@@ -1,18 +1,17 @@
+export type PieceColor = "black" | "white";
+export type PieceType =
+| "Pawn"
+| "Rook"
+| "Knight"
+| "Bishop"
+| "Queen"
+| "King";
+
 interface Piece {
   color: Readonly<PieceColor>;
   type: Readonly<PieceType>;
   move(): void;
 }
-
-export type PieceColor = "black" | "white";
-export type PieceType =
-  | "Pawn"
-  | "Rook"
-  | "Knight"
-  | "Bishop"
-  | "Queen"
-  | "King";
-
 class Piece implements Piece {
   color: PieceColor;
   type: PieceType;
