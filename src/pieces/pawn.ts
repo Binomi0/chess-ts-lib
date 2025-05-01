@@ -30,11 +30,6 @@ class Pawn extends Piece {
           return true;
         }
       }
-      return false;
-    }
-    {
-      console.log("avanzo y como 1");
-      return true;
     }
 
     return false;

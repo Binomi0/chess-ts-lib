@@ -33,7 +33,7 @@ class ChessBoard {
       this.board[to[0]][to[1]] = pieceToMove;
       this.board[from[0]][from[1]] = undefined;
     } else {
-      console.log("Invalid move");
+      throw new Error("Invalid move");
     }
   }
 
