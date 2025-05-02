@@ -1,9 +1,6 @@
-interface Piece {
-  color: Readonly<PieceColor>;
-  type: Readonly<PieceType>;
-  move(): void;
-}
+import ChessBoard, { Movement } from "./chessBoard";
 
+export type Position = [number, number];
 export type PieceColor = "black" | "white";
 export type PieceType =
   | "Pawn"
@@ -13,6 +10,12 @@ export type PieceType =
   | "Queen"
   | "King";
 
+interface Piece {
+  color: Readonly<PieceColor>;
+  type: Readonly<PieceType>;
+  validateMove(board: ChessBoard["board"], movement: Movement): boolean;
+}
+
 class Piece implements Piece {
   color: PieceColor;
   type: PieceType;
@@ -20,10 +23,6 @@ class Piece implements Piece {
   constructor(color: PieceColor, type: PieceType) {
     this.color = color;
     this.type = type;
-  }
-
-  move(): void {
-    console.log("Piece moved");
   }
 }
 
