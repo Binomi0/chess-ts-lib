@@ -2,7 +2,7 @@ import { BoardCell, Movement } from "../chessBoard";
 import Piece, { PieceColor, Position } from "../piece";
 import {
   isCellEmpty,
-  isCellLocked,
+  isCellCaptured,
   isInBounds,
   isValidDestination,
 } from "../utils/helpers";
@@ -33,7 +33,7 @@ export class Knight extends Piece {
       if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
 
-        if (isCellEmpty(target) || isCellLocked(target?.color!, movement)) {
+        if (isCellEmpty(target) || isCellCaptured(target, movement)) {
           validMoves.push([newRow, newCol]);
         }
       }

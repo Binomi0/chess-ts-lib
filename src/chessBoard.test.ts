@@ -78,7 +78,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [1, -1]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Out of bounds");
         }
       });
 
@@ -86,7 +86,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [0, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -185,7 +185,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([6, 0], [6, -1]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Out of bounds");
         }
       });
 
@@ -295,7 +295,9 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([0, 0], [7, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toMatch(
+            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+          );
           expect(chessBoard.getPosition([0, 0])?.type).toBe("Rook");
           expect(chessBoard.getPosition([0, 0])?.color).toBe("white");
         }
@@ -317,7 +319,9 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([0, 0], [4, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toMatch(
+            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+          );
           expect(chessBoard.getPosition([0, 0])?.type).toBe("Rook");
           expect(chessBoard.getPosition([0, 0])?.color).toBe("white");
         }
@@ -329,7 +333,9 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([0, 0], [4, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toMatch(
+            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+          );
           expect(chessBoard.getPosition([0, 0])?.type).toBe("Rook");
           expect(chessBoard.getPosition([0, 0])?.color).toBe("white");
         }
@@ -434,7 +440,9 @@ describe("Chess Board", () => {
           chessBoard.board[4][4] = new BlackRook();
           chessBoard.handleMove([4, 4], [4, 6]);
         } catch (error) {
-          expect((error as Error).message).toBe("Can't capture own piece");
+          expect((error as Error).message).toMatch(
+            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+          );
           expect(chessBoard.getPosition([4, 4])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
         }
@@ -446,7 +454,9 @@ describe("Chess Board", () => {
           chessBoard.board[4][6] = new BlackRook();
           chessBoard.handleMove([4, 6], [4, 4]);
         } catch (error) {
-          expect((error as Error).message).toBe("Can't capture own piece");
+          expect((error as Error).message).toMatch(
+            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+          );
           expect(chessBoard.getPosition([4, 6])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 6])?.color).toBe("black");
         }
@@ -459,7 +469,9 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 0], [2, 0]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toMatch(
+            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+          );
           expect(chessBoard.getPosition([4, 0])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 0])?.color).toBe("black");
         }

@@ -15,9 +15,12 @@ export function isCellEmpty(cell: Piece | undefined): boolean {
   return cell === undefined;
 }
 
-export function isCellLocked(color: PieceColor, movement: Movement): boolean {
+export function isCellCaptured(target?: Piece, movement?: Movement): boolean {
   try {
-    return color !== movement.piece.color;
+    if (!target || !movement) {
+      throw new Error("Invalid movement or target");
+    }
+    return target?.color !== movement?.piece.color;
   } catch (error) {
     throw error;
   }

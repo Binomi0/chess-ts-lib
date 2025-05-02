@@ -59,7 +59,7 @@ class ChessBoardValidations {
       case "Pawn": // Peón
         return Pawn.validateMove(board, movement, isWhite);
       case "Rook": // Torre
-        return Rook.validateMove(board, movement, isWhite);
+        return Rook.validateMove(board, movement);
       case "Knight": // Caballo
         return Knight.validateMove(board, movement);
       case "Bishop": // Bispo
