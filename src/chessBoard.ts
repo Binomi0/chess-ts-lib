@@ -1,15 +1,20 @@
-import Piece from "./piece";
+import Piece, { Position } from "./piece";
 import Bishop from "./pieces/bishop";
 import King from "./pieces/king";
 import Knight from "./pieces/knight";
-import Pawn from "./pieces/pawn";
+import { Pawn } from "./pieces/pawn";
+import { Rook } from "./pieces/rook";
 import Queen from "./pieces/queen";
-import Rook from "./pieces/rook";
 
-type BoardCell = Piece | undefined;
+export type Movement = {
+  from: Position;
+  to: Position;
+};
+export type BoardCell = Piece | undefined;
 
 class ChessBoard {
-  private board: BoardCell[][];
+  board: BoardCell[][];
+  turn: "white" | "black" = "white";
 
   constructor() {
     this.board = Array(8)
@@ -19,35 +24,68 @@ class ChessBoard {
     this.initializeBoard();
   }
 
+  // Set to private when ready
+  nextTurn() {
+    if (this.turn === "white") {
+      this.turn = "black";
+    } else {
+      this.turn = "white";
+    }
+  }
+
   getBoard(): BoardCell[][] {
     return [...this.board];
   }
 
-  getPosition(coords: [number, number]) {
+  getPosition(coords: Position) {
     return this.board[coords[0]][coords[1]];
   }
 
-  handleMove(from: [number, number], to: [number, number]) {
-    if (this.isValidMove(from, to)) {
-      const pieceToMove = this.board[from[0]][from[1]];
-      this.board[to[0]][to[1]] = pieceToMove;
-      this.board[from[0]][from[1]] = undefined;
-    } else {
+  handleMove(from: Position, to: Position) {
+    if (!this.isValidTurn(from)) {
+      throw new Error("Invalid turn");
+    }
+
+    if (!this.isValidMove(from, to)) {
       throw new Error("Invalid move");
     }
+
+    const [rowIndex, colIndex] = from;
+    const pieceToMove = this.board[rowIndex][colIndex];
+
+    this.board[to[0]][to[1]] = pieceToMove;
+    this.board[from[0]][from[1]] = undefined;
+    console.log(
+      `Moved ${pieceToMove?.type} from ${from[0]},${from[1]} to ${to[0]},${to[1]}`
+    );
+    this.nextTurn();
+  }
+
+  private isValidTurn(from: Position): boolean {
+    const currentPiece = this.board[from[0]][from[1]];
+
+    if (
+      (this.turn === "white" && currentPiece?.color === "white") ||
+      (this.turn === "black" && currentPiece?.color === "black")
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   private isValidMove(from: [number, number], to: [number, number]): boolean {
     const [fromRow, fromCol] = from;
     const [toRow, toCol] = to;
 
-    // Implementa la lógica para validar el movimiento aquí
+    // La ficha no existe en esa posición
     if (this.board[fromRow][fromCol] === undefined) {
-      return false; // La ficha no existe en esa posición
+      return false;
     }
-    const pieceToMove = this.board[fromRow][fromCol];
 
+    const pieceToMove = this.board[fromRow][fromCol];
     const destinationPiece = this.board[toRow][toCol];
+
     if (destinationPiece && destinationPiece.color === pieceToMove.color) {
       console.log("Can't capture own piece");
       return false;
@@ -58,38 +96,13 @@ class ChessBoard {
       return false;
     }
 
-    const piece = this.board[fromRow][fromCol];
-    const isWhite = piece.color === "white";
+    const isWhite = pieceToMove.color === "white";
 
-    switch (piece.type) {
+    switch (pieceToMove.type) {
       case "Pawn": // Peón
-        if (isWhite) {
-          return Pawn.validateWhiteMove(this.board, from, to);
-        } else {
-          return Pawn.validateBlackMove(this.board, from, to);
-        }
+        return Pawn.validateMove(this.board, { from, to }, isWhite);
       case "Rook": // Torre
-        for (let i = fromRow + 1; i < 8; i++) {
-          if (this.board[i][fromCol] !== undefined) {
-            break;
-          }
-        }
-        for (let i = fromRow - 1; i >= 0; i--) {
-          if (this.board[i][fromCol] !== undefined) {
-            break;
-          }
-        }
-        for (let i = fromCol + 1; i < 8; i++) {
-          if (this.board[fromRow][i] !== undefined) {
-            break;
-          }
-        }
-        for (let i = fromCol - 1; i >= 0; i--) {
-          if (this.board[fromRow][i] !== undefined) {
-            break;
-          }
-        }
-        return true;
+        return Rook.validateMove(this.board, { from, to }, isWhite);
       case "Knight": // Caballo
         const directions = [
           [2, 1],

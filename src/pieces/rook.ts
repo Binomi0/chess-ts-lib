@@ -1,17 +1,214 @@
-import Piece, { PieceColor } from "../piece";
+import ChessBoard, { BoardCell, Movement } from "../chessBoard";
+import Piece, { type PieceColor } from "../piece";
 
-class Rook extends Piece {
-  private readonly movement: [number, number] = [8, 8];
-  private readonly moveBackward = true;
+type MovementVerticalParam = {
+  board: BoardCell[][];
+  steps: Array<undefined>;
+  fromRow: number;
+  colIndex: number;
+  ownColor: PieceColor;
+  enemyColor: PieceColor;
+};
+
+type MovementHorizontalParam = {
+  board: BoardCell[][];
+  steps: Array<undefined>;
+  fromCol: number;
+  rowIndex: number;
+  ownColor: PieceColor;
+  enemyColor: PieceColor;
+};
+
+export class Rook extends Piece {
+  // private readonly movement: [number, number] = [8, 8];
+  // private readonly moveBackward = true;
 
   constructor(color: PieceColor) {
     super(color, "Rook");
   }
-  move() {
-    console.log(`${this.color} Rook moved`);
-    console.log(
-      `Movement: ${this.movement}, moveBackward: ${this.moveBackward}`
-    );
+
+  static validateMove(
+    board: BoardCell[][],
+    movement: Movement,
+    isWhite: boolean
+  ): boolean {
+    if (isWhite) {
+      return new WhiteRook().validateMove(board, movement);
+    }
+
+    return new BlackRook().validateMove(board, movement);
+  }
+
+  getSteps(range: number) {
+    if (range > 0 || range < 0) {
+      return new Array(Math.abs(range)).fill(undefined);
+    }
+    return [];
+  }
+
+  checkVertical(
+    board: BoardCell[][],
+    movement: Movement,
+    isWhite: boolean
+  ): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow] = movement.to;
+    const range = fromRow - toRow;
+
+    const currentMovement: MovementVerticalParam = {
+      board,
+      fromRow,
+      colIndex: fromCol,
+      steps: this.getSteps(range),
+      ownColor: isWhite ? "white" : "black",
+      enemyColor: isWhite ? "black" : "white",
+    };
+
+    const isUpward = fromRow < toRow;
+    if (isUpward) {
+      return this.canMoveUpward(currentMovement);
+    }
+
+    return this.canMoveDownward(currentMovement);
+  }
+
+  checkHorizontal(
+    board: BoardCell[][],
+    movement: Movement,
+    isWhite: boolean
+  ): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [, toCol] = movement.to;
+    const range = fromCol - toCol;
+
+    const currentMovement: MovementHorizontalParam = {
+      board,
+      fromCol,
+      rowIndex: fromRow,
+      steps: this.getSteps(range),
+      ownColor: isWhite ? "white" : "black",
+      enemyColor: isWhite ? "black" : "white",
+    };
+
+    if (this.canMoveForward(currentMovement)) {
+      return true;
+    }
+    return this.canMoveBackward(currentMovement);
+  }
+
+  canMoveUpward(movement: MovementVerticalParam) {
+    const rowIndex = movement.fromRow + 1;
+
+    return movement.steps.every((_, i) => {
+      const cellPiece = movement.board[rowIndex + i][movement.colIndex];
+
+      if (cellPiece?.color === movement.ownColor) {
+        return false;
+      } else if (cellPiece?.color === movement.enemyColor) {
+        const isTarget = movement.steps.length - 1 === i;
+
+        return isTarget;
+      }
+      return true;
+    });
+  }
+
+  canMoveDownward(movement: MovementVerticalParam) {
+    const rowIndex = movement.fromRow - 1;
+
+    return movement.steps.every((_, i) => {
+      const cellPiece = movement.board[rowIndex - i][movement.colIndex];
+
+      if (cellPiece?.color === movement.ownColor) {
+        return false;
+      } else if (cellPiece?.color === movement.enemyColor) {
+        const isTarget = movement.steps.length - 1 === i;
+
+        return isTarget;
+      }
+      return true;
+    });
+  }
+
+  canMoveForward(movement: MovementHorizontalParam) {
+    const colIndex = movement.fromCol + 1;
+
+    return movement.steps.every((_, i) => {
+      const cellPiece = movement.board[movement.rowIndex][colIndex + i];
+
+      if (cellPiece?.color === movement.ownColor) {
+        return false;
+      } else if (cellPiece?.color === movement.enemyColor) {
+        const isTarget = movement.steps.length - 1 === i;
+
+        return isTarget;
+      }
+      return true;
+    });
+  }
+
+  canMoveBackward(movement: MovementHorizontalParam) {
+    const colIndex = movement.fromCol - 1;
+
+    return movement.steps.every((_, i) => {
+      const cellPiece = movement.board[movement.rowIndex][colIndex - i];
+
+      if (cellPiece?.color === movement.ownColor) {
+        return false;
+      } else if (cellPiece?.color === movement.enemyColor) {
+        const isTarget = movement.steps.length - 1 === i;
+
+        return isTarget;
+      }
+      return true;
+    });
   }
 }
-export default Rook;
+
+export class WhiteRook extends Rook {
+  constructor() {
+    super("white");
+  }
+
+  validateMove(board: ChessBoard["board"], movement: Movement): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow, toCol] = movement.to;
+
+    const isHorizontal = fromRow === toRow && fromCol !== toCol;
+    const isVertical = fromCol === toCol && fromRow !== toRow;
+
+    if (isHorizontal) {
+      return this.checkHorizontal(board, movement, true);
+    }
+
+    if (isVertical) {
+      return this.checkVertical(board, movement, true);
+    }
+
+    return false;
+  }
+}
+
+export class BlackRook extends Rook {
+  constructor() {
+    super("black");
+  }
+
+  validateMove(board: ChessBoard["board"], movement: Movement): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow, toCol] = movement.to;
+
+    const isHorizontal = fromRow === toRow && fromCol !== toCol;
+    const isVertical = fromCol === toCol && fromRow !== toRow;
+
+    if (isHorizontal) {
+      return this.checkHorizontal(board, movement, false);
+    }
+
+    if (isVertical) {
+      return this.checkVertical(board, movement, false);
+    }
+
+    return false;
+  }
+}
