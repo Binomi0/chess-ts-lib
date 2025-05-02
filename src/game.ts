@@ -1,11 +1,6 @@
 import ChessBoard from "./chessBoard";
 import { PieceColor } from "./piece";
-import Player from "./player";
-
-type Players = {
-  white: Player;
-  black: Player;
-};
+import Player, { type Players } from "./player";
 
 class Game {
   chessBoard: ChessBoard;
