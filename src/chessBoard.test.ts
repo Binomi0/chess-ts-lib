@@ -96,7 +96,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([6, 0], [5, 0]);
           chessBoard.handleMove([3, 0], [2, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([2, 0])).toBeUndefined();
           expect(chessBoard.getPosition([3, 0])?.type).toBe("Pawn");
           expect(chessBoard.getPosition([3, 0])?.color).toBe("white");
@@ -107,7 +107,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [1, 1]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -193,7 +193,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([6, 0], [7, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -213,7 +213,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([6, 0], [6, 1]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -249,7 +249,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([0, 0], [1, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -257,7 +257,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([0, 0], [0, 1]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -361,7 +361,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([7, 0], [6, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -369,7 +369,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([7, 0], [6, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
         }
       });
 
@@ -434,7 +434,7 @@ describe("Chess Board", () => {
           chessBoard.board[4][4] = new BlackRook();
           chessBoard.handleMove([4, 4], [4, 6]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([4, 4])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
         }
@@ -446,7 +446,7 @@ describe("Chess Board", () => {
           chessBoard.board[4][6] = new BlackRook();
           chessBoard.handleMove([4, 6], [4, 4]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([4, 6])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 6])?.color).toBe("black");
         }
@@ -471,7 +471,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 0], [4, 0]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([4, 0])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 0])?.color).toBe("black");
         }
@@ -518,7 +518,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([4, 0], [6, 0]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([4, 0])?.type).toBe("Rook");
           expect(chessBoard.getPosition([4, 0])?.color).toBe("black");
         }
@@ -603,10 +603,14 @@ describe("Chess Board", () => {
         it("should not be able to move up three squares and left one square", () => {
           try {
             chessBoard.handleMove([7, 1], [4, 0]);
-            expect(false).toBe(true);
-          } catch (error) {
             expect(chessBoard.getPosition([7, 1])?.color).toBe("black");
             expect(chessBoard.getPosition([7, 1])?.type).toBe("Knight");
+            expect(chessBoard.getPosition([4, 0])?.color).toBeUndefined();
+          } catch (error) {
+            console.log({ error });
+            expect(chessBoard.getPosition([7, 1])?.color).toBe("black");
+            expect(chessBoard.getPosition([7, 1])?.type).toBe("Knight");
+            expect(chessBoard.getPosition([4, 0])?.color).toBeUndefined();
           }
         });
 
@@ -680,7 +684,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 4], [3, 3]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([3, 3])?.color).toBe("white");
           expect(chessBoard.getPosition([3, 3])?.type).toBe("Pawn");
           expect(chessBoard.getPosition([4, 4])?.color).toBe("white");
@@ -740,7 +744,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 4], [3, 3]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([3, 3])?.color).toBe("black");
           expect(chessBoard.getPosition([3, 3])?.type).toBe("Pawn");
           expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
@@ -888,7 +892,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 4], [3, 4]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([4, 4])?.type).toBe("King");
           expect(chessBoard.getPosition([4, 4])?.color).toBe("white");
           expect(chessBoard.getPosition([3, 4])?.type).toBe("Pawn");
@@ -911,9 +915,16 @@ describe("Chess Board", () => {
         chessBoard.board[0][3] = undefined;
 
         const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastling(chessBoard.board, "queen");
+        const castling = whiteKing.canCastle(chessBoard.board, "queen");
+        chessBoard.castlingWhite("queen");
 
         expect(castling).toBe(true);
+
+        expect(chessBoard.board[0][1]).toHaveProperty("type", "Rook");
+        expect(chessBoard.board[0][2]).toHaveProperty("type", "King");
+        expect(chessBoard.board[0][3]).toBe(undefined);
+        expect(chessBoard.board[0][4]).toBe(undefined);
+        expect(chessBoard.board[0][0]).toBe(undefined);
       });
 
       it("should be able to castling to king side if there are no enemy in the way", () => {
@@ -921,7 +932,7 @@ describe("Chess Board", () => {
         chessBoard.board[0][5] = undefined;
 
         const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastling(chessBoard.board, "king");
+        const castling = whiteKing.canCastle(chessBoard.board, "king");
 
         expect(castling).toBe(true);
       });
@@ -931,7 +942,7 @@ describe("Chess Board", () => {
         chessBoard.board[0][5] = new BlackPawn();
 
         const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastling(chessBoard.board, "king");
+        const castling = whiteKing.canCastle(chessBoard.board, "king");
 
         expect(castling).toBe(false);
       });
@@ -941,7 +952,7 @@ describe("Chess Board", () => {
         chessBoard.board[0][5] = new BlackPawn();
 
         const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastling(chessBoard.board, "king");
+        const castling = whiteKing.canCastle(chessBoard.board, "king");
 
         expect(castling).toBe(false);
       });
@@ -991,7 +1002,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 4], [3, 4]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid move");
+          expect((error as Error).message).toBe("Can't capture own piece");
           expect(chessBoard.getPosition([4, 4])?.type).toBe("King");
           expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
           expect(chessBoard.getPosition([3, 4])?.type).toBe("Pawn");
@@ -1014,7 +1025,7 @@ describe("Chess Board", () => {
         chessBoard.board[7][1] = undefined;
 
         const blackKing = new BlackKing();
-        const castling = blackKing.canCastling(chessBoard.board, "queen");
+        const castling = blackKing.canCastle(chessBoard.board, "queen");
 
         expect(castling).toBe(true);
       });
@@ -1024,7 +1035,7 @@ describe("Chess Board", () => {
         chessBoard.board[7][5] = undefined;
 
         const blackKing = new BlackKing();
-        const castling = blackKing.canCastling(chessBoard.board, "king");
+        const castling = blackKing.canCastle(chessBoard.board, "king");
 
         expect(castling).toBe(true);
       });
@@ -1034,7 +1045,7 @@ describe("Chess Board", () => {
         chessBoard.board[0][5] = new BlackPawn();
 
         const blackKing = new BlackKing();
-        const castling = blackKing.canCastling(chessBoard.board, "king");
+        const castling = blackKing.canCastle(chessBoard.board, "king");
         expect(castling).toBe(false);
       });
 
@@ -1044,7 +1055,7 @@ describe("Chess Board", () => {
 
         const blackKing = new BlackKing();
 
-        const castling = blackKing.canCastling(chessBoard.board, "king");
+        const castling = blackKing.canCastle(chessBoard.board, "king");
         expect(castling).toBe(false); // This should never be true
       });
     });

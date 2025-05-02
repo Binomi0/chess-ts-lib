@@ -1,5 +1,11 @@
 import { BoardCell, Movement } from "../chessBoard";
 import Piece, { PieceColor, Position } from "../piece";
+import {
+  isCellEmpty,
+  isCellLocked,
+  isInBounds,
+  isValidDestination,
+} from "../utils/helpers";
 
 export class Knight extends Piece {
   private static readonly directions: [number, number][] = [
@@ -17,30 +23,28 @@ export class Knight extends Piece {
     super(color, "Knight");
   }
 
-  static validateMove(
-    board: BoardCell[][],
-    movement: Movement,
-    isWhite: boolean
-  ): boolean {
+  static validateMove(board: BoardCell[][], movement: Movement): boolean {
     const validMoves: Position[] = [];
 
-    for (const [dx, dy] of this.directions) {
-      const newRow = movement.from[0] + dx;
-      const newCol = movement.from[1] + dy;
+    for (const [row, col] of this.directions) {
+      const newRow = movement.from[0] + row;
+      const newCol = movement.from[1] + col;
 
-      if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+      if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
-        const pieceColor = isWhite ? "white" : "black";
 
-        // Movimiento válido si la casilla está vacía o tiene una pieza del color contrario
-        if (!target || target.color !== pieceColor) {
+        if (isCellEmpty(target) || isCellLocked(target?.color!, movement)) {
           validMoves.push([newRow, newCol]);
         }
       }
     }
 
-    return validMoves.some(
-      (move) => move[0] === movement.to[0] && move[1] === movement.to[1]
+    if (isValidDestination(validMoves, movement.to)) {
+      return true;
+    }
+
+    throw new Error(
+      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
     );
   }
 }

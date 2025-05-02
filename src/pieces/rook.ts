@@ -20,9 +20,6 @@ type MovementHorizontalParam = {
 };
 
 export class Rook extends Piece {
-  // private readonly movement: [number, number] = [8, 8];
-  // private readonly moveBackward = true;
-
   constructor(color: PieceColor) {
     super(color, "Rook");
   }

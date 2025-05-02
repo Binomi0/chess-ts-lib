@@ -1,5 +1,11 @@
 import ChessBoard, { Movement } from "../chessBoard";
 import Piece, { PieceColor, Position } from "../piece";
+import {
+  isCellEmpty,
+  isCellLocked,
+  isInBounds,
+  isValidDestination,
+} from "../utils/helpers";
 
 export class Queen extends Piece {
   private static readonly directions: Position[] = [
@@ -24,16 +30,16 @@ export class Queen extends Piece {
       let newRow = movement.from[0] + dx;
       let newCol = movement.from[1] + dy;
 
-      while (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+      while (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
 
-        if (target === undefined) {
+        if (isCellEmpty(target)) {
           validMoves.push([newRow, newCol]);
-        } else if (target.color !== movement.piece.color) {
-          validMoves.push([newRow, newCol]); // Captura
+        } else if (isCellLocked(target?.color!, movement)) {
+          validMoves.push([newRow, newCol]);
           break;
         } else {
-          break; // Pieza aliada bloquea
+          break;
         }
 
         newRow += dx;
@@ -41,8 +47,12 @@ export class Queen extends Piece {
       }
     }
 
-    return validMoves.some(
-      (move) => move[0] === movement.to[0] && move[1] === movement.to[1]
+    if (isValidDestination(validMoves, movement.to)) {
+      return true;
+    }
+
+    throw new Error(
+      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
     );
   }
 }

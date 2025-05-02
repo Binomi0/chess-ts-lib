@@ -1,5 +1,10 @@
 import { BoardCell, Movement } from "../chessBoard";
 import Piece, { PieceColor, Position } from "../piece";
+import {
+  isCellEmpty,
+  isCellLocked,
+  isValidDestination,
+} from "../utils/helpers";
 
 export class Bishop extends Piece {
   private static readonly directions: Position[] = [
@@ -14,7 +19,7 @@ export class Bishop extends Piece {
   }
 
   static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    const validMoves = [];
+    const validMoves: Position[] = [];
 
     for (const [dx, dy] of this.directions) {
       let newRow = movement.from[0] + dx;
@@ -23,11 +28,11 @@ export class Bishop extends Piece {
       while (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
         const target = board[newRow][newCol];
 
-        if (target === undefined) {
-          validMoves.push([newRow, newCol]); // Casilla vacía, se puede mover
-        } else if (target.color !== movement.piece.color) {
-          validMoves.push([newRow, newCol]); // Puede capturar
-          break; // Pero no puede pasar más allá
+        if (isCellEmpty(target)) {
+          validMoves.push([newRow, newCol]);
+        } else if (isCellLocked(target?.color!, movement)) {
+          validMoves.push([newRow, newCol]);
+          break;
         } else {
           break; // Bloqueado por una pieza del mismo color
         }
@@ -37,8 +42,12 @@ export class Bishop extends Piece {
       }
     }
 
-    return validMoves.some(
-      (move) => move[0] === movement.to[0] && move[1] === movement.to[1]
+    if (isValidDestination(validMoves, movement.to)) {
+      return true;
+    }
+
+    throw new Error(
+      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
     );
   }
 }

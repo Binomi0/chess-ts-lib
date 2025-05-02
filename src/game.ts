@@ -1,31 +1,38 @@
 import ChessBoard from "./chessBoard";
 import { PieceColor } from "./piece";
-import Player, { type Players } from "./player";
+import Player from "./player";
 
 class Game {
-  chessBoard: ChessBoard;
-  winner: PieceColor | null = null;
-  players: Map<keyof Players, Player> = new Map();
+  chessBoard: ChessBoard | undefined;
+  winner: PieceColor | undefined;
 
   constructor() {
     this.chessBoard = new ChessBoard();
-    console.log("Game initialized");
   }
 
   addPlayer(player: Player) {
-    if (this.isPlayersFilled) return;
+    if (this.isPlayersFilled) {
+      throw new Error("Cannot add more than two players.");
+    }
 
-    const isWhiteSelected = this.players.has("white");
-    this.players.set(isWhiteSelected ? "black" : "white", player);
-    console.log("Added player", player.name);
+    const color = this.chessBoard?.players.has("white") ? "black" : "white";
+    this.chessBoard?.players.set(color, player);
+    this.chessBoard?.players.get(color)?.addSide(color);
   }
 
   start() {
-    if (this.isPlayersFilled) console.log("Game started");
+    if (!this.isPlayersFilled) {
+      throw new Error("Please add both players before starting the game.");
+    }
+
+    console.log("Game started");
   }
 
   get isPlayersFilled() {
-    return this.players.has("white") && this.players.has("black");
+    return (
+      this.chessBoard?.players.has("white") &&
+      this.chessBoard?.players.has("black")
+    );
   }
 }
 

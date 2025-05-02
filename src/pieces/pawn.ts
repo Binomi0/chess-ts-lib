@@ -80,7 +80,6 @@ export class WhitePawn extends Pawn {
   static checkCapture(targetCell: BoardCell) {
     if (targetCell !== undefined) {
       if (targetCell?.color === "black") {
-        console.log("Me como la ficha", targetCell.type);
         return true;
       }
     }

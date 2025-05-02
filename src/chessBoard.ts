@@ -1,10 +1,13 @@
 import Piece, { PieceColor, Position } from "./piece";
-import { Bishop } from "./pieces/bishop";
-import { BlackKing, King, WhiteKing } from "./pieces/king";
-import { Knight } from "./pieces/knight";
-import { Pawn } from "./pieces/pawn";
-import { Rook } from "./pieces/rook";
-import { Queen, WhiteQueen } from "./pieces/queen";
+import { BlackBishop, WhiteBishop } from "./pieces/bishop";
+import { BlackKing, WhiteKing } from "./pieces/king";
+import { BlackKnight, WhiteKnight } from "./pieces/knight";
+import { BlackPawn, WhitePawn } from "./pieces/pawn";
+import { BlackRook, WhiteRook } from "./pieces/rook";
+import { BlackQueen, WhiteQueen } from "./pieces/queen";
+import ChessBoardValidations from "./chessBoardValidations";
+import Player, { type Players } from "./player";
+import { logMovement } from "./utils/helpers";
 
 export type Movement = {
   from: Position;
@@ -12,10 +15,12 @@ export type Movement = {
   piece: Piece;
 };
 export type BoardCell = Piece | undefined;
+export type Castling = "queen" | "king";
 
 class ChessBoard {
   board: BoardCell[][];
   turn: PieceColor = "white";
+  players: Map<keyof Players, Player> = new Map();
 
   constructor() {
     // Define the initial positions of pieces on the board
@@ -26,17 +31,67 @@ class ChessBoard {
     this.initializeBoard();
   }
 
+  private initializeBoard() {
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (row === 0) {
+          if (col === 0) {
+            this.board[row][col] = new WhiteRook();
+          } else if (col === 1) {
+            this.board[row][col] = new WhiteKnight();
+          } else if (col === 2) {
+            this.board[row][col] = new WhiteBishop();
+          } else if (col === 3) {
+            this.board[row][col] = new WhiteQueen();
+          } else if (col === 4) {
+            this.board[row][col] = new WhiteKing();
+          } else if (col === 5) {
+            this.board[row][col] = new WhiteBishop();
+          } else if (col === 6) {
+            this.board[row][col] = new WhiteKnight();
+          } else if (col === 7) {
+            this.board[row][col] = new WhiteRook();
+          }
+        } else if (row === 1) {
+          this.board[row][col] = new WhitePawn();
+        } else if (row === 6) {
+          this.board[row][col] = new BlackPawn();
+        } else if (row === 7) {
+          if (col === 0) {
+            this.board[row][col] = new BlackRook();
+          } else if (col === 1) {
+            this.board[row][col] = new BlackKnight();
+          } else if (col === 2) {
+            this.board[row][col] = new BlackBishop();
+          } else if (col === 3) {
+            this.board[row][col] = new BlackQueen();
+          } else if (col === 4) {
+            this.board[row][col] = new BlackKing();
+          } else if (col === 5) {
+            this.board[row][col] = new BlackBishop();
+          } else if (col === 6) {
+            this.board[row][col] = new BlackKnight();
+          } else if (col === 7) {
+            this.board[row][col] = new BlackRook();
+          }
+        }
+      }
+    }
+  }
+
   // Set to private when ready
   nextTurn() {
     if (this.turn === "white") {
       this.turn = "black";
+      this.players.get("white")?.addMovement();
     } else {
       this.turn = "white";
+      this.players.get("black")?.addMovement();
     }
   }
 
   getBoard(): BoardCell[][] {
-    return [...this.board];
+    return this.board;
   }
 
   getPosition(coords: Position) {
@@ -44,158 +99,49 @@ class ChessBoard {
   }
 
   handleMove(from: Position, to: Position) {
-    if (!this.isValidTurn(from)) {
-      throw new Error("Invalid turn");
+    try {
+      ChessBoardValidations.isValidTurn(this.board, from, this.turn);
+      ChessBoardValidations.isValidMove(this.board, from, to);
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
 
-    if (!this.isValidMove(from, to)) {
-      throw new Error("Invalid move");
-    }
-
-    const [fromRow, fromCol] = from;
-    const [toRow, toCol] = to;
-    const pieceToMove = this.board[fromRow][fromCol];
-
-    // Execute movement
-    this.board[toRow][toCol] = pieceToMove;
-    this.board[fromRow][fromCol] = undefined;
-
-    console.log(
-      `Moved ${pieceToMove?.type} from ${from[0]},${from[1]} to ${to[0]},${to[1]}`
-    );
+    this.executeMovement(from, to);
     this.nextTurn();
   }
 
-  private isValidTurn(from: Position): boolean {
-    const currentPiece = this.board[from[0]][from[1]];
+  executeMovement(from: Position, to: Position) {
+    try {
+      const [fromRow, fromCol] = from;
+      const [toRow, toCol] = to;
 
-    if (
-      (this.turn === "white" && currentPiece?.color === "white") ||
-      (this.turn === "black" && currentPiece?.color === "black")
-    ) {
-      return true;
-    }
+      const pieceToMove = this.board[fromRow][fromCol];
 
-    return false;
-  }
+      this.board[toRow][toCol] = pieceToMove;
+      this.board[fromRow][fromCol] = undefined;
 
-  private isValidMove(from: [number, number], to: [number, number]): boolean {
-    const [fromRow, fromCol] = from;
-    const [toRow, toCol] = to;
-
-    // La ficha no existe en esa posición
-    if (this.board[fromRow][fromCol] === undefined) {
-      console.log("No piece at that position");
-      return false;
-    }
-
-    const piece = this.board[fromRow][fromCol];
-    const destinationPiece = this.board[toRow][toCol];
-
-    if (destinationPiece && destinationPiece.color === piece.color) {
-      console.log("Can't capture own piece");
-      return false;
-    }
-
-    if (!this.isInBounds(from) || !this.isInBounds(to)) {
-      console.log("Out of bounds");
-      return false;
-    }
-
-    const isWhite = piece.color === "white";
-    const movement = { from, to, piece };
-
-    switch (piece.type) {
-      case "Pawn": // Peón
-        return Pawn.validateMove(this.board, movement, isWhite);
-      case "Rook": // Torre
-        return Rook.validateMove(this.board, movement, isWhite);
-      case "Knight": // Caballo
-        return Knight.validateMove(this.board, movement, isWhite);
-      case "Bishop": // Bispo
-        return Bishop.validateMove(this.board, movement);
-      case "Queen": // Reina
-        return Queen.validateMove(this.board, movement);
-      case "King": // Rey
-        return King.validateMove(this.board, movement);
-      default:
-        console.error("Invalid piece type");
-        return false;
+      logMovement(from, to, pieceToMove);
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }
 
-  isInBounds([x, y]: [number, number]) {
-    return x >= 0 && x < 8 && y >= 0 && y < 8;
+  castlingWhite(type: Castling) {
+    const whiteKing = new WhiteKing();
+    whiteKing.castling(this.board, type);
+
+    this.players.get("white")?.setCastled(type);
+    this.nextTurn();
   }
 
-  private initializeBoard() {
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (row === 0) {
-          if (col === 0) {
-            this.board[row][col] = new Rook("white");
-          } else if (col === 1) {
-            this.board[row][col] = new Knight("white");
-          } else if (col === 2) {
-            this.board[row][col] = new Bishop("white");
-          } else if (col === 3) {
-            this.board[row][col] = new Queen("white");
-          } else if (col === 4) {
-            this.board[row][col] = new King("white");
-          } else if (col === 5) {
-            this.board[row][col] = new Bishop("white");
-          } else if (col === 6) {
-            this.board[row][col] = new Knight("white");
-          } else if (col === 7) {
-            this.board[row][col] = new Rook("white");
-          }
-        } else if (row === 1) {
-          this.board[row][col] = new Pawn("white");
-        } else if (row === 6) {
-          this.board[row][col] = new Pawn("black");
-        } else if (row === 7) {
-          if (col === 0) {
-            this.board[row][col] = new Rook("black");
-          } else if (col === 1) {
-            this.board[row][col] = new Knight("black");
-          } else if (col === 2) {
-            this.board[row][col] = new Bishop("black");
-          } else if (col === 3) {
-            this.board[row][col] = new Queen("black");
-          } else if (col === 4) {
-            this.board[row][col] = new King("black");
-          } else if (col === 5) {
-            this.board[row][col] = new Bishop("black");
-          } else if (col === 6) {
-            this.board[row][col] = new Knight("black");
-          } else if (col === 7) {
-            this.board[row][col] = new Rook("black");
-          }
-        }
-      }
-    }
-  }
+  castlingBlack(type: Castling) {
+    const blackKing = new BlackKing();
+    blackKing.castling(this.board, type);
 
-  castling(color: PieceColor, type: "queen" | "king") {
-    if (color === "white") {
-      if (type === "queen") {
-        return new WhiteKing().castling(this.board, "queen");
-      } else if (type === "king") {
-        return new WhiteKing().castling(this.board, "king");
-      }
-
-      throw new Error("Invalid castling type for white king");
-    } else if (color === "black") {
-      if (type === "queen") {
-        return new BlackKing().castling(this.board, "queen");
-      } else if (type === "king") {
-        return new BlackKing().castling(this.board, "king");
-      }
-
-      throw new Error("Invalid castling type for black king");
-    }
-
-    throw new Error("Invalid color for king castling");
+    this.players.get("black")?.setCastled(type);
+    this.nextTurn();
   }
 }
 
