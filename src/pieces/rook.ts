@@ -65,11 +65,16 @@ export class Rook extends Piece {
     };
 
     const isUpward = fromRow < toRow;
+    const isDownward = fromRow > toRow;
     if (isUpward) {
       return this.canMoveUpward(currentMovement);
     }
 
-    return this.canMoveDownward(currentMovement);
+    if (isDownward) {
+      return this.canMoveDownward(currentMovement);
+    }
+
+    return false;
   }
 
   checkHorizontal(
@@ -90,10 +95,17 @@ export class Rook extends Piece {
       enemyColor: isWhite ? "black" : "white",
     };
 
-    if (this.canMoveForward(currentMovement)) {
-      return true;
+    const isForward = range < 0;
+    if (isForward) {
+      return this.canMoveForward(currentMovement);
     }
-    return this.canMoveBackward(currentMovement);
+
+    const isBackward = range > 0;
+    if (isBackward) {
+      return this.canMoveBackward(currentMovement);
+    }
+
+    return false;
   }
 
   canMoveUpward(movement: MovementVerticalParam) {

@@ -1,4 +1,4 @@
-import Piece, { Position } from "./piece";
+import Piece, { PieceColor, Position } from "./piece";
 import Bishop from "./pieces/bishop";
 import King from "./pieces/king";
 import Knight from "./pieces/knight";
@@ -14,9 +14,10 @@ export type BoardCell = Piece | undefined;
 
 class ChessBoard {
   board: BoardCell[][];
-  turn: "white" | "black" = "white";
+  turn: PieceColor = "white";
 
   constructor() {
+    // Define the initial positions of pieces on the board
     this.board = Array(8)
       .fill(undefined)
       .map(() => Array(8).fill(undefined));
@@ -50,11 +51,14 @@ class ChessBoard {
       throw new Error("Invalid move");
     }
 
-    const [rowIndex, colIndex] = from;
-    const pieceToMove = this.board[rowIndex][colIndex];
+    const [fromRow, fromCol] = from;
+    const [toRow, toCol] = to;
+    const pieceToMove = this.board[fromRow][fromCol];
 
-    this.board[to[0]][to[1]] = pieceToMove;
-    this.board[from[0]][from[1]] = undefined;
+    // Execute movement
+    this.board[toRow][toCol] = pieceToMove;
+    this.board[fromRow][fromCol] = undefined;
+
     console.log(
       `Moved ${pieceToMove?.type} from ${from[0]},${from[1]} to ${to[0]},${to[1]}`
     );
@@ -104,29 +108,7 @@ class ChessBoard {
       case "Rook": // Torre
         return Rook.validateMove(this.board, { from, to }, isWhite);
       case "Knight": // Caballo
-        const directions = [
-          [2, 1],
-          [2, -1],
-          [-2, 1],
-          [-2, -1],
-          [1, 2],
-          [1, -2],
-          [-1, 2],
-          [-1, -2],
-        ];
-        for (const [dx, dy] of directions) {
-          const newRow = fromRow + dx;
-          const newCol = fromCol + dy;
-          if (
-            newRow >= 0 &&
-            newRow < 8 &&
-            newCol >= 0 &&
-            newCol < 8 &&
-            this.board[newRow][newCol] !== undefined
-          ) {
-            return true;
-          }
-        }
+        return Knight.validateMove(this.board, { from, to }, isWhite);
         break;
       case "Bishop": // Bispo
         for (let i = fromRow + 1, j = fromCol + 1; i < 8 && j < 8; i++, j++) {

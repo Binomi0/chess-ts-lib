@@ -13,7 +13,7 @@ export class Pawn extends Piece {
     board: BoardCell[][],
     movement: Movement,
     isWhite: boolean
-  ) {
+  ): boolean {
     if (isWhite) {
       return WhitePawn.validateMove(board, movement);
     }
@@ -29,34 +29,61 @@ export class WhitePawn extends Pawn {
   static validateMove(board: BoardCell[][], movement: Movement) {
     const [fromRow, fromCol] = movement.from;
     const [toRow, toCol] = movement.to;
+    const targetCell = board[toRow][toCol];
 
+    // White Pawn cannot go backwards
     if (toRow < fromRow) {
       return false;
     }
 
-    if (
-      toRow === fromRow + 1 &&
-      toCol === fromCol &&
-      board[toRow][toCol] === undefined
-    ) {
+    const isTargetEmpty = this.checkTargetFree(board, movement);
+    const isWayCleared = this.checkWayCleared(board, movement);
+    const isTryingToCapture = toRow === fromRow + 1 && fromCol !== toCol;
+
+    if (isTargetEmpty) {
       return true;
-    } else if (
-      (toRow === fromRow + 2 &&
-        fromCol === toCol &&
-        fromRow === 1 &&
-        board[toRow][toCol] === undefined,
-      board[toRow - 1][toCol] === undefined)
-    ) {
+    }
+    if (isWayCleared) {
       return true;
-    } else if (toRow === fromRow + 1 && fromCol !== toCol) {
-      if (board[toRow][toCol] !== undefined) {
-        if (board[toRow][toCol]?.color === "black") {
-          console.log("Me como la ficha", board[toRow][toCol].type);
-          return true;
-        }
-      }
+    }
+    if (isTryingToCapture) {
+      return this.checkCapture(targetCell);
     }
 
+    return false;
+  }
+
+  static checkTargetFree(board: BoardCell[][], movement: Movement) {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow, toCol] = movement.to;
+
+    return (
+      toRow === fromRow + 1 && // Pawn can move one square forward
+      toCol === fromCol && // Only move vertical
+      board[toRow][toCol] === undefined // target cell is empty
+    );
+  }
+
+  static checkWayCleared(board: BoardCell[][], movement: Movement): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow, toCol] = movement.to;
+
+    return (
+      toRow === fromRow + 2 &&
+      fromCol === toCol &&
+      fromRow === 1 &&
+      board[toRow][toCol] === undefined &&
+      board[toRow - 1][toCol] === undefined
+    );
+  }
+
+  static checkCapture(targetCell: BoardCell) {
+    if (targetCell !== undefined) {
+      if (targetCell?.color === "black") {
+        console.log("Me como la ficha", targetCell.type);
+        return true;
+      }
+    }
     return false;
   }
 }
