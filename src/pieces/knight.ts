@@ -1,7 +1,7 @@
-import ChessBoard, { BoardCell, Movement } from "../chessBoard";
+import { BoardCell, Movement } from "../chessBoard";
 import Piece, { PieceColor, Position } from "../piece";
 
-class Knight extends Piece {
+export class Knight extends Piece {
   private static readonly directions: [number, number][] = [
     [2, 1],
     [2, -1],
@@ -44,28 +44,15 @@ class Knight extends Piece {
     );
   }
 }
-export default Knight;
 
-// class WhiteKnight extends Knight {
-//   constructor() {
-//     super("white");
-//   }
+export class WhiteKnight extends Knight {
+  constructor() {
+    super("white");
+  }
+}
 
-//   validateMove(validMoves: Position[], movement: Movement): boolean {
-//     return validMoves.some(
-//       (move) => move[0] === movement.to[0] && move[1] === movement.to[1]
-//     );
-//   }
-// }
-
-// class BlackKnight extends Knight {
-//   constructor() {
-//     super("black");
-//   }
-
-//   validateMove(validMoves: Position[], movement: Movement): boolean {
-//     return validMoves.some(
-//       (move) => move[0] === movement.to[0] && move[1] === movement.to[1]
-//     );
-//   }
-// }
+export class BlackKnight extends Knight {
+  constructor() {
+    super("black");
+  }
+}

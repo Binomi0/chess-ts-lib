@@ -1,6 +1,9 @@
 import ChessBoard from "./chessBoard";
-import Knight from "./pieces/knight";
+import { BlackBishop, WhiteBishop } from "./pieces/bishop";
+import { BlackKing, WhiteKing } from "./pieces/king";
+import { WhiteKnight, BlackKnight } from "./pieces/knight";
 import { Pawn, BlackPawn, WhitePawn } from "./pieces/pawn";
+import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import { BlackRook, WhiteRook } from "./pieces/rook";
 
 describe("Chess Board", () => {
@@ -537,17 +540,17 @@ describe("Chess Board", () => {
     });
 
     describe("White Knight", () => {
-      let chessBoard: ChessBoard;
-      beforeEach(() => {
-        chessBoard = new ChessBoard();
-      });
-
       it("should be defined", () => {
-        const whiteKnight = new Knight("white");
+        const whiteKnight = new WhiteKnight();
         expect(whiteKnight).toBeDefined();
       });
 
       describe("move to valid positions", () => {
+        let chessBoard: ChessBoard;
+        beforeEach(() => {
+          chessBoard = new ChessBoard();
+        });
+
         it("should be able to move up two squares and left one square", () => {
           chessBoard.handleMove([0, 1], [2, 0]);
           expect(chessBoard.getPosition([2, 0])?.type).toBe("Knight");
@@ -580,7 +583,7 @@ describe("Chess Board", () => {
       });
 
       it("should be defined", () => {
-        const blackKnight = new Knight("black");
+        const blackKnight = new BlackKnight();
         expect(blackKnight).toBeDefined();
       });
 
@@ -624,6 +627,425 @@ describe("Chess Board", () => {
           expect(chessBoard.getPosition([5, 2])?.color).toBe("black");
           expect(chessBoard.getPosition([5, 2])?.type).toBe("Knight");
         });
+      });
+    });
+
+    describe("White Bishop", () => {
+      let chessBoard: ChessBoard;
+      beforeEach(() => {
+        chessBoard = new ChessBoard();
+      });
+
+      it("should be able to move diagonally bottom left", () => {
+        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.handleMove([4, 4], [3, 3]);
+        expect(chessBoard.getPosition([3, 3])?.color).toBe("white");
+        expect(chessBoard.getPosition([3, 3])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally top right", () => {
+        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.handleMove([4, 4], [5, 5]);
+        expect(chessBoard.getPosition([5, 5])?.color).toBe("white");
+        expect(chessBoard.getPosition([5, 5])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally top left", () => {
+        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.handleMove([4, 4], [5, 3]);
+        expect(chessBoard.getPosition([5, 3])?.color).toBe("white");
+        expect(chessBoard.getPosition([5, 3])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally bottom right", () => {
+        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.handleMove([4, 4], [3, 5]);
+        expect(chessBoard.getPosition([3, 5])?.color).toBe("white");
+        expect(chessBoard.getPosition([3, 5])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally to a target position", () => {
+        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[3][3] = new BlackPawn();
+        chessBoard.handleMove([4, 4], [3, 3]);
+        expect(chessBoard.getPosition([3, 3])?.color).toBe("white");
+        expect(chessBoard.getPosition([3, 3])?.type).toBe("Bishop");
+      });
+
+      it("should not be able to move diagonally if the target position is occupied by a piece of the same color", () => {
+        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[3][3] = new WhitePawn();
+
+        try {
+          chessBoard.handleMove([4, 4], [3, 3]);
+          expect(false).toBe(true);
+        } catch (error) {
+          expect((error as Error).message).toBe("Invalid move");
+          expect(chessBoard.getPosition([3, 3])?.color).toBe("white");
+          expect(chessBoard.getPosition([3, 3])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([4, 4])?.color).toBe("white");
+          expect(chessBoard.getPosition([4, 4])?.type).toBe("Bishop");
+        }
+      });
+    });
+
+    describe("Black Bishop", () => {
+      let chessBoard: ChessBoard;
+      beforeEach(() => {
+        chessBoard = new ChessBoard();
+        chessBoard.nextTurn();
+      });
+
+      it("should be able to move diagonally bottom left", () => {
+        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.handleMove([4, 4], [3, 3]);
+        expect(chessBoard.getPosition([3, 3])?.color).toBe("black");
+        expect(chessBoard.getPosition([3, 3])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally top right", () => {
+        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.handleMove([4, 4], [5, 5]);
+        expect(chessBoard.getPosition([5, 5])?.color).toBe("black");
+        expect(chessBoard.getPosition([5, 5])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally top left", () => {
+        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.handleMove([4, 4], [5, 3]);
+        expect(chessBoard.getPosition([5, 3])?.color).toBe("black");
+        expect(chessBoard.getPosition([5, 3])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally bottom right", () => {
+        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.handleMove([4, 4], [3, 5]);
+        expect(chessBoard.getPosition([3, 5])?.color).toBe("black");
+        expect(chessBoard.getPosition([3, 5])?.type).toBe("Bishop");
+      });
+
+      it("should be able to move diagonally to a target position", () => {
+        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[3][3] = new WhitePawn();
+        chessBoard.handleMove([4, 4], [3, 3]);
+        expect(chessBoard.getPosition([3, 3])?.color).toBe("black");
+        expect(chessBoard.getPosition([3, 3])?.type).toBe("Bishop");
+      });
+
+      it("should not be able to move diagonally if the target position is occupied by a piece of the same color", () => {
+        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[3][3] = new BlackPawn();
+
+        try {
+          chessBoard.handleMove([4, 4], [3, 3]);
+          expect(false).toBe(true);
+        } catch (error) {
+          expect((error as Error).message).toBe("Invalid move");
+          expect(chessBoard.getPosition([3, 3])?.color).toBe("black");
+          expect(chessBoard.getPosition([3, 3])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
+          expect(chessBoard.getPosition([4, 4])?.type).toBe("Bishop");
+        }
+      });
+    });
+
+    describe("White Queen", () => {
+      let chessBoard: ChessBoard;
+      beforeEach(() => {
+        chessBoard = new ChessBoard();
+      });
+
+      it("should be defined", () => {
+        expect(WhiteQueen).toBeDefined();
+      });
+
+      it("should be able to move diagonally to a target position", () => {
+        chessBoard.board[4][4] = new WhiteQueen();
+        chessBoard.board[2][2] = new BlackPawn();
+        chessBoard.handleMove([4, 4], [2, 2]);
+        expect(chessBoard.getPosition([2, 2])?.color).toBe("white");
+        expect(chessBoard.getPosition([2, 2])?.type).toBe("Queen");
+      });
+      it("should be able to move horizontally to a target position", () => {
+        chessBoard.board[4][4] = new WhiteQueen();
+        chessBoard.board[4][6] = new BlackPawn();
+        chessBoard.handleMove([4, 4], [4, 6]);
+        expect(chessBoard.getPosition([4, 6])?.color).toBe("white");
+        expect(chessBoard.getPosition([4, 6])?.type).toBe("Queen");
+      });
+      it("should be able to move vertically to a target position", () => {
+        chessBoard.board[4][4] = new WhiteQueen();
+        chessBoard.board[2][4] = new BlackPawn();
+        chessBoard.handleMove([4, 4], [2, 4]);
+        expect(chessBoard.getPosition([2, 4])?.color).toBe("white");
+        expect(chessBoard.getPosition([2, 4])?.type).toBe("Queen");
+      });
+
+      it("should not be able to move if a piece is blocking the path", () => {
+        chessBoard.board[4][4] = new WhiteQueen();
+        chessBoard.board[2][4] = new WhitePawn();
+        try {
+          chessBoard.handleMove([4, 4], [2, 4]);
+          expect(false).toBe(true);
+        } catch (error) {
+          expect(chessBoard.getPosition([2, 4])?.color).toBe("white");
+          expect(chessBoard.getPosition([2, 4])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([4, 4])?.color).toBe("white");
+          expect(chessBoard.getPosition([4, 4])?.type).toBe("Queen");
+        }
+      });
+    });
+
+    describe("Black Queen", () => {
+      let chessBoard: ChessBoard;
+      beforeEach(() => {
+        chessBoard = new ChessBoard();
+        chessBoard.nextTurn();
+      });
+
+      it("should be defined", () => {
+        const blackQueen = new BlackQueen();
+        expect(blackQueen).toBeDefined();
+      });
+
+      it("should be able to move diagonally to a target position", () => {
+        chessBoard.board[4][4] = new BlackQueen();
+        chessBoard.board[2][2] = new WhitePawn();
+        chessBoard.handleMove([4, 4], [2, 2]);
+        expect(chessBoard.getPosition([2, 2])?.color).toBe("black");
+        expect(chessBoard.getPosition([2, 2])?.type).toBe("Queen");
+      });
+      it("should be able to move horizontally to a target position", () => {
+        chessBoard.board[4][4] = new BlackQueen();
+        chessBoard.board[4][6] = new WhitePawn();
+        chessBoard.handleMove([4, 4], [4, 6]);
+        expect(chessBoard.getPosition([4, 6])?.color).toBe("black");
+        expect(chessBoard.getPosition([4, 6])?.type).toBe("Queen");
+      });
+      it("should be able to move vertically to a target position", () => {
+        chessBoard.board[4][4] = new BlackQueen();
+        chessBoard.board[2][4] = new WhitePawn();
+        chessBoard.handleMove([4, 4], [2, 4]);
+        expect(chessBoard.getPosition([2, 4])?.color).toBe("black");
+        expect(chessBoard.getPosition([2, 4])?.type).toBe("Queen");
+      });
+
+      it("should not be able to move if a piece is blocking the path", () => {
+        chessBoard.board[4][4] = new BlackQueen();
+        chessBoard.board[2][4] = new BlackPawn();
+        try {
+          chessBoard.handleMove([4, 4], [2, 4]);
+          expect(false).toBe(true);
+        } catch (error) {
+          expect(chessBoard.getPosition([2, 4])?.color).toBe("black");
+          expect(chessBoard.getPosition([2, 4])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
+          expect(chessBoard.getPosition([4, 4])?.type).toBe("Queen");
+        }
+      });
+    });
+
+    describe("White King", () => {
+      let chessBoard: ChessBoard;
+      beforeEach(() => {
+        chessBoard = new ChessBoard();
+      });
+
+      it("should be defined", () => {
+        const whiteKing = new WhiteKing();
+        expect(whiteKing).toBeDefined();
+      });
+
+      it("should move vertically", () => {
+        chessBoard.board[4][4] = new WhiteKing(); // Place the king at position (4, 4)
+        chessBoard.handleMove([4, 4], [3, 4]);
+
+        expect(chessBoard.getPosition([3, 4])?.type).toBe("King");
+        expect(chessBoard.getPosition([3, 4])?.color).toBe("white");
+      });
+
+      it("should move horizontally", () => {
+        chessBoard.board[4][4] = new WhiteKing(); // Place the king at position (4, 4)
+        chessBoard.handleMove([4, 4], [4, 3]);
+
+        expect(chessBoard.getPosition([4, 3])?.type).toBe("King");
+        expect(chessBoard.getPosition([4, 3])?.color).toBe("white");
+      });
+
+      it("should move diagonally", () => {
+        chessBoard.board[4][4] = new WhiteKing(); // Place the king at position (4, 4)
+        chessBoard.handleMove([4, 4], [3, 3]);
+
+        expect(chessBoard.getPosition([3, 3])?.type).toBe("King");
+        expect(chessBoard.getPosition([3, 3])?.color).toBe("white");
+      });
+
+      it("should not be able to move if there is a piece in the way", () => {
+        chessBoard.board[4][4] = new WhiteKing(); // Place the king at position (4, 4)
+        chessBoard.board[3][4] = new WhitePawn(); // Place the king at position (4, 4)
+
+        try {
+          chessBoard.handleMove([4, 4], [3, 4]);
+          expect(false).toBe(true);
+        } catch (error) {
+          expect((error as Error).message).toBe("Invalid move");
+          expect(chessBoard.getPosition([4, 4])?.type).toBe("King");
+          expect(chessBoard.getPosition([4, 4])?.color).toBe("white");
+          expect(chessBoard.getPosition([3, 4])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([3, 4])?.color).toBe("white");
+        }
+      });
+
+      it("should be able to move if there is an enemy in the target", () => {
+        chessBoard.board[4][4] = new WhiteKing();
+        chessBoard.board[3][4] = new BlackPawn();
+
+        chessBoard.handleMove([4, 4], [3, 4]);
+        expect(chessBoard.getPosition([3, 4])?.type).toBe("King");
+        expect(chessBoard.getPosition([3, 4])?.color).toBe("white");
+      });
+
+      it("should be able to castling to queen side if there are no enemy in the way", () => {
+        chessBoard.board[0][1] = undefined;
+        chessBoard.board[0][2] = undefined;
+        chessBoard.board[0][3] = undefined;
+
+        const whiteKing = new WhiteKing();
+        const castling = whiteKing.canCastling(chessBoard.board, "queen");
+
+        expect(castling).toBe(true);
+      });
+
+      it("should be able to castling to king side if there are no enemy in the way", () => {
+        chessBoard.board[0][6] = undefined;
+        chessBoard.board[0][5] = undefined;
+
+        const whiteKing = new WhiteKing();
+        const castling = whiteKing.canCastling(chessBoard.board, "king");
+
+        expect(castling).toBe(true);
+      });
+
+      it("should not be able to castling to king side if there is an enemy in the way", () => {
+        chessBoard.board[0][6] = undefined;
+        chessBoard.board[0][5] = new BlackPawn();
+
+        const whiteKing = new WhiteKing();
+        const castling = whiteKing.canCastling(chessBoard.board, "king");
+
+        expect(castling).toBe(false);
+      });
+
+      it("should not be able to castling to king side if its blocked", () => {
+        chessBoard.board[0][6] = undefined;
+        chessBoard.board[0][5] = new BlackPawn();
+
+        const whiteKing = new WhiteKing();
+        const castling = whiteKing.canCastling(chessBoard.board, "king");
+
+        expect(castling).toBe(false);
+      });
+    });
+
+    describe("Black King", () => {
+      let chessBoard: ChessBoard;
+      beforeEach(() => {
+        chessBoard = new ChessBoard();
+        chessBoard.nextTurn();
+      });
+
+      it("should be defined", () => {
+        const blackKing = new BlackKing();
+        expect(blackKing).toBeDefined();
+      });
+
+      it("should move vertically", () => {
+        chessBoard.board[4][4] = new BlackKing(); // Place the king at position (4, 4)
+        chessBoard.handleMove([4, 4], [3, 4]);
+
+        expect(chessBoard.getPosition([3, 4])?.type).toBe("King");
+        expect(chessBoard.getPosition([3, 4])?.color).toBe("black");
+      });
+
+      it("should move horizontally", () => {
+        chessBoard.board[4][4] = new BlackKing(); // Place the king at position (4, 4)
+        chessBoard.handleMove([4, 4], [4, 3]);
+
+        expect(chessBoard.getPosition([4, 3])?.type).toBe("King");
+        expect(chessBoard.getPosition([4, 3])?.color).toBe("black");
+      });
+
+      it("should move diagonally", () => {
+        chessBoard.board[4][4] = new BlackKing(); // Place the king at position (4, 4)
+        chessBoard.handleMove([4, 4], [3, 3]);
+
+        expect(chessBoard.getPosition([3, 3])?.type).toBe("King");
+        expect(chessBoard.getPosition([3, 3])?.color).toBe("black");
+      });
+
+      it("should not be able to move if there is a piece in the way", () => {
+        chessBoard.board[4][4] = new BlackKing(); // Place the king at position (4, 4)
+        chessBoard.board[3][4] = new BlackPawn(); // Place the king at position (4, 4)
+
+        try {
+          chessBoard.handleMove([4, 4], [3, 4]);
+          expect(false).toBe(true);
+        } catch (error) {
+          expect((error as Error).message).toBe("Invalid move");
+          expect(chessBoard.getPosition([4, 4])?.type).toBe("King");
+          expect(chessBoard.getPosition([4, 4])?.color).toBe("black");
+          expect(chessBoard.getPosition([3, 4])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([3, 4])?.color).toBe("black");
+        }
+      });
+
+      it("should be able to move if there is an enemy in the target", () => {
+        chessBoard.board[4][4] = new BlackKing(); // Place the king at position (4, 4)
+        chessBoard.board[3][4] = new WhitePawn(); // Place the king at position (4, 4)
+
+        chessBoard.handleMove([4, 4], [3, 4]);
+        expect(chessBoard.getPosition([3, 4])?.type).toBe("King");
+        expect(chessBoard.getPosition([3, 4])?.color).toBe("black");
+      });
+
+      it("should be able to castling to queen side if there are no enemy in the way", () => {
+        chessBoard.board[7][3] = undefined;
+        chessBoard.board[7][2] = undefined;
+        chessBoard.board[7][1] = undefined;
+
+        const blackKing = new BlackKing();
+        const castling = blackKing.canCastling(chessBoard.board, "queen");
+
+        expect(castling).toBe(true);
+      });
+
+      it("should be able to castling to king side if there are no enemy in the way", () => {
+        chessBoard.board[7][6] = undefined;
+        chessBoard.board[7][5] = undefined;
+
+        const blackKing = new BlackKing();
+        const castling = blackKing.canCastling(chessBoard.board, "king");
+
+        expect(castling).toBe(true);
+      });
+
+      it("should not be able to castling to king side if there is an enemy in the way", () => {
+        chessBoard.board[0][6] = undefined;
+        chessBoard.board[0][5] = new BlackPawn();
+
+        const blackKing = new BlackKing();
+        const castling = blackKing.canCastling(chessBoard.board, "king");
+        expect(castling).toBe(false);
+      });
+
+      it("should not be able to castling to king side if its blocked", () => {
+        chessBoard.board[0][6] = undefined;
+        chessBoard.board[0][5] = new BlackPawn();
+
+        const blackKing = new BlackKing();
+
+        const castling = blackKing.canCastling(chessBoard.board, "king");
+        expect(castling).toBe(false); // This should never be true
       });
     });
   });
