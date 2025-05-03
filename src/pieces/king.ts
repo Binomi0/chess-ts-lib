@@ -186,21 +186,21 @@ export class WhiteKing extends King {
   }
 
   castleQueenSide(board: BoardCell[][]) {
-    board[7][7] = undefined;
+    board[7][0] = undefined;
     board[7][4] = undefined;
 
-    board[7][6] = new WhiteRook();
-    board[7][5] = new WhiteKing();
+    board[7][2] = new WhiteRook();
+    board[7][1] = new WhiteKing();
 
     this.castlingRights = false;
   }
 
   castleKingSide(board: BoardCell[][]) {
-    board[7][0] = undefined;
+    board[7][7] = undefined;
     board[7][4] = undefined;
 
-    board[7][1] = new WhiteRook();
-    board[7][2] = new WhiteKing();
+    board[7][5] = new WhiteRook();
+    board[7][6] = new WhiteKing();
 
     this.castlingRights = false;
   }
