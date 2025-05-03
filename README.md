@@ -11,6 +11,6 @@ A lightweight chess logic library for validating moves and simulating a chess ga
 ## Usage
 
 ```js
-const { Game, WhitePawn, BlackRook } = require("chess-lib");
+const { Game, WhitePawn, BlackRook } = require("chess-ts-lib");
 // Create board and play!
 ```

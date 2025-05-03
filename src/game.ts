@@ -3,14 +3,12 @@ import { type PieceColor } from "./piece";
 import Player from "./player";
 
 class Game {
-  static chessBoard: ChessBoard | undefined;
+  static chessBoard: ChessBoard = new ChessBoard();
   static winner: PieceColor | undefined;
-  private static started = false;
+  static started = false;
   static timeElapsed: number = 0;
 
-  constructor() {
-    Game.chessBoard = new ChessBoard();
-  }
+  constructor() {}
 
   static addPlayer(player: Player) {
     if (!this.chessBoard) {
@@ -35,6 +33,8 @@ class Game {
       console.log("Game has been started");
       this.timeElapsed = Date.now();
       this.started = true;
+    } else {
+      console.log("Game has already been started");
     }
   }
 

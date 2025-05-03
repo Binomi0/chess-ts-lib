@@ -6,7 +6,7 @@ class Player {
   movements: number = 0;
   color: PieceColor | undefined;
   private castled = "";
-  private timeElapsed: number = 0;
+  timeElapsed: number = 0;
 
   constructor(name: string) {
     this.name = name;
