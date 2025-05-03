@@ -22,11 +22,11 @@ export class Pawn extends Piece {
 }
 
 export class WhitePawn extends Pawn {
-  private static readonly START_ROW = 1;
+  private static readonly START_ROW = 6;
   private static readonly directions: Position[] = [
-    [1, 0],
-    [1, 1],
-    [1, -1],
+    [-1, 0],
+    [-1, -1],
+    [-1, 1],
   ];
 
   constructor() {
@@ -36,7 +36,7 @@ export class WhitePawn extends Pawn {
   private static isFirstMove(movement: Movement): boolean {
     const [fromRow] = movement.from;
     const [toRow] = movement.to;
-    return fromRow === this.START_ROW && toRow === this.START_ROW + 2;
+    return fromRow === this.START_ROW && toRow === this.START_ROW - 2;
   }
 
   static validateMove(board: BoardCell[][], movement: Movement): boolean {
@@ -49,11 +49,12 @@ export class WhitePawn extends Pawn {
 }
 
 export class BlackPawn extends Pawn {
-  private static readonly START_ROW = 6;
+  private static readonly START_ROW = 1;
+
   private static readonly directions: Position[] = [
-    [-1, 0],
-    [-1, -1],
-    [-1, 1],
+    [1, 0],
+    [1, 1],
+    [1, -1],
   ];
 
   constructor() {
@@ -64,7 +65,7 @@ export class BlackPawn extends Pawn {
     const [fromRow] = movement.from;
     const [toRow] = movement.to;
 
-    if (fromRow === this.START_ROW && toRow === this.START_ROW - 2) {
+    if (fromRow === this.START_ROW && toRow === this.START_ROW + 2) {
       return true; // First move can be two squares forward
     }
 

@@ -23,11 +23,11 @@ export class King extends Piece {
   }
 }
 
-export class WhiteKing extends King {
+export class BlackKing extends King {
   private castlingRights = true;
 
   constructor() {
-    super("white");
+    super("black");
   }
 
   castling(board: BoardCell[][], side: Castling) {
@@ -115,11 +115,11 @@ export class WhiteKing extends King {
   }
 }
 
-export class BlackKing extends King {
+export class WhiteKing extends King {
   protected castlingRights = true;
 
   constructor() {
-    super("black");
+    super("white");
   }
 
   castling(board: BoardCell[][], side: Castling) {

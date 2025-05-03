@@ -37,28 +37,6 @@ class ChessBoard {
       for (let col = 0; col < 8; col++) {
         if (row === 0) {
           if (col === 0) {
-            this.board[row][col] = new WhiteRook();
-          } else if (col === 1) {
-            this.board[row][col] = new WhiteKnight();
-          } else if (col === 2) {
-            this.board[row][col] = new WhiteBishop();
-          } else if (col === 3) {
-            this.board[row][col] = new WhiteQueen();
-          } else if (col === 4) {
-            this.board[row][col] = new WhiteKing();
-          } else if (col === 5) {
-            this.board[row][col] = new WhiteBishop();
-          } else if (col === 6) {
-            this.board[row][col] = new WhiteKnight();
-          } else if (col === 7) {
-            this.board[row][col] = new WhiteRook();
-          }
-        } else if (row === 1) {
-          this.board[row][col] = new WhitePawn();
-        } else if (row === 6) {
-          this.board[row][col] = new BlackPawn();
-        } else if (row === 7) {
-          if (col === 0) {
             this.board[row][col] = new BlackRook();
           } else if (col === 1) {
             this.board[row][col] = new BlackKnight();
@@ -74,6 +52,28 @@ class ChessBoard {
             this.board[row][col] = new BlackKnight();
           } else if (col === 7) {
             this.board[row][col] = new BlackRook();
+          }
+        } else if (row === 1) {
+          this.board[row][col] = new BlackPawn();
+        } else if (row === 6) {
+          this.board[row][col] = new WhitePawn();
+        } else if (row === 7) {
+          if (col === 0) {
+            this.board[row][col] = new WhiteRook();
+          } else if (col === 1) {
+            this.board[row][col] = new WhiteKnight();
+          } else if (col === 2) {
+            this.board[row][col] = new WhiteBishop();
+          } else if (col === 3) {
+            this.board[row][col] = new WhiteQueen();
+          } else if (col === 4) {
+            this.board[row][col] = new WhiteKing();
+          } else if (col === 5) {
+            this.board[row][col] = new WhiteBishop();
+          } else if (col === 6) {
+            this.board[row][col] = new WhiteKnight();
+          } else if (col === 7) {
+            this.board[row][col] = new WhiteRook();
           }
         }
       }

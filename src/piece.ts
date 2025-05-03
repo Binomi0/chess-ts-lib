@@ -37,9 +37,9 @@ class Piece implements Piece {
   ): boolean {
     const validMoves: Position[] = [];
 
-    for (const [dx, dy] of directions) {
-      const newRow = movement.from[0] + dx;
-      const newCol = movement.from[1] + dy;
+    for (const [row, col] of directions) {
+      const newRow = movement.from[0] + row;
+      const newCol = movement.from[1] + col;
 
       if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
@@ -66,9 +66,9 @@ class Piece implements Piece {
   ) {
     const validMoves: Position[] = [];
 
-    for (const [dx, dy] of directions) {
-      let newRow = movement.from[0] + dx;
-      let newCol = movement.from[1] + dy;
+    for (const [row, col] of directions) {
+      let newRow = movement.from[0] + row;
+      let newCol = movement.from[1] + col;
 
       while (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
@@ -82,8 +82,8 @@ class Piece implements Piece {
           break;
         }
 
-        newRow += dx;
-        newCol += dy;
+        newRow += row;
+        newCol += col;
       }
     }
 
