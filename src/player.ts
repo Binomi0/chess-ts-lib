@@ -1,11 +1,6 @@
 import { Castling } from "./chessBoard";
 import { PieceColor } from "./piece";
 
-export type Players = {
-  white: Player;
-  black: Player;
-};
-
 class Player {
   name: string;
   movements: number = 0;

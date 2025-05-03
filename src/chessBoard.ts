@@ -6,7 +6,7 @@ import { BlackPawn, WhitePawn } from "./pieces/pawn";
 import { BlackRook, WhiteRook } from "./pieces/rook";
 import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import ChessBoardValidations from "./chessBoardValidations";
-import Player, { type Players } from "./player";
+import Player from "./player";
 import { logMovement } from "./utils/helpers";
 
 export type Movement = {
@@ -21,7 +21,7 @@ export type Position = [number, number];
 class ChessBoard {
   board: BoardCell[][];
   turn: PieceColor = "white";
-  players: Map<keyof Players, Player> = new Map();
+  players: Map<PieceColor, Player> = new Map();
 
   constructor() {
     // Define the initial positions of pieces on the board

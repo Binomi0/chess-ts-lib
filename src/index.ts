@@ -4,7 +4,6 @@ export { default as Piece } from "./piece";
 export * from "./piece";
 
 export { default as Player } from "./player";
-export * from "./player";
 
 export { default as ChessBoard } from "./chessBoard";
 export * from "./chessBoard";
