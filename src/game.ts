@@ -3,14 +3,14 @@ import { type PieceColor } from "./piece";
 import Player from "./player";
 
 class Game {
-  static chessBoard: ChessBoard = new ChessBoard();
-  static winner: PieceColor | undefined;
-  static started = false;
-  static timeElapsed: number = 0;
+  chessBoard: ChessBoard = new ChessBoard();
+  winner: PieceColor | undefined;
+  started = false;
+  timeElapsed: number = 0;
 
   constructor() {}
 
-  static addPlayer(player: Player) {
+  addPlayer(player: Player) {
     if (!this.chessBoard) {
       throw new Error("Chess board is not initialized");
     }
@@ -24,7 +24,7 @@ class Game {
     this.chessBoard.players.get(color)?.addSide(color);
   }
 
-  static start() {
+  start() {
     if (!this.arePlayersReady) {
       throw new Error("Please add both players before starting the game.");
     }
@@ -38,7 +38,7 @@ class Game {
     }
   }
 
-  static get arePlayersReady(): boolean {
+  get arePlayersReady(): boolean {
     if (!this.chessBoard) {
       throw new Error("Chess board is not initialized");
     }
