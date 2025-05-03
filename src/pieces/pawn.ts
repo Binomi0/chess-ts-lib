@@ -5,6 +5,7 @@ import {
   isCellEmpty,
   isCellCaptured,
   isValidDestination,
+  isCellBlocked,
 } from "../utils/helpers";
 
 export class Pawn extends Piece {
@@ -39,14 +40,23 @@ export class WhitePawn extends Pawn {
     super("white");
   }
 
-  private static isFirstMove(movement: Movement): boolean {
-    const [fromRow] = movement.from;
-    const [toRow] = movement.to;
-    return fromRow === this.START_ROW && toRow === this.START_ROW - 2;
+  private static isFirstMove(
+    board: BoardCell[][],
+    movement: Movement
+  ): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow, toCol] = movement.to;
+    const piece = board[fromRow - 1][fromCol];
+    return (
+      fromRow === this.START_ROW &&
+      toRow === this.START_ROW - 2 &&
+      fromCol === toCol &&
+      piece === undefined
+    );
   }
 
   static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    if (this.isFirstMove(movement)) {
+    if (this.isFirstMove(board, movement)) {
       return true;
     }
 
@@ -71,7 +81,11 @@ export class WhitePawn extends Pawn {
       if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
 
-        if (!isCellEmpty(target) && isCellCaptured(target, movement)) {
+        if (
+          !isCellEmpty(target) &&
+          !isCellBlocked(target, movement) &&
+          isCellCaptured(target, movement)
+        ) {
           validMoves.push([newRow, newCol]);
         }
       }
@@ -100,14 +114,23 @@ export class BlackPawn extends Pawn {
     super("black");
   }
 
-  private static isFirstMove(movement: Movement): boolean {
-    const [fromRow] = movement.from;
-    const [toRow] = movement.to;
-    return fromRow === this.START_ROW && toRow === this.START_ROW + 2;
+  private static isFirstMove(
+    board: BoardCell[][],
+    movement: Movement
+  ): boolean {
+    const [fromRow, fromCol] = movement.from;
+    const [toRow, toCol] = movement.to;
+    const piece = board[fromRow + 1][fromCol];
+    return (
+      fromRow === this.START_ROW &&
+      toRow === this.START_ROW + 2 &&
+      fromCol === toCol &&
+      piece === undefined
+    );
   }
 
   static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    if (this.isFirstMove(movement)) {
+    if (this.isFirstMove(board, movement)) {
       return true; // First move can be two squares forward
     }
 
@@ -132,7 +155,11 @@ export class BlackPawn extends Pawn {
       if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
 
-        if (!isCellEmpty(target) && isCellCaptured(target, movement)) {
+        if (
+          !isCellEmpty(target) &&
+          !isCellBlocked(target, movement) &&
+          isCellCaptured(target, movement)
+        ) {
           validMoves.push([newRow, newCol]);
         }
       }
