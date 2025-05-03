@@ -8,6 +8,8 @@ export { default as Player } from "./player";
 export { default as ChessBoard } from "./chessBoard";
 export * from "./chessBoard";
 
+export { default as ChessBoardValidations } from "./chessBoardValidations";
+
 export * from "./utils/helpers";
 
 export * from "./pieces/bishop";
