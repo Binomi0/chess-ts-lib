@@ -1,11 +1,5 @@
-import { BoardCell, Castling, Movement } from "../chessBoard";
-import Piece, { PieceColor, Position } from "../piece";
-import {
-  isCellEmpty,
-  isCellCaptured,
-  isInBounds,
-  isValidDestination,
-} from "../utils/helpers";
+import { BoardCell, Castling, Movement, Position } from "../chessBoard";
+import Piece, { PieceColor } from "../piece";
 import { WhiteRook } from "./rook";
 
 export class King extends Piece {
@@ -25,28 +19,7 @@ export class King extends Piece {
   }
 
   static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    const validMoves: Position[] = [];
-
-    for (const [dx, dy] of this.directions) {
-      const newRow = movement.from[0] + dx;
-      const newCol = movement.from[1] + dy;
-
-      if (isInBounds([newRow, newCol])) {
-        const target = board[newRow][newCol];
-
-        if (isCellEmpty(target) || isCellCaptured(target, movement)) {
-          validMoves.push([newRow, newCol]);
-        }
-      }
-    }
-
-    if (isValidDestination(validMoves, movement.to)) {
-      return true;
-    }
-
-    throw new Error(
-      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
-    );
+    return this.validateSingleMove(board, King.directions, movement);
   }
 }
 
@@ -71,6 +44,26 @@ export class WhiteKing extends King {
     }
 
     throw new Error("Invalid side for castling");
+  }
+
+  castleQueenSide(board: BoardCell[][]) {
+    board[0][0] = undefined;
+    board[0][4] = undefined;
+
+    board[0][1] = new WhiteRook();
+    board[0][2] = new WhiteKing();
+
+    this.castlingRights = false;
+  }
+
+  castleKingSide(board: BoardCell[][]) {
+    board[0][7] = undefined;
+    board[0][4] = undefined;
+
+    board[0][6] = new WhiteRook();
+    board[0][5] = new WhiteKing();
+
+    this.castlingRights = false;
   }
 
   canCastle(board: BoardCell[][], side: Castling) {
@@ -119,26 +112,6 @@ export class WhiteKing extends King {
     }
 
     throw new Error("Invalid castling rights for queen");
-  }
-
-  castleQueenSide(board: BoardCell[][]) {
-    board[0][0] = undefined;
-    board[0][4] = undefined;
-
-    board[0][1] = new WhiteRook();
-    board[0][2] = new WhiteKing();
-
-    this.castlingRights = false;
-  }
-
-  castleKingSide(board: BoardCell[][]) {
-    board[0][7] = undefined;
-    board[0][4] = undefined;
-
-    board[0][6] = new WhiteRook();
-    board[0][5] = new WhiteKing();
-
-    this.castlingRights = false;
   }
 }
 

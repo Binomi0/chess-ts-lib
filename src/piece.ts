@@ -1,4 +1,4 @@
-import ChessBoard, { BoardCell, Movement } from "./chessBoard";
+import { BoardCell, Movement, Position } from "./chessBoard";
 import {
   isInBounds,
   isCellEmpty,
@@ -6,7 +6,6 @@ import {
   isValidDestination,
 } from "./utils/helpers";
 
-export type Position = [number, number];
 export type PieceColor = "black" | "white";
 export type PieceType =
   | "Pawn"
@@ -31,7 +30,35 @@ class Piece implements Piece {
     this.type = type;
   }
 
-  validateSingleMove() {}
+  static validateSingleMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean {
+    const validMoves: Position[] = [];
+
+    for (const [dx, dy] of directions) {
+      const newRow = movement.from[0] + dx;
+      const newCol = movement.from[1] + dy;
+
+      if (isInBounds([newRow, newCol])) {
+        const target = board[newRow][newCol];
+
+        if (isCellEmpty(target) || isCellCaptured(target, movement)) {
+          validMoves.push([newRow, newCol]);
+        }
+      }
+    }
+
+    if (isValidDestination(validMoves, movement.to)) {
+      return true;
+    }
+
+    throw new Error(
+      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
+    );
+  }
+
   static validateMultiMove(
     board: BoardCell[][],
     directions: Position[],

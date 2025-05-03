@@ -1,37 +1,51 @@
 import ChessBoard from "./chessBoard";
-import { PieceColor } from "./piece";
+import { type PieceColor } from "./piece";
 import Player from "./player";
 
 class Game {
-  chessBoard: ChessBoard | undefined;
-  winner: PieceColor | undefined;
+  static chessBoard: ChessBoard | undefined;
+  static winner: PieceColor | undefined;
+  private static started = false;
+  static timeElapsed: number = 0;
 
   constructor() {
-    this.chessBoard = new ChessBoard();
+    Game.chessBoard = new ChessBoard();
   }
 
-  addPlayer(player: Player) {
-    if (this.isPlayersFilled) {
+  static addPlayer(player: Player) {
+    if (!this.chessBoard) {
+      throw new Error("Chess board is not initialized");
+    }
+
+    if (this.arePlayersReady) {
       throw new Error("Cannot add more than two players.");
     }
 
-    const color = this.chessBoard?.players.has("white") ? "black" : "white";
-    this.chessBoard?.players.set(color, player);
-    this.chessBoard?.players.get(color)?.addSide(color);
+    const color = this.chessBoard.players.has("white") ? "black" : "white";
+    this.chessBoard.players.set(color, player);
+    this.chessBoard.players.get(color)?.addSide(color);
   }
 
-  start() {
-    if (!this.isPlayersFilled) {
+  static start() {
+    if (!this.arePlayersReady) {
       throw new Error("Please add both players before starting the game.");
     }
 
-    console.log("Game started");
+    if (!this.started) {
+      console.log("Game has been started");
+      this.timeElapsed = Date.now();
+      this.started = true;
+    }
   }
 
-  get isPlayersFilled() {
+  static get arePlayersReady(): boolean {
+    if (!this.chessBoard) {
+      throw new Error("Chess board is not initialized");
+    }
+
     return (
-      this.chessBoard?.players.has("white") &&
-      this.chessBoard?.players.has("black")
+      this.chessBoard.players.has("white") &&
+      this.chessBoard.players.has("black")
     );
   }
 }

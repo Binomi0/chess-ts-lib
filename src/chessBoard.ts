@@ -1,4 +1,4 @@
-import Piece, { PieceColor, Position } from "./piece";
+import Piece, { PieceColor } from "./piece";
 import { BlackBishop, WhiteBishop } from "./pieces/bishop";
 import { BlackKing, WhiteKing } from "./pieces/king";
 import { BlackKnight, WhiteKnight } from "./pieces/knight";
@@ -16,6 +16,7 @@ export type Movement = {
 };
 export type BoardCell = Piece | undefined;
 export type Castling = "queen" | "king";
+export type Position = [number, number];
 
 class ChessBoard {
   board: BoardCell[][];

@@ -1,11 +1,5 @@
-import { BoardCell, Movement } from "../chessBoard";
-import Piece, { PieceColor, Position } from "../piece";
-import {
-  isCellEmpty,
-  isCellCaptured,
-  isInBounds,
-  isValidDestination,
-} from "../utils/helpers";
+import { BoardCell, Movement, Position } from "../chessBoard";
+import Piece, { PieceColor } from "../piece";
 
 export class Queen extends Piece {
   private static readonly directions: Position[] = [

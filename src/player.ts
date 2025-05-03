@@ -11,9 +11,14 @@ class Player {
   movements: number = 0;
   color: PieceColor | undefined;
   private castled = "";
+  private timeElapsed: number = 0;
 
   constructor(name: string) {
     this.name = name;
+  }
+
+  addTimeElapsed(time: number) {
+    this.timeElapsed += time;
   }
 
   addMovement() {

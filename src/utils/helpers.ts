@@ -1,7 +1,7 @@
-import { Movement } from "../chessBoard";
-import Piece, { PieceColor, Position } from "../piece";
+import type { Movement, Position } from "../chessBoard";
+import type Piece from "../piece";
 
-export function isInBounds([x, y]: [number, number]) {
+export function isInBounds([x, y]: Position) {
   return x >= 0 && x < 8 && y >= 0 && y < 8;
 }
 
@@ -27,5 +27,10 @@ export function isCellCaptured(target?: Piece, movement?: Movement): boolean {
 }
 
 export function isValidDestination(moves: Position[], target: Position) {
-  return moves.some(([row, col]) => row === target[0] && col === target[1]);
+  if (!moves || !target) {
+    throw new Error("Invalid moves or target");
+  }
+
+  const [tRow, tCol] = target;
+  return moves.some(([r, c]) => r === tRow && c === tCol);
 }

@@ -1,5 +1,5 @@
-import { BoardCell } from "./chessBoard";
-import { PieceColor, Position } from "./piece";
+import { BoardCell, Position } from "./chessBoard";
+import { PieceColor } from "./piece";
 import { Bishop } from "./pieces/bishop";
 import { King } from "./pieces/king";
 import { Knight } from "./pieces/knight";
@@ -30,8 +30,8 @@ class ChessBoardValidations {
 
   static isValidMove(
     board: BoardCell[][],
-    from: [number, number],
-    to: [number, number]
+    from: Position,
+    to: Position
   ): boolean {
     const [fromRow, fromCol] = from;
     const [toRow, toCol] = to;
@@ -52,12 +52,11 @@ class ChessBoardValidations {
       throw new Error("Out of bounds");
     }
 
-    const isWhite = piece.color === "white";
     const movement = { from, to, piece };
 
     switch (piece.type) {
       case "Pawn": // Peón
-        return Pawn.validateMove(board, movement, isWhite);
+        return Pawn.validateMove(board, movement);
       case "Rook": // Torre
         return Rook.validateMove(board, movement);
       case "Knight": // Caballo
