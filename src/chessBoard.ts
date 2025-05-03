@@ -83,11 +83,11 @@ class ChessBoard {
   // Set to private when ready
   nextTurn() {
     if (this.turn === "white") {
-      this.turn = "black";
       this.players.get("white")?.addMovement();
+      this.turn = "black";
     } else {
-      this.turn = "white";
       this.players.get("black")?.addMovement();
+      this.turn = "white";
     }
   }
 

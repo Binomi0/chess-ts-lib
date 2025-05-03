@@ -69,9 +69,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [2, 1]);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement or target");
         }
       });
 
@@ -125,9 +123,7 @@ describe("Chess Board", () => {
             "color",
             "black"
           );
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement or target");
         }
       });
 
@@ -140,9 +136,7 @@ describe("Chess Board", () => {
         } catch (error) {
           expect(chessBoard.getPosition([3, 0])?.color).toBe("black");
           expect(chessBoard.getPosition([4, 0])?.color).toBe("white");
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement or target");
         }
       });
     });
