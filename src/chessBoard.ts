@@ -1,6 +1,6 @@
 import Piece, { PieceColor } from "./piece";
 import { BlackBishop, WhiteBishop } from "./pieces/bishop";
-import { BlackKing, WhiteKing } from "./pieces/king";
+import { BlackKing, King, WhiteKing } from "./pieces/king";
 import { BlackKnight, WhiteKnight } from "./pieces/knight";
 import { BlackPawn, WhitePawn } from "./pieces/pawn";
 import { BlackRook, WhiteRook } from "./pieces/rook";
@@ -89,6 +89,13 @@ class ChessBoard {
       this.players.get("black")?.addMovement();
       this.turn = "white";
     }
+
+    const isCheckmate = ChessBoardValidations.checkForCheckmate(
+      this.board,
+      this.turn
+    );
+
+    console.log(isCheckmate ? "Checkmate!" : "No checkmate.");
   }
 
   getBoard(): BoardCell[][] {
@@ -116,7 +123,6 @@ class ChessBoard {
     try {
       const [fromRow, fromCol] = from;
       const [toRow, toCol] = to;
-
       const pieceToMove = this.board[fromRow][fromCol];
 
       this.board[toRow][toCol] = pieceToMove;

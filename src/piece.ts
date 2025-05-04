@@ -19,6 +19,8 @@ interface Piece {
   color: Readonly<PieceColor>;
   type: Readonly<PieceType>;
   validateMove(board: BoardCell[][], movement: Movement): boolean;
+  validateSingleMove(board: BoardCell[][], movement: Movement): boolean;
+  validateMultiMove(board: BoardCell[][], movement: Movement): boolean;
 }
 
 class Piece implements Piece {

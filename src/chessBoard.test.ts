@@ -1,4 +1,5 @@
 import ChessBoard from "./chessBoard";
+import ChessBoardValidations from "./chessBoardValidations";
 import { BlackBishop, WhiteBishop } from "./pieces/bishop";
 import { BlackKing, WhiteKing } from "./pieces/king";
 import { WhiteKnight, BlackKnight } from "./pieces/knight";
@@ -140,6 +141,15 @@ describe("Chess Board", () => {
           expect(chessBoard.getPosition([4, 0])?.color).toBe("white");
           expect((error as Error).message).toBe("Invalid movement or target");
         }
+      });
+
+      it.only("should be able to checkmate", () => {
+        chessBoard.board[4][4] = new WhiteKing();
+        chessBoard.board[6][5] = new BlackPawn();
+
+        expect(
+          ChessBoardValidations.checkForCheckmate(chessBoard.board, "black")
+        ).toBe(false);
       });
     });
 

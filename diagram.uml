@@ -1,0 +1,126 @@
+@startuml
+
+' -- Piezas base --
+class Piece {
+  +color: string
+  +type: string
+  +{static} validateSingleMove()
+  +{static} validateMultiMove()
+}
+
+class Bishop extends Piece {
+  +{static} directions: array
+}
+
+class Rook extends Piece {
+  +{static} directions: array
+}
+
+class Knight extends Piece {
+  +{static} directions: array
+}
+
+class King extends Piece {
+  +{static} directions: array
+  +castlingRights: boolean
+  +canCastle()
+  +castling()
+  +performCastling()
+}
+
+class Queen extends Piece {
+  +{static} directions: array
+}
+
+class Pawn extends Piece {
+  +{static} START_ROW: number
+  +{static} directions: array
+}
+
+' -- Piezas concretas --
+class WhiteBishop extends Bishop
+class BlackBishop extends Bishop
+class WhiteRook extends Rook
+class BlackRook extends Rook
+class WhiteKnight extends Knight
+class BlackKnight extends Knight
+class WhiteKing extends King
+class BlackKing extends King
+class WhiteQueen extends Queen
+class BlackQueen extends Queen
+class WhitePawn extends Pawn
+class BlackPawn extends Pawn
+
+' -- Jugador y tablero --
+class Player {
+  +name: string
+  +movements: number
+  +castled: string
+  +timeElapsed: number
+  +addMovement()
+  +addSide()
+  +setCastled()
+}
+
+class ChessBoard {
+  -board: Piece[][]
+  -turn: string
+  -players: Map<string, Player>
+  +initializeBoard()
+  +nextTurn()
+  +handleMove()
+  +executeMovement()
+  +castlingWhite()
+  +castlingBlack()
+  +findKingPosition
+  +attemptCastling()
+}
+
+class CastlingManager {
+  +{static} canCastle()
+  +{static} getCastlingData()
+  +{static} validateConditions()
+}
+
+class ChessBoardValidations {
+  +{static} isValidTurn()
+  +{static} isValidMove()
+  +{static} checkForCheckmate()
+  +{static} findKing()
+}
+
+class Game {
+  -chessBoard: ChessBoard
+  -started: boolean
+  -timeElapsed: number
+  +addPlayer()
+  +start()
+}
+
+' -- Relaciones --
+Piece <|-- Bishop
+Piece <|-- Rook
+Piece <|-- Knight
+Piece <|-- King
+Piece <|-- Queen
+Piece <|-- Pawn
+
+Bishop <|-- WhiteBishop
+Bishop <|-- BlackBishop
+Rook <|-- WhiteRook
+Rook <|-- BlackRook
+Knight <|-- WhiteKnight
+Knight <|-- BlackKnight
+King <|-- WhiteKing
+King <|-- BlackKing
+Queen <|-- WhiteQueen
+Queen <|-- BlackQueen
+Pawn <|-- WhitePawn
+Pawn <|-- BlackPawn
+
+ChessBoard "1" *-- "8x8" Piece
+ChessBoard "1" *-- "2" Player
+ChessBoard ..> ChessBoardValidations
+Game "1" *-- "1" ChessBoard
+
+@enduml

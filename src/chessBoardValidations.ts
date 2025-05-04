@@ -1,5 +1,5 @@
 import { BoardCell, Position } from "./chessBoard";
-import { PieceColor } from "./piece";
+import Piece, { PieceColor } from "./piece";
 import { Bishop } from "./pieces/bishop";
 import { King } from "./pieces/king";
 import { Knight } from "./pieces/knight";
@@ -10,6 +10,55 @@ import { isInBounds } from "./utils/helpers";
 
 class ChessBoardValidations {
   private constructor() {}
+
+  static checkForCheckmate(board: BoardCell[][], turn: PieceColor): boolean {
+    const kingPosition = ChessBoardValidations.findKing(board, turn);
+    if (!kingPosition) {
+      throw new Error("King not found");
+    }
+
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const current: Position = [row, col];
+        const piece = board[row][col];
+        if (piece) {
+          if (!piece.validateMove) {
+            console.log(
+              "Piece does not have validateSingleMove method:",
+              piece
+            );
+          }
+
+          if (
+            piece.color !== turn &&
+            isInBounds(current) &&
+            piece?.validateMove(board, {
+              from: current,
+              to: kingPosition,
+              piece,
+            })
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  static findKing(board: BoardCell[][], turn: PieceColor): Position | null {
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (
+          board[row][col]?.color === turn &&
+          board[row][col]?.type === "King"
+        ) {
+          return [row, col];
+        }
+      }
+    }
+    return null;
+  }
 
   static isValidTurn(
     board: BoardCell[][],

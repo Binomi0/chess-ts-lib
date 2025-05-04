@@ -24,7 +24,7 @@ export class King extends Piece {
 }
 
 export class BlackKing extends King {
-  private castlingRights = true;
+  castlingRights = true;
 
   constructor() {
     super("black");
@@ -116,7 +116,7 @@ export class BlackKing extends King {
 }
 
 export class WhiteKing extends King {
-  protected castlingRights = true;
+  castlingRights = true;
 
   constructor() {
     super("white");

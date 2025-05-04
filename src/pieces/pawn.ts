@@ -99,6 +99,22 @@ export class WhitePawn extends Pawn {
       `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
     );
   }
+
+  static validateMultiMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean {
+    return super.validateSingleMove(board, directions, movement);
+  }
+
+  static validateSingleMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean {
+    return super.validateSingleMove(board, directions, movement);
+  }
 }
 
 export class BlackPawn extends Pawn {
@@ -121,6 +137,7 @@ export class BlackPawn extends Pawn {
     const [fromRow, fromCol] = movement.from;
     const [toRow, toCol] = movement.to;
     const piece = board[fromRow + 1][fromCol];
+
     return (
       fromRow === this.START_ROW &&
       toRow === this.START_ROW + 2 &&
@@ -172,5 +189,21 @@ export class BlackPawn extends Pawn {
     throw new Error(
       `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
     );
+  }
+
+  static validateMultiMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean {
+    return super.validateSingleMove(board, directions, movement);
+  }
+
+  static validateSingleMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean {
+    return super.validateSingleMove(board, directions, movement);
   }
 }
