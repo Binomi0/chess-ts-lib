@@ -85,7 +85,7 @@ class CastlingManager {
 class ChessBoardValidations {
   +{static} isValidTurn()
   +{static} isValidMove()
-  +{static} checkForCheckmate()
+  +{static} checkForCheck()
   +{static} findKing()
 }
 

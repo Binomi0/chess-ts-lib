@@ -1,209 +1,69 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { type PieceColor } from "../piece";
-import {
-  isInBounds,
-  isCellEmpty,
-  isCellCaptured,
-  isValidDestination,
-  isCellBlocked,
-} from "../utils/helpers";
+import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 
 export class Pawn extends Piece {
-  constructor(color: PieceColor) {
-    super(color, "Pawn");
-  }
-
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    const piece = board[movement.from[0]][movement.from[1]];
-
-    if (piece?.color === "black") {
-      return BlackPawn.validateMove(board, movement);
-    }
-
-    if (piece?.color === "white") {
-      return WhitePawn.validateMove(board, movement);
-    }
-
-    throw new Error("Invalid piece color");
-  }
-}
-
-export class WhitePawn extends Pawn {
-  private static readonly START_ROW = 6;
-  private static readonly directions: Position[] = [
-    [-1, 0],
-    [-1, -1],
-    [-1, 1],
-  ];
-
-  constructor() {
-    super("white");
-  }
-
-  private static isFirstMove(
-    board: BoardCell[][],
-    movement: Movement
-  ): boolean {
-    const [fromRow, fromCol] = movement.from;
-    const [toRow, toCol] = movement.to;
-    const piece = board[fromRow - 1][fromCol];
-    return (
-      fromRow === this.START_ROW &&
-      toRow === this.START_ROW - 2 &&
-      fromCol === toCol &&
-      piece === undefined
-    );
-  }
-
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    if (this.isFirstMove(board, movement)) {
-      return true;
-    }
-
-    const validMoves: Position[] = [];
-
-    for (const [row] of this.directions) {
-      const newRow = movement.from[0] + row;
-      const newCol = movement.from[1];
-
-      if (isInBounds([newRow, newCol])) {
-        const target = board[newRow][newCol];
-
-        if (isCellEmpty(target)) {
-          validMoves.push([newRow, newCol]);
-        }
-      }
-    }
-    for (const [row, col] of this.directions) {
-      const newRow = movement.from[0] + row;
-      const newCol = movement.from[1] + col;
-
-      if (isInBounds([newRow, newCol])) {
-        const target = board[newRow][newCol];
-
-        if (
-          !isCellEmpty(target) &&
-          !isCellBlocked(target, movement) &&
-          isCellCaptured(target, movement)
-        ) {
-          validMoves.push([newRow, newCol]);
-        }
-      }
-    }
-
-    if (isValidDestination(validMoves, movement.to)) {
-      return true;
-    }
-
-    throw new Error(
-      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
-    );
-  }
-
-  static validateMultiMove(
-    board: BoardCell[][],
-    directions: Position[],
-    movement: Movement
-  ): boolean {
-    return super.validateSingleMove(board, directions, movement);
-  }
-
-  static validateSingleMove(
-    board: BoardCell[][],
-    directions: Position[],
-    movement: Movement
-  ): boolean {
-    return super.validateSingleMove(board, directions, movement);
-  }
-}
-
-export class BlackPawn extends Pawn {
-  private static readonly START_ROW = 1;
-
-  private static readonly directions: Position[] = [
+  protected readonly directions: Position[] = [
     [1, 0],
     [1, 1],
     [1, -1],
   ];
 
-  constructor() {
-    super("black");
+  constructor(color: PieceColor) {
+    super(color, "Pawn");
   }
 
-  private static isFirstMove(
-    board: BoardCell[][],
-    movement: Movement
-  ): boolean {
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    super.getAllAvailableMoves(board, from, this.directions);
+  }
+
+  validateMove(board: BoardCell[][], movement: Movement): boolean {
     const [fromRow, fromCol] = movement.from;
     const [toRow, toCol] = movement.to;
-    const piece = board[fromRow + 1][fromCol];
+    const deltaRow = toRow - fromRow;
+    const deltaCol = toCol - fromCol;
 
-    return (
-      fromRow === this.START_ROW &&
-      toRow === this.START_ROW + 2 &&
-      fromCol === toCol &&
-      piece === undefined
-    );
-  }
+    const direction = this.color === "white" ? -1 : 1;
+    const startRow = this.color === "white" ? 6 : 1;
 
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    if (this.isFirstMove(board, movement)) {
-      return true; // First move can be two squares forward
-    }
-
-    const validMoves: Position[] = [];
-
-    for (const [row] of this.directions) {
-      const newRow = movement.from[0] + row;
-      const newCol = movement.from[1];
-
-      if (isInBounds([newRow, newCol])) {
-        const target = board[newRow][newCol];
-
-        if (isCellEmpty(target)) {
-          validMoves.push([newRow, newCol]);
-        }
+    // Movimiento hacia delante
+    if (deltaCol === 0) {
+      if (deltaRow === direction && isCellEmpty(board[toRow][toCol])) {
+        return true;
       }
-    }
-    for (const [row, col] of this.directions) {
-      const newRow = movement.from[0] + row;
-      const newCol = movement.from[1] + col;
 
-      if (isInBounds([newRow, newCol])) {
-        const target = board[newRow][newCol];
-
-        if (
-          !isCellEmpty(target) &&
-          !isCellBlocked(target, movement) &&
-          isCellCaptured(target, movement)
-        ) {
-          validMoves.push([newRow, newCol]);
-        }
+      if (
+        fromRow === startRow &&
+        deltaRow === 2 * direction &&
+        isCellEmpty(board[fromRow + direction][toCol]) &&
+        isCellEmpty(board[toRow][toCol])
+      ) {
+        return true;
       }
     }
 
-    if (isValidDestination(validMoves, movement.to)) {
+    // Captura en diagonal
+    if (
+      Math.abs(deltaCol) === 1 &&
+      deltaRow === direction &&
+      !isCellEmpty(board[toRow][toCol]) &&
+      isCellCaptured(board[toRow][toCol], movement.piece.color)
+    ) {
       return true;
     }
 
-    throw new Error(
-      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
-    );
+    throw new Error("Invalid movement for pawn");
   }
+}
 
-  static validateMultiMove(
-    board: BoardCell[][],
-    directions: Position[],
-    movement: Movement
-  ): boolean {
-    return super.validateSingleMove(board, directions, movement);
+export class WhitePawn extends Pawn {
+  constructor() {
+    super("white");
   }
+}
 
-  static validateSingleMove(
-    board: BoardCell[][],
-    directions: Position[],
-    movement: Movement
-  ): boolean {
-    return super.validateSingleMove(board, directions, movement);
+export class BlackPawn extends Pawn {
+  constructor() {
+    super("black");
   }
 }

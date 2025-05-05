@@ -1,25 +1,18 @@
 import { BoardCell, Castling, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor } from "../piece";
+import PieceDirections from "../PieceDirections";
+import { isCellCaptured, isCellEmpty, isInBounds } from "../utils/helpers";
 import { WhiteRook } from "./rook";
 
 export class King extends Piece {
-  private static readonly directions: Position[] = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-    [1, 1],
-    [1, -1],
-    [-1, 1],
-    [-1, -1],
-  ];
+  protected readonly directions: Position[] = PieceDirections.king;
 
   constructor(color: PieceColor) {
     super(color, "King");
   }
 
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    return this.validateSingleMove(board, King.directions, movement);
+  validateMove(board: BoardCell[][], movement: Movement): boolean {
+    return this.validateSingleMove(board, this.directions, movement);
   }
 }
 
@@ -28,6 +21,10 @@ export class BlackKing extends King {
 
   constructor() {
     super("black");
+  }
+
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    super.getAllAvailableMoves(board, from, this.directions);
   }
 
   castling(board: BoardCell[][], side: Castling) {

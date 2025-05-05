@@ -1,20 +1,16 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { type PieceColor } from "../piece";
+import PieceDirections from "../PieceDirections";
 
 export class Rook extends Piece {
-  private static readonly directions: Position[] = [
-    [-1, 0], // ↑
-    [1, 0], // ↓
-    [0, -1], // ←
-    [0, 1], // →
-  ];
+  protected readonly directions: Position[] = PieceDirections.rook;
 
   constructor(color: PieceColor) {
     super(color, "Rook");
   }
 
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    return this.validateMultiMove(board, Rook.directions, movement);
+  validateMove(board: BoardCell[][], movement: Movement): boolean {
+    return this.validateMultiMove(board, this.directions, movement);
   }
 }
 

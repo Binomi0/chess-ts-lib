@@ -1,24 +1,20 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor } from "../piece";
+import PieceDirections from "../PieceDirections";
 
 export class Knight extends Piece {
-  private static readonly directions: Position[] = [
-    [2, 1],
-    [2, -1],
-    [-2, 1],
-    [-2, -1],
-    [1, 2],
-    [1, -2],
-    [-1, 2],
-    [-1, -2],
-  ];
+  protected readonly directions: Position[] = PieceDirections.knight;
 
   constructor(color: PieceColor) {
     super(color, "Knight");
   }
 
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
-    return Piece.validateSingleMove(board, this.directions, movement);
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    super.getAllAvailableMoves(board, from, this.directions);
+  }
+
+  validateMove(board: BoardCell[][], movement: Movement): boolean {
+    return this.validateSingleMove(board, this.directions, movement);
   }
 }
 

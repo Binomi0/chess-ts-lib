@@ -19,8 +19,16 @@ interface Piece {
   color: Readonly<PieceColor>;
   type: Readonly<PieceType>;
   validateMove(board: BoardCell[][], movement: Movement): boolean;
-  validateSingleMove(board: BoardCell[][], movement: Movement): boolean;
-  validateMultiMove(board: BoardCell[][], movement: Movement): boolean;
+  validateSingleMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean;
+  validateMultiMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean;
 }
 
 class Piece implements Piece {
@@ -32,7 +40,29 @@ class Piece implements Piece {
     this.type = type;
   }
 
-  static validateSingleMove(
+  getAllAvailableMoves(
+    board: BoardCell[][],
+    from: Position,
+    directions: Position[]
+  ) {
+    const piece = board[from[0]][from[1]];
+    const validMoves: Position[] = [];
+
+    for (const [row, col] of directions) {
+      const newRow = from[0] + row;
+      const newCol = from[1] + col;
+
+      if (isInBounds([newRow, newCol])) {
+        const target = board[newRow][newCol];
+
+        if (isCellEmpty(target) || isCellCaptured(target, piece?.color)) {
+          validMoves.push([newRow, newCol]);
+        }
+      }
+    }
+  }
+
+  validateSingleMove(
     board: BoardCell[][],
     directions: Position[],
     movement: Movement
@@ -46,7 +76,10 @@ class Piece implements Piece {
       if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
 
-        if (isCellEmpty(target) || isCellCaptured(target, movement)) {
+        if (
+          isCellEmpty(target) ||
+          isCellCaptured(target, movement.piece.color)
+        ) {
           validMoves.push([newRow, newCol]);
         }
       }
@@ -61,7 +94,7 @@ class Piece implements Piece {
     );
   }
 
-  static validateMultiMove(
+  validateMultiMove(
     board: BoardCell[][],
     directions: Position[],
     movement: Movement
@@ -77,7 +110,7 @@ class Piece implements Piece {
 
         if (isCellEmpty(target)) {
           validMoves.push([newRow, newCol]);
-        } else if (isCellCaptured(target, movement)) {
+        } else if (isCellCaptured(target, movement.piece.color)) {
           validMoves.push([newRow, newCol]);
           break;
         } else {

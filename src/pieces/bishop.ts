@@ -1,19 +1,19 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor } from "../piece";
+import PieceDirections from "../PieceDirections";
 
 export class Bishop extends Piece {
-  private static readonly directions: Position[] = [
-    [-1, -1],
-    [1, 1],
-    [-1, 1],
-    [1, -1],
-  ];
+  protected readonly directions: Position[] = PieceDirections.bishop;
 
   constructor(color: PieceColor) {
     super(color, "Bishop");
   }
 
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    super.getAllAvailableMoves(board, from, this.directions);
+  }
+
+  validateMove(board: BoardCell[][], movement: Movement): boolean {
     return this.validateMultiMove(board, this.directions, movement);
   }
 }

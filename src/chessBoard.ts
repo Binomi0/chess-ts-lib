@@ -89,13 +89,22 @@ class ChessBoard {
       this.players.get("black")?.addMovement();
       this.turn = "white";
     }
+  }
 
-    const isCheckmate = ChessBoardValidations.checkForCheckmate(
-      this.board,
-      this.turn
-    );
+  isCheck() {
+    const result = ChessBoardValidations.isCheck(this.board, this.turn);
+    if (result) {
+      console.log("Check!");
+    }
 
-    console.log(isCheckmate ? "Checkmate!" : "No checkmate.");
+    return result;
+  }
+
+  isCheckMate() {
+    const result = ChessBoardValidations.isCheckMate(this.board, this.turn);
+    if (result) {
+      console.log("Checkmate!");
+    }
   }
 
   getBoard(): BoardCell[][] {
@@ -107,6 +116,8 @@ class ChessBoard {
   }
 
   handleMove(from: Position, to: Position) {
+    this.isCheck();
+
     try {
       ChessBoardValidations.isValidTurn(this.board, from, this.turn);
       ChessBoardValidations.isValidMove(this.board, from, to);

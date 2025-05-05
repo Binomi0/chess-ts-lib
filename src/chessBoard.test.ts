@@ -49,9 +49,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [4, 0]);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -59,9 +57,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [2, 1]);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -70,7 +66,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([1, 0], [2, 1]);
         } catch (error) {
-          expect((error as Error).message).toBe("Invalid movement or target");
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -92,18 +88,15 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to move backwards", () => {
+        chessBoard.board[5][0] = new BlackPawn();
         try {
-          chessBoard.handleMove([1, 0], [3, 0]);
-          chessBoard.handleMove([6, 0], [5, 0]);
-          chessBoard.handleMove([3, 0], [2, 0]);
+          chessBoard.handleMove([5, 0], [4, 0]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
-          expect(chessBoard.getPosition([2, 0])).toBeUndefined();
-          expect(chessBoard.getPosition([3, 0])?.type).toBe("Pawn");
-          expect(chessBoard.getPosition([3, 0])?.color).toBe("black");
+          expect((error as Error).message).toBe("Invalid movement for pawn");
+          expect(chessBoard.getPosition([4, 0])).toBeUndefined();
+          expect(chessBoard.getPosition([5, 0])?.type).toBe("Pawn");
+          expect(chessBoard.getPosition([5, 0])?.color).toBe("black");
         }
       });
 
@@ -126,30 +119,53 @@ describe("Chess Board", () => {
             "color",
             "black"
           );
-          expect((error as Error).message).toBe("Invalid movement or target");
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
       it("should not be able to jump if it's blocked", () => {
-        chessBoard.handleMove([1, 0], [3, 0]);
-        chessBoard.handleMove([6, 0], [4, 0]);
+        chessBoard.board[2][0] = new WhitePawn();
 
         try {
-          chessBoard.handleMove([3, 0], [4, 0]);
+          chessBoard.handleMove([1, 0], [3, 0]);
+          expect(false).toBe(true);
         } catch (error) {
-          expect(chessBoard.getPosition([3, 0])?.color).toBe("black");
-          expect(chessBoard.getPosition([4, 0])?.color).toBe("white");
-          expect((error as Error).message).toBe("Invalid movement or target");
+          expect(chessBoard.getPosition([1, 0])?.color).toBe("black");
+          expect(chessBoard.getPosition([2, 0])?.color).toBe("white");
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
-      it.only("should be able to checkmate", () => {
-        chessBoard.board[4][4] = new WhiteKing();
-        chessBoard.board[6][5] = new BlackPawn();
+      it("should be able to checkmate", () => {
+        chessBoard.board[7][0] = new WhiteKing();
+        chessBoard.board[5][1] = new BlackPawn();
 
-        expect(
-          ChessBoardValidations.checkForCheckmate(chessBoard.board, "black")
-        ).toBe(false);
+        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
+          false
+        );
+
+        chessBoard.board[5][1] = undefined;
+        chessBoard.board[6][1] = new BlackPawn();
+
+        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
+          true
+        );
+      });
+
+      it("should not be able to check", () => {
+        chessBoard.board[7][0] = new WhiteKing();
+        chessBoard.board[5][0] = new BlackPawn();
+
+        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
+          false
+        );
+
+        chessBoard.board[5][0] = undefined;
+        chessBoard.board[6][0] = new BlackPawn();
+
+        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
+          false
+        );
       });
     });
 
@@ -183,9 +199,7 @@ describe("Chess Board", () => {
         try {
           chessBoard.handleMove([6, 0], [3, 0]);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -194,9 +208,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([6, 0], [4, 1]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -205,9 +217,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([6, 0], [5, 1]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -236,9 +246,7 @@ describe("Chess Board", () => {
           chessBoard.handleMove([4, 0], [5, 0]);
           expect(false).toBe(true);
         } catch (error) {
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
 
@@ -274,9 +282,7 @@ describe("Chess Board", () => {
           expect(chessBoard.getPosition([4, 0])).toBeUndefined();
           expect(chessBoard.getPosition([5, 0])?.color).toBe("white");
           expect(chessBoard.getPosition([6, 0])?.color).toBe("white");
-          expect((error as Error).message).toMatch(
-            /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
-          );
+          expect((error as Error).message).toBe("Invalid movement for pawn");
         }
       });
     });
@@ -655,10 +661,11 @@ describe("Chess Board", () => {
         it("should not be able to move up three squares and left one square", () => {
           try {
             chessBoard.handleMove([7, 1], [4, 0]);
-            expect(chessBoard.getPosition([7, 1])?.color).toBe("white");
-            expect(chessBoard.getPosition([7, 1])?.type).toBe("Knight");
-            expect(chessBoard.getPosition([4, 0])?.color).toBeUndefined();
+            expect(false).toBe(true);
           } catch (error) {
+            expect((error as Error).message).toMatch(
+              /^Invalid move for \w+ from [0-7],[0-7] to [0-7],[0-7]$/
+            );
             expect(chessBoard.getPosition([7, 1])?.color).toBe("white");
             expect(chessBoard.getPosition([7, 1])?.type).toBe("Knight");
             expect(chessBoard.getPosition([4, 0])?.color).toBeUndefined();
