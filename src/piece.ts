@@ -60,6 +60,8 @@ class Piece implements Piece {
         }
       }
     }
+
+    return validMoves;
   }
 
   validateSingleMove(

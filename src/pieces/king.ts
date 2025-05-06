@@ -5,7 +5,7 @@ import { isCellCaptured, isCellEmpty, isInBounds } from "../utils/helpers";
 import { WhiteRook } from "./rook";
 
 export class King extends Piece {
-  protected readonly directions: Position[] = PieceDirections.king;
+  protected readonly directions: Position[] = PieceDirections.King;
 
   constructor(color: PieceColor) {
     super(color, "King");
@@ -24,7 +24,7 @@ export class BlackKing extends King {
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    super.getAllAvailableMoves(board, from, this.directions);
+    return super.getAllAvailableMoves(board, from, this.directions);
   }
 
   castling(board: BoardCell[][], side: Castling) {
@@ -117,6 +117,10 @@ export class WhiteKing extends King {
 
   constructor() {
     super("white");
+  }
+
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    return super.getAllAvailableMoves(board, from, this.directions);
   }
 
   castling(board: BoardCell[][], side: Castling) {

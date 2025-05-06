@@ -7,12 +7,12 @@ import { Knight } from "./pieces/knight";
 import { BlackPawn, Pawn, WhitePawn } from "./pieces/pawn";
 import { BlackQueen, Queen, WhiteQueen } from "./pieces/queen";
 import { BlackRook, Rook, WhiteRook } from "./pieces/rook";
-import { isInBounds } from "./utils/helpers";
+import { cloneBoard, isInBounds, isValidDestination } from "./utils/helpers";
 
 class ChessBoardValidations {
   private constructor() {}
 
-  static isCheck(board: BoardCell[][], turn: PieceColor): boolean {
+  static isKingInCheck(board: BoardCell[][], turn: PieceColor): boolean {
     // Buscamos al rey del color opuesto
     const kingPosition = ChessBoardValidations.findKing(board, turn);
     if (!kingPosition) {
@@ -32,19 +32,22 @@ class ChessBoardValidations {
           // Si la pieza es del turno del jugador que le toca mover
           if (piece.color === turn) {
             try {
-              // Intentamos comernos al rey
-              console.log("Intentamos comernos al rey");
               if (
-                ChessBoardValidations.isValidMove(board, current, kingPosition)
+                piece.validateMove(board, {
+                  from: current,
+                  to: kingPosition,
+                  piece,
+                })
               ) {
-                console.log("ES CHECK!");
+                // Si la pieza puede moverse a la posición del rey
+                console.log(
+                  `${piece.color}-${piece.type} can capture enemy king`
+                );
                 isValid = true;
+              } else {
+                console.log(`${piece.type} cannot capture enemy king`);
               }
-            } catch (error) {
-              if ((error as Error).message === `Can't capture own piece`) {
-                console.log("Es normal este error forzamos a las pie");
-              }
-            }
+            } catch (_) {}
           }
         }
       }
@@ -55,38 +58,67 @@ class ChessBoardValidations {
   }
 
   static isCheckMate(board: BoardCell[][], turn: PieceColor): boolean {
-    const kingPosition = ChessBoardValidations.findKing(board, turn);
-    if (!kingPosition) {
-      return true;
+    // Buscar todas las piezas del jugador en jaque
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const piece = board[row][col];
+        if (piece && piece.color === turn) {
+          const directions = PieceDirections.getPieceDirections(piece.type);
+          const from: Position = [row, col];
+
+          for (let [dr, dc] of directions) {
+            let moves: Position[] = [];
+
+            try {
+              if (piece instanceof Piece) {
+                moves = piece.getAllAvailableMoves(board, from, [[dr, dc]]);
+              }
+            } catch (_) {
+              continue;
+            }
+
+            for (let to of moves) {
+              const tempBoard = cloneBoard(board);
+
+              tempBoard[to[0]][to[1]] = tempBoard[from[0]][from[1]];
+              tempBoard[from[0]][from[1]] = undefined;
+
+              try {
+                if (!this.isKingInCheck(tempBoard, turn)) {
+                  return false; // hay una jugada legal
+                }
+              } catch (_) {}
+            }
+          }
+        }
+      }
     }
 
-    const piece = board[kingPosition[0]][kingPosition[1]];
-    if (!piece) {
-      throw new Error("King must exists");
+    return true; // No hay movimientos legales y el rey está en jaque
+  }
+
+  static findEnemyKing(
+    board: BoardCell[][],
+    turn: PieceColor
+  ): Position | null {
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (
+          board[row][col]?.color !== turn &&
+          board[row][col]?.type === "King"
+        ) {
+          return [row, col];
+        }
+      }
     }
-
-    const availableMoves = piece.getAllAvailableMoves(
-      board,
-      [kingPosition[0], kingPosition[1]],
-      PieceDirections.getPieceDirections(piece.type)
-    );
-
-    console.log({ availableMoves });
-
-    // const canMove = piece?.validateMove(board, {
-    //   from: kingPosition,
-    //   to: kingPosition,
-    //   piece,
-    // });
-
-    return !Boolean(kingPosition);
+    return null;
   }
 
   static findKing(board: BoardCell[][], turn: PieceColor): Position | null {
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         if (
-          board[row][col]?.color !== turn &&
+          board[row][col]?.color === turn &&
           board[row][col]?.type === "King"
         ) {
           return [row, col];

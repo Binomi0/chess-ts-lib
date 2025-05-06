@@ -6,6 +6,7 @@ import { WhiteKnight, BlackKnight } from "./pieces/knight";
 import { Pawn, BlackPawn, WhitePawn } from "./pieces/pawn";
 import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import { BlackRook, WhiteRook } from "./pieces/rook";
+import { createFreshBoard } from "./utils/helpers";
 
 describe("Chess Board", () => {
   it("should be able to create an instance", () => {
@@ -136,36 +137,31 @@ describe("Chess Board", () => {
         }
       });
 
-      it("should be able to checkmate", () => {
+      it("should be able to check", () => {
+        chessBoard.board = createFreshBoard();
         chessBoard.board[7][0] = new WhiteKing();
-        chessBoard.board[5][1] = new BlackPawn();
+        chessBoard.board[5][0] = new BlackPawn();
+        chessBoard.board[6][1] = new BlackQueen();
 
-        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
-          false
-        );
-
-        chessBoard.board[5][1] = undefined;
-        chessBoard.board[6][1] = new BlackPawn();
-
-        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
-          true
-        );
+        expect(
+          ChessBoardValidations.isKingInCheck(chessBoard.board, "black")
+        ).toBe(true);
       });
 
       it("should not be able to check", () => {
         chessBoard.board[7][0] = new WhiteKing();
         chessBoard.board[5][0] = new BlackPawn();
 
-        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
-          false
-        );
+        expect(
+          ChessBoardValidations.isKingInCheck(chessBoard.board, "black")
+        ).toBe(false);
 
         chessBoard.board[5][0] = undefined;
         chessBoard.board[6][0] = new BlackPawn();
 
-        expect(ChessBoardValidations.isCheck(chessBoard.board, "black")).toBe(
-          false
-        );
+        expect(
+          ChessBoardValidations.isKingInCheck(chessBoard.board, "black")
+        ).toBe(false);
       });
     });
 

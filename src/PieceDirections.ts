@@ -1,4 +1,5 @@
 import { Position } from "./chessBoard";
+import { PieceType } from "./piece";
 
 class PieceDirections {
   static readonly King: Position[] = [
@@ -48,34 +49,28 @@ class PieceDirections {
     [0, 1], // →
   ];
 
-  static readonly WhitePawn: Position[] = [
+  static readonly Pawn: Position[] = [
     [-1, 0],
     [-1, -1],
     [-1, 1],
-  ];
-
-  static readonly BlackPawn: Position[] = [
-    [1, 0],
     [1, 1],
     [1, -1],
   ];
 
-  static getPieceDirections(type: string): Position[] {
+  static getPieceDirections(type: PieceType): Position[] {
     switch (type) {
-      case "king":
+      case "King":
         return PieceDirections.King;
-      case "queen":
+      case "Queen":
         return PieceDirections.Queen;
-      case "bishop":
+      case "Bishop":
         return PieceDirections.Bishop;
-      case "rook":
+      case "Rook":
         return PieceDirections.Rook;
-      case "knight":
+      case "Knight":
         return PieceDirections.Knight;
-      case "whitePawn":
-        return PieceDirections.WhitePawn;
-      case "blackPawn":
-        return PieceDirections.BlackPawn;
+      case "Pawn":
+        return PieceDirections.Pawn;
       default:
         throw new Error("Invalid piece type");
     }

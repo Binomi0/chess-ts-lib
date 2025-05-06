@@ -1,4 +1,5 @@
 import Game from "./game";
+import { BlackPawn, WhitePawn } from "./pieces/pawn";
 import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import Player from "./player";
 
@@ -44,16 +45,19 @@ const castleWhiteQueenSide = () => {
 const canCheck = () => {
   if (game.chessBoard) {
     game.chessBoard.board[1][4] = undefined;
+    game.chessBoard.board[0][5] = new BlackPawn();
+    game.chessBoard.board[0][3] = new BlackPawn();
 
-    console.log("BlackKing", game.chessBoard.getPosition([0, 4]));
+    console.log(game.chessBoard.getPosition([0, 4]));
     game.chessBoard.board[6][4] = new WhiteQueen();
+    game.chessBoard.nextTurn();
 
-    const isCheck = game.chessBoard.isCheck();
+    const isCheck = game.chessBoard.isKingInCheck();
     if (isCheck) {
+      console.log({ isCheck });
       const isCheckMate = game.chessBoard.isCheckMate();
       console.log({ isCheckMate });
     }
-    console.log({ isCheck });
   }
 };
 

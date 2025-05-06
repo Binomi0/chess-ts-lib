@@ -7,7 +7,7 @@ import { BlackRook, WhiteRook } from "./pieces/rook";
 import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import ChessBoardValidations from "./chessBoardValidations";
 import Player from "./player";
-import { logMovement } from "./utils/helpers";
+import { createFreshBoard, logMovement } from "./utils/helpers";
 
 export type Movement = {
   from: Position;
@@ -25,9 +25,7 @@ class ChessBoard {
 
   constructor() {
     // Define the initial positions of pieces on the board
-    this.board = Array(8)
-      .fill(undefined)
-      .map(() => Array(8).fill(undefined));
+    this.board = createFreshBoard();
 
     this.initializeBoard();
   }
@@ -91,8 +89,8 @@ class ChessBoard {
     }
   }
 
-  isCheck() {
-    const result = ChessBoardValidations.isCheck(this.board, this.turn);
+  isKingInCheck() {
+    const result = ChessBoardValidations.isKingInCheck(this.board, this.turn);
     if (result) {
       console.log("Check!");
     }
@@ -116,8 +114,6 @@ class ChessBoard {
   }
 
   handleMove(from: Position, to: Position) {
-    this.isCheck();
-
     try {
       ChessBoardValidations.isValidTurn(this.board, from, this.turn);
       ChessBoardValidations.isValidMove(this.board, from, to);

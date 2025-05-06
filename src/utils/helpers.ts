@@ -1,4 +1,4 @@
-import type { Movement, Position } from "../chessBoard";
+import type { BoardCell, Movement, Position } from "../chessBoard";
 import type Piece from "../piece";
 import { PieceColor } from "../piece";
 
@@ -45,4 +45,18 @@ export function isValidDestination(moves: Position[], target: Position) {
 
   const [tRow, tCol] = target;
   return moves.some(([r, c]) => r === tRow && c === tCol);
+}
+
+export function createFreshBoard(): BoardCell[][] {
+  return Array.from({ length: 8 }, () => Array(8).fill(undefined));
+}
+
+export function cloneBoard(board: BoardCell[][]): BoardCell[][] {
+  return board.map((row) =>
+    row.map((piece) =>
+      piece
+        ? Object.assign(Object.create(Object.getPrototypeOf(piece)), piece)
+        : undefined
+    )
+  );
 }

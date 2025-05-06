@@ -3,10 +3,14 @@ import Piece, { type PieceColor } from "../piece";
 import PieceDirections from "../PieceDirections";
 
 export class Rook extends Piece {
-  protected readonly directions: Position[] = PieceDirections.rook;
+  protected readonly directions: Position[] = PieceDirections.Rook;
 
   constructor(color: PieceColor) {
     super(color, "Rook");
+  }
+
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    return super.getAllAvailableMoves(board, from, this.directions);
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {

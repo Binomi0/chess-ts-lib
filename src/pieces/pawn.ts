@@ -14,7 +14,7 @@ export class Pawn extends Piece {
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    super.getAllAvailableMoves(board, from, this.directions);
+    return super.getAllAvailableMoves(board, from, this.directions);
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {
