@@ -1,5 +1,4 @@
 import { PieceType, PieceColor } from "../piece";
-import SingleMoveValidator from "../singleMoveValidator";
 import PieceFactory from "./factory";
 
 describe("PieceFactory", () => {

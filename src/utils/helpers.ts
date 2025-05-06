@@ -17,25 +17,11 @@ export function isCellEmpty(cell: Piece | undefined): boolean {
 }
 
 export function isCellBlocked(target?: Piece, movement?: Movement) {
-  try {
-    if (!target || !movement) {
-      throw new Error("Invalid movement or target");
-    }
-    return target?.color === movement?.piece.color;
-  } catch (error) {
-    throw error;
-  }
+  return target?.color === movement?.piece.color;
 }
 
 export function isCellCaptured(target?: Piece, color?: PieceColor): boolean {
-  try {
-    if (!target || !color) {
-      throw new Error("Invalid movement or target");
-    }
-    return target?.color !== color;
-  } catch (error) {
-    throw error;
-  }
+  return target?.color !== color;
 }
 
 export function isValidDestination(moves: Position[], target: Position) {
