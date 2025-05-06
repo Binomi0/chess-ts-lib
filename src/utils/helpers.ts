@@ -1,5 +1,6 @@
-import type { Movement, Position } from "../chessBoard";
+import type { BoardCell, Movement, Position } from "../chessBoard";
 import type Piece from "../piece";
+import { PieceColor } from "../piece";
 
 export function isInBounds([x, y]: Position) {
   return x >= 0 && x < 8 && y >= 0 && y < 8;
@@ -18,7 +19,6 @@ export function isCellEmpty(cell: Piece | undefined): boolean {
 export function isCellBlocked(target?: Piece, movement?: Movement) {
   try {
     if (!target || !movement) {
-      console.log({ target, movement });
       throw new Error("Invalid movement or target");
     }
     return target?.color === movement?.piece.color;
@@ -27,13 +27,12 @@ export function isCellBlocked(target?: Piece, movement?: Movement) {
   }
 }
 
-export function isCellCaptured(target?: Piece, movement?: Movement): boolean {
+export function isCellCaptured(target?: Piece, color?: PieceColor): boolean {
   try {
-    if (!target || !movement) {
-      console.log({ target, movement });
+    if (!target || !color) {
       throw new Error("Invalid movement or target");
     }
-    return target?.color !== movement?.piece.color;
+    return target?.color !== color;
   } catch (error) {
     throw error;
   }
@@ -46,4 +45,18 @@ export function isValidDestination(moves: Position[], target: Position) {
 
   const [tRow, tCol] = target;
   return moves.some(([r, c]) => r === tRow && c === tCol);
+}
+
+export function createFreshBoard(): BoardCell[][] {
+  return Array.from({ length: 8 }, () => Array(8).fill(undefined));
+}
+
+export function cloneBoard(board: BoardCell[][]): BoardCell[][] {
+  return board.map((row) =>
+    row.map((piece) =>
+      piece
+        ? Object.assign(Object.create(Object.getPrototypeOf(piece)), piece)
+        : undefined
+    )
+  );
 }

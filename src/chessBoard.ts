@@ -1,13 +1,15 @@
-import Piece, { PieceColor } from "./piece";
+import Piece, { PieceColor, PieceType } from "./piece";
 import { BlackBishop, WhiteBishop } from "./pieces/bishop";
-import { BlackKing, WhiteKing } from "./pieces/king";
+import { BlackKing, King, WhiteKing } from "./pieces/king";
 import { BlackKnight, WhiteKnight } from "./pieces/knight";
 import { BlackPawn, WhitePawn } from "./pieces/pawn";
 import { BlackRook, WhiteRook } from "./pieces/rook";
 import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import ChessBoardValidations from "./chessBoardValidations";
 import Player from "./player";
-import { logMovement } from "./utils/helpers";
+import { createFreshBoard, logMovement } from "./utils/helpers";
+import PieceFactory from "./pieces/factory";
+import CastlingManager from "./castlingManager";
 
 export type Movement = {
   from: Position;
@@ -20,14 +22,19 @@ export type Position = [number, number];
 
 class ChessBoard {
   board: BoardCell[][];
-  turn: PieceColor = "white";
+  turn: PieceColor = PieceColor.White;
   players: Map<PieceColor, Player> = new Map();
+  lastTurn: Position | undefined;
+  castling: { [key in Castling]: boolean } = {
+    queen: true,
+    king: true,
+  };
+  movements: Movement[] = [];
+  validMoves: Position[][] = [];
 
   constructor() {
     // Define the initial positions of pieces on the board
-    this.board = Array(8)
-      .fill(undefined)
-      .map(() => Array(8).fill(undefined));
+    this.board = createFreshBoard();
 
     this.initializeBoard();
   }
@@ -37,43 +44,97 @@ class ChessBoard {
       for (let col = 0; col < 8; col++) {
         if (row === 0) {
           if (col === 0) {
-            this.board[row][col] = new BlackRook();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Rook,
+              PieceColor.Black
+            );
           } else if (col === 1) {
-            this.board[row][col] = new BlackKnight();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Knight,
+              PieceColor.Black
+            );
           } else if (col === 2) {
-            this.board[row][col] = new BlackBishop();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Bishop,
+              PieceColor.Black
+            );
           } else if (col === 3) {
-            this.board[row][col] = new BlackQueen();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Queen,
+              PieceColor.Black
+            );
           } else if (col === 4) {
-            this.board[row][col] = new BlackKing();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.King,
+              PieceColor.Black
+            );
           } else if (col === 5) {
-            this.board[row][col] = new BlackBishop();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Bishop,
+              PieceColor.Black
+            );
           } else if (col === 6) {
-            this.board[row][col] = new BlackKnight();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Knight,
+              PieceColor.Black
+            );
           } else if (col === 7) {
-            this.board[row][col] = new BlackRook();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Rook,
+              PieceColor.Black
+            );
           }
         } else if (row === 1) {
-          this.board[row][col] = new BlackPawn();
+          this.board[row][col] = PieceFactory.getPiece(
+            PieceType.Pawn,
+            PieceColor.Black
+          );
         } else if (row === 6) {
-          this.board[row][col] = new WhitePawn();
+          this.board[row][col] = PieceFactory.getPiece(
+            PieceType.Pawn,
+            PieceColor.White
+          );
         } else if (row === 7) {
           if (col === 0) {
-            this.board[row][col] = new WhiteRook();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Rook,
+              PieceColor.White
+            );
           } else if (col === 1) {
-            this.board[row][col] = new WhiteKnight();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Knight,
+              PieceColor.White
+            );
           } else if (col === 2) {
-            this.board[row][col] = new WhiteBishop();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Bishop,
+              PieceColor.White
+            );
           } else if (col === 3) {
-            this.board[row][col] = new WhiteQueen();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Queen,
+              PieceColor.White
+            );
           } else if (col === 4) {
-            this.board[row][col] = new WhiteKing();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.King,
+              PieceColor.White
+            );
           } else if (col === 5) {
-            this.board[row][col] = new WhiteBishop();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Bishop,
+              PieceColor.White
+            );
           } else if (col === 6) {
-            this.board[row][col] = new WhiteKnight();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Knight,
+              PieceColor.White
+            );
           } else if (col === 7) {
-            this.board[row][col] = new WhiteRook();
+            this.board[row][col] = PieceFactory.getPiece(
+              PieceType.Rook,
+              PieceColor.White
+            );
           }
         }
       }
@@ -82,13 +143,31 @@ class ChessBoard {
 
   // Set to private when ready
   nextTurn() {
-    if (this.turn === "white") {
-      this.players.get("white")?.addMovement();
-      this.turn = "black";
+    if (this.turn === PieceColor.White) {
+      this.players.get(PieceColor.White)?.addMovement();
+      this.turn = PieceColor.Black;
     } else {
-      this.players.get("black")?.addMovement();
-      this.turn = "white";
+      this.players.get(PieceColor.Black)?.addMovement();
+      this.turn = PieceColor.White;
     }
+  }
+
+  isKingInCheck() {
+    const result = ChessBoardValidations.isKingInCheck(this.board, this.turn);
+    if (result) {
+      console.log("Check!");
+    }
+
+    return result;
+  }
+
+  isCheckMate() {
+    const result = ChessBoardValidations.isCheckMate(this.board, this.turn);
+    if (result) {
+      console.log("Checkmate!");
+    }
+
+    return result;
   }
 
   getBoard(): BoardCell[][] {
@@ -109,6 +188,12 @@ class ChessBoard {
     }
 
     this.executeMovement(from, to);
+
+    if (this.isKingInCheck()) {
+      console.log("Check!");
+      this.executeMovement(to, from);
+    }
+
     this.nextTurn();
   }
 
@@ -116,7 +201,6 @@ class ChessBoard {
     try {
       const [fromRow, fromCol] = from;
       const [toRow, toCol] = to;
-
       const pieceToMove = this.board[fromRow][fromCol];
 
       this.board[toRow][toCol] = pieceToMove;
@@ -130,18 +214,16 @@ class ChessBoard {
   }
 
   castlingWhite(type: Castling) {
-    const whiteKing = new WhiteKing();
-    whiteKing.castling(this.board, type);
+    const whiteKing = PieceFactory.getPiece(PieceType.King, PieceColor.White);
+    CastlingManager.castle(this.board, whiteKing as WhiteKing, type);
 
-    this.players.get("white")?.setCastled(type);
     this.nextTurn();
   }
 
   castlingBlack(type: Castling) {
-    const blackKing = new BlackKing();
-    blackKing.castling(this.board, type);
+    const blackKing = PieceFactory.getPiece(PieceType.King, PieceColor.Black);
+    CastlingManager.castle(this.board, blackKing as BlackKing, type);
 
-    this.players.get("black")?.setCastled(type);
     this.nextTurn();
   }
 }

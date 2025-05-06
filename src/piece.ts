@@ -6,19 +6,47 @@ import {
   isValidDestination,
 } from "./utils/helpers";
 
-export type PieceColor = "black" | "white";
-export type PieceType =
-  | "Pawn"
-  | "Rook"
-  | "Knight"
-  | "Bishop"
-  | "Queen"
-  | "King";
+// export type PieceColor = PieceColor.Black | PieceColor.White;
+// export type PieceType =
+//   | "Pawn"
+//   | "Rook"
+//   | "Knight"
+//   | "Bishop"
+//   | "Queen"
+//   | "King";
+export enum PieceType {
+  King = "King",
+  Queen = "Queen",
+  Rook = "Rook",
+  Bishop = "Bishop",
+  Knight = "Knight",
+  Pawn = "Pawn",
+}
+
+export enum PieceColor {
+  White = "white",
+  Black = "black",
+}
 
 interface Piece {
-  color: Readonly<PieceColor>;
-  type: Readonly<PieceType>;
+  color: PieceColor;
+  type: PieceType;
+  getAllAvailableMoves(
+    board: BoardCell[][],
+    from: Position,
+    directions: Position[]
+  ): Position[];
   validateMove(board: BoardCell[][], movement: Movement): boolean;
+  validateSingleMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean;
+  validateMultiMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement
+  ): boolean;
 }
 
 class Piece implements Piece {
@@ -30,7 +58,31 @@ class Piece implements Piece {
     this.type = type;
   }
 
-  static validateSingleMove(
+  getAllAvailableMoves(
+    board: BoardCell[][],
+    from: Position,
+    directions: Position[]
+  ) {
+    const piece = board[from[0]][from[1]];
+    const validMoves: Position[] = [];
+
+    for (const [row, col] of directions) {
+      const newRow = from[0] + row;
+      const newCol = from[1] + col;
+
+      if (isInBounds([newRow, newCol])) {
+        const target = board[newRow][newCol];
+
+        if (isCellEmpty(target) || isCellCaptured(target, piece?.color)) {
+          validMoves.push([newRow, newCol]);
+        }
+      }
+    }
+
+    return validMoves;
+  }
+
+  validateSingleMove(
     board: BoardCell[][],
     directions: Position[],
     movement: Movement
@@ -44,7 +96,10 @@ class Piece implements Piece {
       if (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
 
-        if (isCellEmpty(target) || isCellCaptured(target, movement)) {
+        if (
+          isCellEmpty(target) ||
+          isCellCaptured(target, movement.piece.color)
+        ) {
           validMoves.push([newRow, newCol]);
         }
       }
@@ -59,7 +114,7 @@ class Piece implements Piece {
     );
   }
 
-  static validateMultiMove(
+  validateMultiMove(
     board: BoardCell[][],
     directions: Position[],
     movement: Movement
@@ -75,7 +130,7 @@ class Piece implements Piece {
 
         if (isCellEmpty(target)) {
           validMoves.push([newRow, newCol]);
-        } else if (isCellCaptured(target, movement)) {
+        } else if (isCellCaptured(target, movement.piece.color)) {
           validMoves.push([newRow, newCol]);
           break;
         } else {

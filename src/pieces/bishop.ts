@@ -1,31 +1,31 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import Piece, { PieceColor } from "../piece";
+import Piece, { PieceColor, PieceType } from "../piece";
+import PieceDirections from "./directions";
 
 export class Bishop extends Piece {
-  private static readonly directions: Position[] = [
-    [-1, -1],
-    [1, 1],
-    [-1, 1],
-    [1, -1],
-  ];
+  protected readonly directions: Position[] = PieceDirections.Bishop;
 
   constructor(color: PieceColor) {
-    super(color, "Bishop");
+    super(color, PieceType.Bishop);
   }
 
-  static validateMove(board: BoardCell[][], movement: Movement): boolean {
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    return super.getAllAvailableMoves(board, from, this.directions);
+  }
+
+  validateMove(board: BoardCell[][], movement: Movement): boolean {
     return this.validateMultiMove(board, this.directions, movement);
   }
 }
 
 export class WhiteBishop extends Bishop {
   constructor() {
-    super("white");
+    super(PieceColor.White);
   }
 }
 
 export class BlackBishop extends Bishop {
   constructor() {
-    super("black");
+    super(PieceColor.Black);
   }
 }
