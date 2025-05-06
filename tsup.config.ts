@@ -6,7 +6,7 @@ export default defineConfig({
   entry: ["src/index.ts"], // Ajusta según tu estructura
 
   // Solo necesitas ESM para frontend moderno
-  format: ["esm"],
+  // format: ["esm"],
 
   // Generar declaraciones de tipo (opcional para frontend)
   dts: true, // Puedes cambiarlo a true si necesitas tipos
@@ -21,7 +21,7 @@ export default defineConfig({
   sourcemap: process.env.NODE_ENV !== "production",
 
   // Plataforma específica
-  platform: "browser",
+  platform: "neutral",
 
   // Objetivo de transpilación
   target: "es2020",
@@ -39,13 +39,6 @@ export default defineConfig({
       "process.env.NODE_ENV": JSON.stringify(
         process.env.NODE_ENV || "production"
       ),
-    };
-
-    // Opcional: configurar loader para assets
-    options.loader = {
-      ".png": "file",
-      ".jpg": "file",
-      ".svg": "file",
     };
   },
 });
