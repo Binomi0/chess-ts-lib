@@ -139,29 +139,28 @@ describe("Chess Board", () => {
 
       it("should be able to check", () => {
         chessBoard.board = createFreshBoard();
+
         chessBoard.board[7][0] = new WhiteKing();
         chessBoard.board[5][0] = new BlackPawn();
         chessBoard.board[6][1] = new BlackQueen();
+        chessBoard.nextTurn();
 
         expect(
-          ChessBoardValidations.isKingInCheck(chessBoard.board, "black")
+          ChessBoardValidations.isKingInCheck(chessBoard.board, chessBoard.turn)
         ).toBe(true);
       });
 
-      it("should not be able to check", () => {
+      it("should be able to checkmate", () => {
+        chessBoard.board = createFreshBoard();
+
         chessBoard.board[7][0] = new WhiteKing();
         chessBoard.board[5][0] = new BlackPawn();
+        chessBoard.nextTurn();
+        chessBoard.board[6][1] = new BlackQueen();
 
         expect(
-          ChessBoardValidations.isKingInCheck(chessBoard.board, "black")
-        ).toBe(false);
-
-        chessBoard.board[5][0] = undefined;
-        chessBoard.board[6][0] = new BlackPawn();
-
-        expect(
-          ChessBoardValidations.isKingInCheck(chessBoard.board, "black")
-        ).toBe(false);
+          ChessBoardValidations.isCheckMate(chessBoard.board, chessBoard.turn)
+        ).toBe(true);
       });
     });
 

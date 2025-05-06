@@ -30,7 +30,7 @@ class ChessBoardValidations {
         // Busco si existe alguna pieza en la casilla
         if (piece) {
           // Si la pieza es del turno del jugador que le toca mover
-          if (piece.color === turn) {
+          if (piece.color !== turn) {
             try {
               if (
                 piece.validateMove(board, {
