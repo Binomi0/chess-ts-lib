@@ -1,5 +1,6 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
+import SingleMoveValidator from "../singleMoveValidator";
 import PieceDirections from "./directions";
 
 export class Knight extends Piece {
@@ -14,6 +15,6 @@ export class Knight extends Piece {
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {
-    return this.validateSingleMove(board, this.directions, movement);
+    return SingleMoveValidator.validateMove(board, this.directions, movement);
   }
 }

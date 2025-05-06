@@ -1,4 +1,5 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
+import MultiMoveValidator from "../multiMoveValidator";
 import Piece, { PieceColor, PieceType } from "../piece";
 import PieceDirections from "./directions";
 
@@ -14,6 +15,6 @@ export class Rook extends Piece {
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {
-    return this.validateMultiMove(board, this.directions, movement);
+    return MultiMoveValidator.validateMove(board, this.directions, movement);
   }
 }

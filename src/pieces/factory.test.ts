@@ -1,4 +1,5 @@
 import { PieceType, PieceColor } from "../piece";
+import SingleMoveValidator from "../singleMoveValidator";
 import PieceFactory from "./factory";
 
 describe("PieceFactory", () => {
@@ -53,12 +54,8 @@ describe("PieceFactory", () => {
   it("should repect Liskov", () => {
     const whiteKing = PieceFactory.getPiece(PieceType.King, PieceColor.White);
     expect(whiteKing.validateMove).toBeDefined();
-    expect(whiteKing.validateMultiMove).toBeDefined();
-    expect(whiteKing.validateSingleMove).toBeDefined();
 
     const blackKing = PieceFactory.getPiece(PieceType.King, PieceColor.Black);
     expect(blackKing.validateMove).toBeDefined();
-    expect(blackKing.validateMultiMove).toBeDefined();
-    expect(blackKing.validateSingleMove).toBeDefined();
   });
 });
