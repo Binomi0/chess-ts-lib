@@ -21,32 +21,32 @@ describe("PieceFactory", () => {
   it("should throw an error if invalid piece type or color is provided", () => {
     // @ts-expect-error test
     expect(() => PieceFactory.getPiece("", PieceColor.White)).toThrow(
-      "Invalid piece type or color"
+      "Invalid piece type or color",
     );
     // @ts-expect-error test
     expect(() => PieceFactory.getPiece(PieceType.King, "")).toThrow(
-      "Invalid piece type or color"
+      "Invalid piece type or color",
     );
   });
 
   it("should throw an error if invalid piece type is provided", () => {
     // @ts-expect-error test
     expect(() => PieceFactory.getPiece("", PieceColor.White)).toThrow(
-      "Invalid piece type or color"
+      "Invalid piece type or color",
     );
   });
 
   it("should throw an error if invalid piece color is provided", () => {
     // @ts-expect-error test
     expect(() => PieceFactory.getPiece(PieceType.King, "")).toThrow(
-      "Invalid piece type or color"
+      "Invalid piece type or color",
     );
   });
 
   it("should throw an error if invalid piece provided", () => {
     expect(() =>
       // @ts-expect-error test
-      PieceFactory.getPiece("InvalidType", PieceColor.White)
+      PieceFactory.getPiece("InvalidType", PieceColor.White),
     ).toThrow("Invalid piece type");
   });
 

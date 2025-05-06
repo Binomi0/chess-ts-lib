@@ -84,7 +84,7 @@ describe("Helper functions", () => {
       const target: Position = [1, 2];
       expect(() =>
         // @ts-expect-error test
-        Helpers.isValidDestination(undefined, target)
+        Helpers.isValidDestination(undefined, target),
       ).toThrowError();
     });
     it("should throw an error if target is undefined", () => {

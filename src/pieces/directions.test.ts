@@ -57,7 +57,7 @@ describe("PieceDirections", () => {
   it("should throw an error for invalid piece type", () => {
     // @ts-expect-error test
     expect(() => PieceDirections.getPieceDirections("Invalid")).toThrowError(
-      "Invalid piece type"
+      "Invalid piece type",
     );
   });
 });

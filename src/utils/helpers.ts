@@ -8,7 +8,7 @@ export function isInBounds([x, y]: Position) {
 
 export function logMovement(from: Position, to: Position, pieceToMove?: Piece) {
   console.log(
-    `Moved ${pieceToMove?.color}-${pieceToMove?.type} from ${from[0]},${from[1]} to ${to[0]},${to[1]}`
+    `Moved ${pieceToMove?.color}-${pieceToMove?.type} from ${from[0]},${from[1]} to ${to[0]},${to[1]}`,
   );
 }
 
@@ -42,7 +42,7 @@ export function cloneBoard(board: BoardCell[][]): BoardCell[][] {
     row.map((piece) =>
       piece
         ? Object.assign(Object.create(Object.getPrototypeOf(piece)), piece)
-        : undefined
-    )
+        : undefined,
+    ),
   );
 }
