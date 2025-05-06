@@ -32,7 +32,6 @@ class Game {
     }
 
     if (!this.started) {
-      console.log("Game has been started");
       this.timeElapsed = Date.now();
       this.started = true;
     } else {

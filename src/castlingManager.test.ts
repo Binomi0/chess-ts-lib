@@ -15,21 +15,13 @@ describe("Castling Manager", () => {
 
     it("should not be able to castle at start for white king side", () => {
       expect(
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.White),
-          "king"
-        )
+        CastlingManager.castle(chessBoard.board, PieceColor.White, "king")
       ).toBe(false);
     });
 
     it("should not be able to castle at start for white queen side", () => {
       expect(
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.White),
-          "queen"
-        )
+        CastlingManager.castle(chessBoard.board, PieceColor.White, "queen")
       ).toBe(false);
     });
 
@@ -38,13 +30,7 @@ describe("Castling Manager", () => {
       chessBoard.board[7][4] = new King(PieceColor.White);
       chessBoard.board[7][0] = new Rook(PieceColor.White);
 
-      if (
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.White),
-          "queen"
-        )
-      ) {
+      if (CastlingManager.castle(chessBoard.board, PieceColor.White, "queen")) {
         expect(chessBoard.board[7][2]).toHaveProperty("type", "King");
         expect(chessBoard.board[7][3]).toHaveProperty("type", "Rook");
       } else {
@@ -59,13 +45,7 @@ describe("Castling Manager", () => {
       chessBoard.board[7][4] = new King(PieceColor.White);
       chessBoard.board[7][7] = new Rook(PieceColor.White);
 
-      if (
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.White),
-          "king"
-        )
-      ) {
+      if (CastlingManager.castle(chessBoard.board, PieceColor.White, "king")) {
         expect(chessBoard.board[7][6]).toHaveProperty("type", "King");
         expect(chessBoard.board[7][5]).toHaveProperty("type", "Rook");
       } else {
@@ -83,21 +63,13 @@ describe("Castling Manager", () => {
 
     it("should not be able to castle at start for white king side", () => {
       expect(
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.Black),
-          "king"
-        )
+        CastlingManager.castle(chessBoard.board, PieceColor.Black, "king")
       ).toBe(false);
     });
 
     it("should not be able to castle at start for White queen side", () => {
       expect(
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.Black),
-          "queen"
-        )
+        CastlingManager.castle(chessBoard.board, PieceColor.Black, "queen")
       ).toBe(false);
     });
 
@@ -106,13 +78,7 @@ describe("Castling Manager", () => {
       chessBoard.board[0][4] = new King(PieceColor.Black);
       chessBoard.board[0][0] = new Rook(PieceColor.Black);
 
-      if (
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.Black),
-          "queen"
-        )
-      ) {
+      if (CastlingManager.castle(chessBoard.board, PieceColor.Black, "queen")) {
         expect(chessBoard.board[0][2]).toHaveProperty("type", "King");
         expect(chessBoard.board[0][3]).toHaveProperty("type", "Rook");
       } else {
@@ -127,13 +93,7 @@ describe("Castling Manager", () => {
       chessBoard.board[0][4] = new King(PieceColor.Black);
       chessBoard.board[0][7] = new Rook(PieceColor.Black);
 
-      if (
-        CastlingManager.castle(
-          chessBoard.board,
-          new King(PieceColor.Black),
-          "king"
-        )
-      ) {
+      if (CastlingManager.castle(chessBoard.board, PieceColor.Black, "king")) {
         expect(chessBoard.board[0][6]).toHaveProperty("type", "King");
         expect(chessBoard.board[0][5]).toHaveProperty("type", "Rook");
       } else {

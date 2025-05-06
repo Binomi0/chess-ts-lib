@@ -19,10 +19,6 @@ class ChessBoard {
   turn: PieceColor = PieceColor.White;
   players: Map<PieceColor, Player> = new Map();
   lastTurn: Position | undefined;
-  castling: { [key in Castling]: boolean } = {
-    queen: true,
-    king: true,
-  };
   movements: Movement[] = [];
   validMoves: Position[][] = [];
 
@@ -147,21 +143,11 @@ class ChessBoard {
   }
 
   isKingInCheck() {
-    const result = ChessBoardValidations.isKingInCheck(this.board, this.turn);
-    if (result) {
-      console.log("Check!");
-    }
-
-    return result;
+    return ChessBoardValidations.isKingInCheck(this.board, this.turn);
   }
 
   isCheckMate() {
-    const result = ChessBoardValidations.isCheckMate(this.board, this.turn);
-    if (result) {
-      console.log("Checkmate!");
-    }
-
-    return result;
+    return ChessBoardValidations.isCheckMate(this.board, this.turn);
   }
 
   getBoard(): BoardCell[][] {
@@ -184,14 +170,13 @@ class ChessBoard {
     this.executeMovement(from, to);
 
     if (this.isKingInCheck()) {
-      console.log("Check!");
       this.executeMovement(to, from);
     }
 
     this.nextTurn();
   }
 
-  executeMovement(from: Position, to: Position) {
+  private executeMovement(from: Position, to: Position) {
     try {
       const [fromRow, fromCol] = from;
       const [toRow, toCol] = to;
@@ -207,16 +192,8 @@ class ChessBoard {
     }
   }
 
-  castlingWhite(type: Castling) {
-    const whiteKing = PieceFactory.getPiece(PieceType.King, PieceColor.White);
-    CastlingManager.castle(this.board, whiteKing, type);
-
-    this.nextTurn();
-  }
-
-  castlingBlack(type: Castling) {
-    const blackKing = PieceFactory.getPiece(PieceType.King, PieceColor.Black);
-    CastlingManager.castle(this.board, blackKing, type);
+  castling(type: Castling, color: PieceColor) {
+    CastlingManager.castle(this.board, color, type);
 
     this.nextTurn();
   }

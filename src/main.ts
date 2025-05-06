@@ -1,8 +1,9 @@
+import CastlingManager from "./castlingManager";
 import Game from "./game";
 import { PieceColor } from "./piece";
-import { BlackPawn } from "./pieces/pawn";
-import { WhiteQueen } from "./pieces/queen";
 import Player from "./player";
+import { Pawn } from "./pieces/pawn";
+import { Queen } from "./pieces/queen";
 
 const game = new Game();
 
@@ -18,39 +19,34 @@ const castleWhiteKingSide = () => {
     game.chessBoard.board[7][6] = undefined;
     game.chessBoard.board[7][5] = undefined;
 
-    game.chessBoard.castlingWhite("king");
+    CastlingManager.castle(game.chessBoard.board, PieceColor.White, "king");
 
     console.log(game.chessBoard.players.get(PieceColor.White));
     console.log(game.chessBoard.players.get(PieceColor.Black));
-
-    // const isCheck = game.chessBoard.isCheck();
-    // console.log({ isCheck });
   }
 };
+
 const castleWhiteQueenSide = () => {
   if (game.chessBoard) {
     game.chessBoard.board[7][1] = undefined;
     game.chessBoard.board[7][2] = undefined;
     game.chessBoard.board[7][3] = undefined;
 
-    game.chessBoard.castlingWhite("queen");
+    CastlingManager.castle(game.chessBoard.board, PieceColor.White, "queen");
 
     console.log(game.chessBoard.players.get(PieceColor.White));
     console.log(game.chessBoard.players.get(PieceColor.Black));
-
-    // const isCheck = game.chessBoard.isCheck();
-    // console.log({ isCheck });
   }
 };
 
 const canCheck = () => {
   if (game.chessBoard) {
     game.chessBoard.board[1][4] = undefined;
-    game.chessBoard.board[0][5] = new BlackPawn();
-    game.chessBoard.board[0][3] = new BlackPawn();
+    game.chessBoard.board[0][5] = new Pawn(PieceColor.Black);
+    game.chessBoard.board[0][3] = new Pawn(PieceColor.Black);
 
     console.log(game.chessBoard.getPosition([0, 4]));
-    game.chessBoard.board[6][4] = new WhiteQueen();
+    game.chessBoard.board[6][4] = new Queen(PieceColor.White);
     game.chessBoard.nextTurn();
 
     const isCheck = game.chessBoard.isKingInCheck();

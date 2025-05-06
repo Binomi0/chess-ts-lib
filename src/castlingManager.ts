@@ -1,5 +1,6 @@
 import { BoardCell, Castling, Position } from "./chessBoard";
 import Piece, { PieceColor } from "./piece";
+import { King } from "./pieces/king";
 
 type CastlingData = [Position, Position[], Position, Position];
 
@@ -9,17 +10,17 @@ class CastlingManager {
     [PieceColor.Black]: true,
   };
 
-  static castle(board: BoardCell[][], piece: Piece, side: Castling) {
-    if (!this.castlingRights[piece.color]) return false;
+  static castle(board: BoardCell[][], color: PieceColor, side: Castling) {
+    if (!this.castlingRights[color]) return false;
 
-    if (this.canCastle(board, piece, side)) {
+    if (this.canCastle(board, color, side)) {
       const [rookPos, _, newKingPos, newRookPos] = this.getCastlingData(
-        piece.color,
+        color,
         side
       );
 
-      this.execCastling(board, piece, rookPos, newKingPos, newRookPos);
-      this.setCastlingLocked(piece.color);
+      this.execCastling(board, color, rookPos, newKingPos, newRookPos);
+      this.setCastlingLocked(color);
 
       return true;
     }
@@ -27,13 +28,13 @@ class CastlingManager {
     return false;
   }
 
-  static canCastle(board: BoardCell[][], piece: Piece, side: Castling) {
-    if (!this.castlingRights[piece.color]) return false;
+  static canCastle(board: BoardCell[][], color: PieceColor, side: Castling) {
+    if (!this.castlingRights[color]) return false;
 
     const [rookPos, emptySquares, newKingPos, newRookPos] =
-      this.getCastlingData(piece.color, side);
+      this.getCastlingData(color, side);
 
-    return this.validateConditions(board, piece, rookPos, emptySquares);
+    return this.validateConditions(board, color, rookPos, emptySquares);
   }
 
   private static getCastlingData(
@@ -79,7 +80,7 @@ class CastlingManager {
 
   private static validateConditions(
     board: BoardCell[][],
-    king: Piece,
+    color: PieceColor,
     rookPos: Position,
     emptySquares: Position[]
   ): boolean {
@@ -87,7 +88,7 @@ class CastlingManager {
     const rook = board[rookRow][rookCol];
 
     // Verificar que la torre exista y sea del mismo color
-    if (!rook || rook.type !== "Rook" || rook.color !== king.color) {
+    if (!rook || rook.type !== "Rook" || rook.color !== color) {
       return false;
     }
 
@@ -97,19 +98,21 @@ class CastlingManager {
 
   private static execCastling(
     board: BoardCell[][],
-    piece: Piece,
+    color: PieceColor,
     rookPos: Position,
     newKingPos: Position,
     newRookPos: Position
   ): void {
-    if (piece.color === PieceColor.White) {
+    if (color === PieceColor.White) {
       board[7][4] = undefined;
-    } else if (piece.color === PieceColor.Black) {
+    } else if (color === PieceColor.Black) {
       board[0][4] = undefined;
     }
 
     board[newRookPos[0]][newRookPos[1]] = board[rookPos[0]][rookPos[1]];
     board[rookPos[0]][rookPos[1]] = undefined;
+
+    const piece = new King(color);
     board[newKingPos[0]][newKingPos[1]] = piece;
   }
 
