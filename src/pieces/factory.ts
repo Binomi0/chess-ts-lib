@@ -1,10 +1,10 @@
-import { BlackPawn, WhitePawn } from "./pawn";
-import { BlackRook, WhiteRook } from "./rook";
-import { BlackKnight, WhiteKnight } from "./knight";
-import { BlackBishop, WhiteBishop } from "./bishop";
-import { BlackQueen, WhiteQueen } from "./queen";
-import { BlackKing, WhiteKing } from "./king";
 import Piece, { PieceColor, PieceType } from "../piece";
+import { Pawn } from "./pawn";
+import { Rook } from "./rook";
+import { Knight } from "./knight";
+import { Queen } from "./queen";
+import { King } from "./king";
+import { Bishop } from "./bishop";
 
 class PieceFactory {
   private static piece: Map<PieceType, Map<PieceColor, Piece>> = new Map();
@@ -28,21 +28,17 @@ class PieceFactory {
   private static getPieceInstance(type: PieceType, color: PieceColor) {
     switch (type) {
       case "Pawn":
-        return color === PieceColor.White ? new WhitePawn() : new BlackPawn();
+        return new Pawn(color);
       case "Rook":
-        return color === PieceColor.White ? new WhiteRook() : new BlackRook();
+        return new Rook(color);
       case "Bishop":
-        return color === PieceColor.White
-          ? new WhiteBishop()
-          : new BlackBishop();
+        return new Bishop(color);
       case "King":
-        return color === PieceColor.White ? new WhiteKing() : new BlackKing();
+        return new King(color);
       case "Queen":
-        return color === PieceColor.White ? new WhiteQueen() : new BlackQueen();
+        return new Queen(color);
       case "Knight":
-        return color === PieceColor.White
-          ? new WhiteKnight()
-          : new BlackKnight();
+        return new Knight(color);
       default:
         throw new Error("Invalid piece type");
     }

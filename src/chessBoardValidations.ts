@@ -1,20 +1,13 @@
 import { BoardCell, Position } from "./chessBoard";
-import Piece, { PieceColor, PieceType } from "./piece";
+import Piece, { PieceColor } from "./piece";
 import PieceDirections from "./pieces/directions";
-import { Bishop, BlackBishop, WhiteBishop } from "./pieces/bishop";
 import PieceFactory from "./pieces/factory";
-import { BlackKing, King, WhiteKing } from "./pieces/king";
-import { Knight } from "./pieces/knight";
-import { BlackPawn, Pawn, WhitePawn } from "./pieces/pawn";
-import { BlackQueen, Queen, WhiteQueen } from "./pieces/queen";
-import { BlackRook, Rook, WhiteRook } from "./pieces/rook";
-import { cloneBoard, isInBounds, isValidDestination } from "./utils/helpers";
+import { cloneBoard, isInBounds } from "./utils/helpers";
 
 class ChessBoardValidations {
   private constructor() {}
 
   static isKingInCheck(board: BoardCell[][], turn: PieceColor): boolean {
-    // Buscamos al rey del color opuesto
     const kingPosition = ChessBoardValidations.findKing(board, turn);
     if (!kingPosition) {
       throw new Error("King not found");
@@ -22,34 +15,23 @@ class ChessBoardValidations {
 
     let isValid = false;
 
-    // Recorro todo el tablero
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const current: Position = [row, col];
         const piece = board[row][col];
 
-        // Busco si existe alguna pieza en la casilla
-        if (piece) {
-          // Si la pieza es del turno del jugador que le toca mover
-          if (piece.color !== turn) {
-            try {
-              if (
-                piece.validateMove(board, {
-                  from: current,
-                  to: kingPosition,
-                  piece,
-                })
-              ) {
-                // Si la pieza puede moverse a la posición del rey
-                console.log(
-                  `${piece.color}-${piece.type} can capture enemy king`
-                );
-                isValid = true;
-              } else {
-                console.log(`${piece.type} cannot capture enemy king`);
-              }
-            } catch (_) {}
-          }
+        if (piece && piece.color !== turn) {
+          try {
+            if (
+              piece.validateMove(board, {
+                from: current,
+                to: kingPosition,
+                piece,
+              })
+            ) {
+              isValid = true;
+            }
+          } catch (_) {}
         }
       }
     }

@@ -1,15 +1,14 @@
 import ChessBoard, { Position } from "./chessBoard";
 import ChessBoardValidations from "./chessBoardValidations";
-import Piece, { PieceColor, PieceType } from "./piece";
+import { PieceColor, PieceType } from "./piece";
 import PieceDirections from "./pieces/directions";
-import { BlackBishop, WhiteBishop } from "./pieces/bishop";
 import PieceFactory from "./pieces/factory";
-import { BlackKing, WhiteKing } from "./pieces/king";
-import { WhiteKnight, BlackKnight } from "./pieces/knight";
-import { Pawn, BlackPawn, WhitePawn } from "./pieces/pawn";
-import { BlackQueen, WhiteQueen } from "./pieces/queen";
-import { BlackRook, WhiteRook } from "./pieces/rook";
+import { Pawn } from "./pieces/pawn";
 import { createFreshBoard } from "./utils/helpers";
+import { Queen } from "./pieces/queen";
+import { Rook } from "./pieces/rook";
+import { Knight } from "./pieces/knight";
+import { Bishop } from "./pieces/bishop";
 
 describe("Chess Board", () => {
   it("should be able to create an instance", () => {
@@ -505,7 +504,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move horizontally", () => {
-        chessBoard.board[3][0] = new WhiteRook();
+        chessBoard.board[3][0] = new Rook(PieceColor.White);
 
         chessBoard.handleMove([3, 0], [3, 7]);
         expect(chessBoard.getPosition([3, 7])?.color).toBe(PieceColor.White);
@@ -520,7 +519,7 @@ describe("Chess Board", () => {
 
       it("should be able to capture moving forward", () => {
         chessBoard.board[6][0] = undefined;
-        chessBoard.board[3][0] = new WhiteRook();
+        chessBoard.board[3][0] = new Rook(PieceColor.White);
         chessBoard.board[3][7] = PieceFactory.getPiece(
           PieceType.Pawn,
           PieceColor.Black
@@ -533,8 +532,8 @@ describe("Chess Board", () => {
 
       it("should be able to capture moving backward", () => {
         chessBoard.board[6][0] = undefined;
-        chessBoard.board[3][7] = new WhiteRook();
-        chessBoard.board[3][0] = new BlackRook();
+        chessBoard.board[3][7] = new Rook(PieceColor.White);
+        chessBoard.board[3][0] = new Rook(PieceColor.Black);
 
         chessBoard.handleMove([3, 7], [3, 0]);
         expect(chessBoard.getPosition([3, 0])?.color).toBe(PieceColor.White);
@@ -547,7 +546,7 @@ describe("Chess Board", () => {
             PieceType.Pawn,
             PieceColor.White
           );
-          chessBoard.board[4][4] = new WhiteRook();
+          chessBoard.board[4][4] = new Rook(PieceColor.White);
           chessBoard.handleMove([4, 4], [4, 6]);
         } catch (error) {
           expect((error as Error).message).toMatch(
@@ -564,7 +563,7 @@ describe("Chess Board", () => {
             PieceType.Pawn,
             PieceColor.White
           );
-          chessBoard.board[4][6] = new WhiteRook();
+          chessBoard.board[4][6] = new Rook(PieceColor.White);
           chessBoard.handleMove([4, 6], [4, 4]);
         } catch (error) {
           expect((error as Error).message).toMatch(
@@ -581,7 +580,7 @@ describe("Chess Board", () => {
             PieceType.Pawn,
             PieceColor.White
           );
-          chessBoard.board[4][0] = new WhiteRook();
+          chessBoard.board[4][0] = new Rook(PieceColor.White);
           chessBoard.handleMove([4, 0], [2, 0]);
           expect(false).toBe(true);
         } catch (error) {
@@ -595,7 +594,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move if no changes", () => {
         try {
-          chessBoard.board[4][0] = new WhiteRook();
+          chessBoard.board[4][0] = new Rook(PieceColor.White);
           chessBoard.handleMove([4, 0], [4, 0]);
           expect(false).toBe(true);
         } catch (error) {
@@ -649,7 +648,7 @@ describe("Chess Board", () => {
         }
       });
       it("should not be able to move away if there is an own piece in the middle while going backward", () => {
-        chessBoard.board[4][0] = new WhiteRook();
+        chessBoard.board[4][0] = new Rook(PieceColor.White);
         chessBoard.board[5][0] = PieceFactory.getPiece(
           PieceType.Pawn,
           PieceColor.White
@@ -684,7 +683,7 @@ describe("Chess Board", () => {
 
     describe("Black Knight", () => {
       it("should be defined", () => {
-        const blackKnight = new BlackKnight();
+        const blackKnight = new Knight(PieceColor.Black);
         expect(blackKnight).toBeDefined();
       });
 
@@ -728,7 +727,7 @@ describe("Chess Board", () => {
       });
 
       it("should be defined", () => {
-        const whiteKnight = new WhiteKnight();
+        const whiteKnight = new Knight(PieceColor.White);
         expect(whiteKnight).toBeDefined();
       });
 
@@ -796,35 +795,35 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally bottom left", () => {
-        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.White);
         chessBoard.handleMove([4, 4], [3, 3]);
         expect(chessBoard.getPosition([3, 3])?.color).toBe(PieceColor.White);
         expect(chessBoard.getPosition([3, 3])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally top right", () => {
-        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.White);
         chessBoard.handleMove([4, 4], [5, 5]);
         expect(chessBoard.getPosition([5, 5])?.color).toBe(PieceColor.White);
         expect(chessBoard.getPosition([5, 5])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally top left", () => {
-        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.White);
         chessBoard.handleMove([4, 4], [5, 3]);
         expect(chessBoard.getPosition([5, 3])?.color).toBe(PieceColor.White);
         expect(chessBoard.getPosition([5, 3])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally bottom right", () => {
-        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.White);
         chessBoard.handleMove([4, 4], [3, 5]);
         expect(chessBoard.getPosition([3, 5])?.color).toBe(PieceColor.White);
         expect(chessBoard.getPosition([3, 5])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally to a target position", () => {
-        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.White);
         chessBoard.board[3][3] = PieceFactory.getPiece(
           PieceType.Pawn,
           PieceColor.Black
@@ -835,7 +834,7 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to move diagonally if the target position is occupied by a piece of the same color", () => {
-        chessBoard.board[4][4] = new WhiteBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.White);
         chessBoard.board[3][3] = PieceFactory.getPiece(
           PieceType.Pawn,
           PieceColor.White
@@ -862,35 +861,35 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally bottom left", () => {
-        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.Black);
         chessBoard.handleMove([4, 4], [3, 3]);
         expect(chessBoard.getPosition([3, 3])?.color).toBe(PieceColor.Black);
         expect(chessBoard.getPosition([3, 3])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally top right", () => {
-        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.Black);
         chessBoard.handleMove([4, 4], [5, 5]);
         expect(chessBoard.getPosition([5, 5])?.color).toBe(PieceColor.Black);
         expect(chessBoard.getPosition([5, 5])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally top left", () => {
-        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.Black);
         chessBoard.handleMove([4, 4], [5, 3]);
         expect(chessBoard.getPosition([5, 3])?.color).toBe(PieceColor.Black);
         expect(chessBoard.getPosition([5, 3])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally bottom right", () => {
-        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.Black);
         chessBoard.handleMove([4, 4], [3, 5]);
         expect(chessBoard.getPosition([3, 5])?.color).toBe(PieceColor.Black);
         expect(chessBoard.getPosition([3, 5])?.type).toBe("Bishop");
       });
 
       it("should be able to move diagonally to a target position", () => {
-        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.Black);
         chessBoard.board[3][3] = PieceFactory.getPiece(
           PieceType.Pawn,
           PieceColor.White
@@ -901,7 +900,7 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to move diagonally if the target position is occupied by a piece of the same color", () => {
-        chessBoard.board[4][4] = new BlackBishop();
+        chessBoard.board[4][4] = new Bishop(PieceColor.Black);
         chessBoard.board[3][3] = PieceFactory.getPiece(
           PieceType.Pawn,
           PieceColor.Black
@@ -927,7 +926,7 @@ describe("Chess Board", () => {
       });
 
       it("should be defined", () => {
-        expect(WhiteQueen).toBeDefined();
+        expect(Queen).toBeDefined();
       });
 
       it("should be able to move diagonally to a target position", () => {

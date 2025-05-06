@@ -17,15 +17,3 @@ export class Rook extends Piece {
     return this.validateMultiMove(board, this.directions, movement);
   }
 }
-
-export class WhiteRook extends Rook {
-  constructor() {
-    super(PieceColor.White);
-  }
-}
-
-export class BlackRook extends Rook {
-  constructor() {
-    super(PieceColor.Black);
-  }
-}

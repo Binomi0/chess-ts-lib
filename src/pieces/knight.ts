@@ -17,15 +17,3 @@ export class Knight extends Piece {
     return this.validateSingleMove(board, this.directions, movement);
   }
 }
-
-export class WhiteKnight extends Knight {
-  constructor() {
-    super(PieceColor.White);
-  }
-}
-
-export class BlackKnight extends Knight {
-  constructor() {
-    super(PieceColor.Black);
-  }
-}

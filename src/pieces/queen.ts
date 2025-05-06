@@ -17,15 +17,3 @@ export class Queen extends Piece {
     return super.validateMultiMove(board, this.directions, movement);
   }
 }
-
-export class WhiteQueen extends Queen {
-  constructor() {
-    super(PieceColor.White);
-  }
-}
-
-export class BlackQueen extends Queen {
-  constructor() {
-    super(PieceColor.Black);
-  }
-}

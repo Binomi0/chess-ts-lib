@@ -55,15 +55,3 @@ export class Pawn extends Piece {
     throw new Error("Invalid movement for pawn");
   }
 }
-
-export class WhitePawn extends Pawn {
-  constructor() {
-    super(PieceColor.White);
-  }
-}
-
-export class BlackPawn extends Pawn {
-  constructor() {
-    super(PieceColor.Black);
-  }
-}

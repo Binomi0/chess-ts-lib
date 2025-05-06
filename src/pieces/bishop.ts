@@ -17,15 +17,3 @@ export class Bishop extends Piece {
     return this.validateMultiMove(board, this.directions, movement);
   }
 }
-
-export class WhiteBishop extends Bishop {
-  constructor() {
-    super(PieceColor.White);
-  }
-}
-
-export class BlackBishop extends Bishop {
-  constructor() {
-    super(PieceColor.Black);
-  }
-}

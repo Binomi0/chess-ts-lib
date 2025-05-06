@@ -1,6 +1,5 @@
 import { BoardCell, Castling, Position } from "./chessBoard";
-import { PieceColor } from "./piece";
-import { BlackKing, WhiteKing } from "./pieces/king";
+import Piece, { PieceColor } from "./piece";
 
 type CastlingData = [Position, Position[], Position, Position];
 
@@ -10,11 +9,7 @@ class CastlingManager {
     [PieceColor.Black]: true,
   };
 
-  static castle(
-    board: BoardCell[][],
-    piece: WhiteKing | BlackKing,
-    side: Castling
-  ) {
+  static castle(board: BoardCell[][], piece: Piece, side: Castling) {
     if (!this.castlingRights[piece.color]) return false;
 
     if (this.canCastle(board, piece, side)) {
@@ -32,11 +27,7 @@ class CastlingManager {
     return false;
   }
 
-  static canCastle(
-    board: BoardCell[][],
-    piece: WhiteKing | BlackKing,
-    side: Castling
-  ) {
+  static canCastle(board: BoardCell[][], piece: Piece, side: Castling) {
     if (!this.castlingRights[piece.color]) return false;
 
     const [rookPos, emptySquares, newKingPos, newRookPos] =
@@ -88,7 +79,7 @@ class CastlingManager {
 
   private static validateConditions(
     board: BoardCell[][],
-    king: WhiteKing | BlackKing,
+    king: Piece,
     rookPos: Position,
     emptySquares: Position[]
   ): boolean {
@@ -106,7 +97,7 @@ class CastlingManager {
 
   private static execCastling(
     board: BoardCell[][],
-    piece: WhiteKing | BlackKing,
+    piece: Piece,
     rookPos: Position,
     newKingPos: Position,
     newRookPos: Position

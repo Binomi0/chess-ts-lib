@@ -1,10 +1,4 @@
 import Piece, { PieceColor, PieceType } from "./piece";
-import { BlackBishop, WhiteBishop } from "./pieces/bishop";
-import { BlackKing, King, WhiteKing } from "./pieces/king";
-import { BlackKnight, WhiteKnight } from "./pieces/knight";
-import { BlackPawn, WhitePawn } from "./pieces/pawn";
-import { BlackRook, WhiteRook } from "./pieces/rook";
-import { BlackQueen, WhiteQueen } from "./pieces/queen";
 import ChessBoardValidations from "./chessBoardValidations";
 import Player from "./player";
 import { createFreshBoard, logMovement } from "./utils/helpers";
@@ -141,7 +135,7 @@ class ChessBoard {
     }
   }
 
-  // Set to private when ready
+  // TODO: Set to private when ready
   nextTurn() {
     if (this.turn === PieceColor.White) {
       this.players.get(PieceColor.White)?.addMovement();
@@ -215,14 +209,14 @@ class ChessBoard {
 
   castlingWhite(type: Castling) {
     const whiteKing = PieceFactory.getPiece(PieceType.King, PieceColor.White);
-    CastlingManager.castle(this.board, whiteKing as WhiteKing, type);
+    CastlingManager.castle(this.board, whiteKing, type);
 
     this.nextTurn();
   }
 
   castlingBlack(type: Castling) {
     const blackKing = PieceFactory.getPiece(PieceType.King, PieceColor.Black);
-    CastlingManager.castle(this.board, blackKing as BlackKing, type);
+    CastlingManager.castle(this.board, blackKing, type);
 
     this.nextTurn();
   }

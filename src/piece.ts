@@ -6,14 +6,6 @@ import {
   isValidDestination,
 } from "./utils/helpers";
 
-// export type PieceColor = PieceColor.Black | PieceColor.White;
-// export type PieceType =
-//   | "Pawn"
-//   | "Rook"
-//   | "Knight"
-//   | "Bishop"
-//   | "Queen"
-//   | "King";
 export enum PieceType {
   King = "King",
   Queen = "Queen",
