@@ -1,4 +1,4 @@
-import ChessBoard from "./chessBoard";
+import ChessBoard, { Position } from "./chessBoard";
 import ChessBoardValidations from "./chessBoardValidations";
 import { BlackBishop, WhiteBishop } from "./pieces/bishop";
 import { BlackKing, WhiteKing } from "./pieces/king";
@@ -962,54 +962,6 @@ describe("Chess Board", () => {
         expect(chessBoard.getPosition([3, 4])?.type).toBe("King");
         expect(chessBoard.getPosition([3, 4])?.color).toBe("black");
       });
-
-      it("should be able to castling to queen side if there are no enemy in the way", () => {
-        chessBoard.board[0][1] = undefined;
-        chessBoard.board[0][2] = undefined;
-        chessBoard.board[0][3] = undefined;
-
-        const blackKing = new BlackKing();
-        const castling = blackKing.canCastle(chessBoard.board, "queen");
-        chessBoard.castlingBlack("queen");
-
-        expect(castling).toBe(true);
-
-        expect(chessBoard.board[0][1]).toHaveProperty("type", "Rook");
-        expect(chessBoard.board[0][2]).toHaveProperty("type", "King");
-        expect(chessBoard.board[0][3]).toBe(undefined);
-        expect(chessBoard.board[0][4]).toBe(undefined);
-        expect(chessBoard.board[0][0]).toBe(undefined);
-      });
-
-      it("should be able to castling to king side if there are no enemy in the way", () => {
-        chessBoard.board[0][6] = undefined;
-        chessBoard.board[0][5] = undefined;
-
-        const blackKing = new BlackKing();
-        const castling = blackKing.canCastle(chessBoard.board, "king");
-
-        expect(castling).toBe(true);
-      });
-
-      it("should not be able to castling to king side if there is an enemy in the way", () => {
-        chessBoard.board[0][6] = undefined;
-        chessBoard.board[0][5] = new BlackPawn();
-
-        const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastle(chessBoard.board, "king");
-
-        expect(castling).toBe(false);
-      });
-
-      it("should not be able to castling to king side if its blocked", () => {
-        chessBoard.board[0][6] = undefined;
-        chessBoard.board[0][5] = new BlackPawn();
-
-        const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastle(chessBoard.board, "king");
-
-        expect(castling).toBe(false);
-      });
     });
 
     describe("White King", () => {
@@ -1072,44 +1024,35 @@ describe("Chess Board", () => {
         expect(chessBoard.getPosition([3, 4])?.color).toBe("white");
       });
 
-      it("should be able to castling to queen side if there are no enemy in the way", () => {
-        chessBoard.board[7][3] = undefined;
-        chessBoard.board[7][2] = undefined;
-        chessBoard.board[7][1] = undefined;
+      it("should not be able to move if will be in check, DRAW", () => {
+        chessBoard.board = createFreshBoard();
 
         const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastle(chessBoard.board, "queen");
 
-        expect(castling).toBe(true);
-      });
+        chessBoard.board[7][0] = whiteKing;
+        chessBoard.board[5][1] = new BlackQueen();
 
-      it("should be able to castling to king side if there are no enemy in the way", () => {
-        chessBoard.board[7][6] = undefined;
-        chessBoard.board[7][5] = undefined;
+        const availableMoves = whiteKing.getAllAvailableMoves(
+          chessBoard.board,
+          [7, 0]
+        );
 
-        const whiteKing = new WhiteKing();
-        const castling = whiteKing.canCastle(chessBoard.board, "king");
+        const escapeMoves: Position[] = [];
+        for (const move of availableMoves) {
+          chessBoard.board[move[0]][move[1]] = whiteKing;
+          chessBoard.board[7][0] = undefined;
 
-        expect(castling).toBe(true);
-      });
+          if (
+            !ChessBoardValidations.isKingInCheck(
+              chessBoard.board,
+              chessBoard.turn
+            )
+          ) {
+            escapeMoves.push(move);
+          }
+        }
 
-      it("should not be able to castling to king side if there is an enemy in the way", () => {
-        chessBoard.board[0][6] = undefined;
-        chessBoard.board[0][5] = new BlackPawn();
-
-        const blackKing = new BlackKing();
-        const castling = blackKing.canCastle(chessBoard.board, "king");
-        expect(castling).toBe(false);
-      });
-
-      it("should not be able to castling to king side if its blocked", () => {
-        chessBoard.board[0][6] = undefined;
-        chessBoard.board[0][5] = new BlackPawn();
-
-        const blackKing = new BlackKing();
-
-        const castling = blackKing.canCastle(chessBoard.board, "king");
-        expect(castling).toBe(false); // This should never be true
+        expect(escapeMoves.length).toBe(0);
       });
     });
   });

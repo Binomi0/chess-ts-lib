@@ -54,14 +54,15 @@ class ChessBoardValidations {
     }
 
     return isValid;
-    // throw new Error("Checkmate not found");
   }
 
+  // This should work under check
   static isCheckMate(board: BoardCell[][], turn: PieceColor): boolean {
     // Buscar todas las piezas del jugador en jaque
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const piece = board[row][col];
+        // Look for own pieces
         if (piece && piece.color === turn) {
           const directions = PieceDirections.getPieceDirections(piece.type);
           const from: Position = [row, col];
@@ -77,6 +78,7 @@ class ChessBoardValidations {
               continue;
             }
 
+            // Search for any move that can save king to be under check
             for (let to of moves) {
               const tempBoard = cloneBoard(board);
 
