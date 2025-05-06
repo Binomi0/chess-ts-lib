@@ -1,5 +1,5 @@
 import ChessBoard from "./chessBoard";
-import { type PieceColor } from "./piece";
+import { PieceColor } from "./piece";
 import Player from "./player";
 
 class Game {
@@ -19,7 +19,9 @@ class Game {
       throw new Error("Cannot add more than two players.");
     }
 
-    const color = this.chessBoard.players.has("white") ? "black" : "white";
+    const color = this.chessBoard.players.has(PieceColor.White)
+      ? PieceColor.Black
+      : PieceColor.White;
     this.chessBoard.players.set(color, player);
     this.chessBoard.players.get(color)?.addSide(color);
   }
@@ -34,7 +36,7 @@ class Game {
       this.timeElapsed = Date.now();
       this.started = true;
     } else {
-      console.log("Game has already been started");
+      throw new Error("Game has already been started");
     }
   }
 
@@ -44,8 +46,8 @@ class Game {
     }
 
     return (
-      this.chessBoard.players.has("white") &&
-      this.chessBoard.players.has("black")
+      this.chessBoard.players.has(PieceColor.White) &&
+      this.chessBoard.players.has(PieceColor.Black)
     );
   }
 }

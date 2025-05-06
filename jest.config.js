@@ -24,7 +24,12 @@ export default {
   // transform: {
   //   '^.+\\.test.ts$': 'ts-jest',
   // },
-  modulePathIgnorePatterns: ["^.+\\.d.ts$", "dist"],
+  modulePathIgnorePatterns: [
+    "^.+\\.d.ts$",
+    "dist",
+    "src/index.ts",
+    "src/main.ts",
+  ],
   collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}"],
   setupFilesAfterEnv: ["./jest.setup.ts"], // Cambiado a .ts
 };

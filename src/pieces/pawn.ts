@@ -1,5 +1,5 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import Piece, { type PieceColor } from "../piece";
+import Piece, { PieceColor, PieceType } from "../piece";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 
 export class Pawn extends Piece {
@@ -10,7 +10,7 @@ export class Pawn extends Piece {
   ];
 
   constructor(color: PieceColor) {
-    super(color, "Pawn");
+    super(color, PieceType.Pawn);
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
@@ -23,8 +23,8 @@ export class Pawn extends Piece {
     const deltaRow = toRow - fromRow;
     const deltaCol = toCol - fromCol;
 
-    const direction = this.color === "white" ? -1 : 1;
-    const startRow = this.color === "white" ? 6 : 1;
+    const direction = this.color === PieceColor.White ? -1 : 1;
+    const startRow = this.color === PieceColor.White ? 6 : 1;
 
     // Movimiento hacia delante
     if (deltaCol === 0) {
@@ -58,12 +58,12 @@ export class Pawn extends Piece {
 
 export class WhitePawn extends Pawn {
   constructor() {
-    super("white");
+    super(PieceColor.White);
   }
 }
 
 export class BlackPawn extends Pawn {
   constructor() {
-    super("black");
+    super(PieceColor.Black);
   }
 }

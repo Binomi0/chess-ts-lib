@@ -1,6 +1,7 @@
 import Game from "./game";
-import { BlackPawn, WhitePawn } from "./pieces/pawn";
-import { BlackQueen, WhiteQueen } from "./pieces/queen";
+import { PieceColor } from "./piece";
+import { BlackPawn } from "./pieces/pawn";
+import { WhiteQueen } from "./pieces/queen";
 import Player from "./player";
 
 const game = new Game();
@@ -19,8 +20,8 @@ const castleWhiteKingSide = () => {
 
     game.chessBoard.castlingWhite("king");
 
-    console.log(game.chessBoard.players.get("white"));
-    console.log(game.chessBoard.players.get("black"));
+    console.log(game.chessBoard.players.get(PieceColor.White));
+    console.log(game.chessBoard.players.get(PieceColor.Black));
 
     // const isCheck = game.chessBoard.isCheck();
     // console.log({ isCheck });
@@ -34,8 +35,8 @@ const castleWhiteQueenSide = () => {
 
     game.chessBoard.castlingWhite("queen");
 
-    console.log(game.chessBoard.players.get("white"));
-    console.log(game.chessBoard.players.get("black"));
+    console.log(game.chessBoard.players.get(PieceColor.White));
+    console.log(game.chessBoard.players.get(PieceColor.Black));
 
     // const isCheck = game.chessBoard.isCheck();
     // console.log({ isCheck });

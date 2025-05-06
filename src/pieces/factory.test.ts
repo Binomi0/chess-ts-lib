@@ -1,4 +1,4 @@
-import { PieceColor, PieceType } from "../constants";
+import { PieceType, PieceColor } from "../piece";
 import PieceFactory from "./factory";
 
 describe("PieceFactory", () => {
@@ -44,19 +44,19 @@ describe("PieceFactory", () => {
   });
 
   it("should throw an error if invalid piece provided", () => {
-    // @ts-expect-error test
-    expect(() => PieceFactory.getPiece("InvalidType", "white")).toThrow(
-      "Invalid piece type"
-    );
+    expect(() =>
+      // @ts-expect-error test
+      PieceFactory.getPiece("InvalidType", PieceColor.White)
+    ).toThrow("Invalid piece type");
   });
 
   it("should repect Liskov", () => {
-    const whiteKing = PieceFactory.getPiece("King", "white");
+    const whiteKing = PieceFactory.getPiece(PieceType.King, PieceColor.White);
     expect(whiteKing.validateMove).toBeDefined();
     expect(whiteKing.validateMultiMove).toBeDefined();
     expect(whiteKing.validateSingleMove).toBeDefined();
 
-    const blackKing = PieceFactory.getPiece("King", "black");
+    const blackKing = PieceFactory.getPiece(PieceType.King, PieceColor.Black);
     expect(blackKing.validateMove).toBeDefined();
     expect(blackKing.validateMultiMove).toBeDefined();
     expect(blackKing.validateSingleMove).toBeDefined();

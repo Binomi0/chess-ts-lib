@@ -1,12 +1,27 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import Piece, { PieceColor } from "../piece";
-import PieceDirections from "../PieceDirections";
+import ChessBoardValidations from "../chessBoardValidations";
+import Piece, { PieceColor, PieceType } from "../piece";
+import { cloneBoard } from "../utils/helpers";
+import PieceDirections from "./directions";
 
 export class King extends Piece {
   protected readonly directions: Position[] = PieceDirections.King;
 
   constructor(color: PieceColor) {
-    super(color, "King");
+    super(color, PieceType.King);
+  }
+
+  getAllAvailableMoves(board: BoardCell[][], from: Position) {
+    const moves = super.getAllAvailableMoves(board, from, this.directions);
+
+    const tempBoard = cloneBoard(board);
+
+    return moves.filter((move) => {
+      tempBoard[move[0]][move[1]] = this;
+      tempBoard[from[0]][from[1]] = undefined;
+
+      return ChessBoardValidations.isKingInCheck(tempBoard, this.color);
+    });
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {
@@ -16,11 +31,11 @@ export class King extends Piece {
 
 export class BlackKing extends King {
   constructor() {
-    super("black");
+    super(PieceColor.Black);
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return super.getAllAvailableMoves(board, from, this.directions);
+    return super.getAllAvailableMoves(board, from);
   }
 
   // castling(board: BoardCell[][], side: Castling) {
@@ -110,11 +125,11 @@ export class BlackKing extends King {
 
 export class WhiteKing extends King {
   constructor() {
-    super("white");
+    super(PieceColor.White);
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return super.getAllAvailableMoves(board, from, this.directions);
+    return super.getAllAvailableMoves(board, from);
   }
 
   // castling(board: BoardCell[][], side: Castling) {

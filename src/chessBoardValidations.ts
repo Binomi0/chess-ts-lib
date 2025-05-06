@@ -1,7 +1,8 @@
 import { BoardCell, Position } from "./chessBoard";
-import Piece, { PieceColor } from "./piece";
-import PieceDirections from "./PieceDirections";
+import Piece, { PieceColor, PieceType } from "./piece";
+import PieceDirections from "./pieces/directions";
 import { Bishop, BlackBishop, WhiteBishop } from "./pieces/bishop";
+import PieceFactory from "./pieces/factory";
 import { BlackKing, King, WhiteKing } from "./pieces/king";
 import { Knight } from "./pieces/knight";
 import { BlackPawn, Pawn, WhitePawn } from "./pieces/pawn";
@@ -99,23 +100,6 @@ class ChessBoardValidations {
     return true; // No hay movimientos legales y el rey está en jaque
   }
 
-  static findEnemyKing(
-    board: BoardCell[][],
-    turn: PieceColor
-  ): Position | null {
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (
-          board[row][col]?.color !== turn &&
-          board[row][col]?.type === "King"
-        ) {
-          return [row, col];
-        }
-      }
-    }
-    return null;
-  }
-
   static findKing(board: BoardCell[][], turn: PieceColor): Position | null {
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -138,8 +122,8 @@ class ChessBoardValidations {
     const currentPiece = board[from[0]][from[1]];
 
     if (
-      (turn === "white" && currentPiece?.color === "white") ||
-      (turn === "black" && currentPiece?.color === "black")
+      (turn === PieceColor.White && currentPiece?.color === PieceColor.White) ||
+      (turn === PieceColor.Black && currentPiece?.color === PieceColor.Black)
     ) {
       return true;
     }
@@ -173,40 +157,10 @@ class ChessBoardValidations {
 
     const movement = { from, to, piece };
 
-    const isWhite = piece.color === "white";
-    switch (piece.type) {
-      case "Pawn": // Peón
-        return isWhite
-          ? new WhitePawn().validateMove(board, movement)
-          : new BlackPawn().validateMove(board, movement);
-      case "Rook": // Torre
-        return new Rook(piece.color).validateMove(board, movement); // Torre
-      // return isWhite
-      //   ? new WhiteRook().validateMove(board, movement)
-      //   : new BlackRook().validateMove(board, movement);
-      case "Knight": // Caballo
-        return new Knight(piece.color).validateMove(board, movement); // Caballo
-      // return isWhite
-      //   ? new WhiteKing().validateMove(board, movement)
-      //   : new BlackKing().validateMove(board, movement);
-      case "Bishop": // Bispo
-        return new Bishop(piece.color).validateMove(board, movement); // Bispo
-      // return isWhite
-      //   ? new WhiteBishop().validateMove(board, movement)
-      //   : new BlackBishop().validateMove(board, movement);
-      case "Queen": // Reina
-        return new Queen(piece.color).validateMove(board, movement); // Reina
-      // return isWhite
-      //   ? new WhiteQueen().validateMove(board, movement)
-      //   : new BlackQueen().validateMove(board, movement);
-      case "King": // Rey
-        return new King(piece.color).validateMove(board, movement); // Rey
-      // return isWhite
-      //   ? new WhiteKing().validateMove(board, movement)
-      //   : new BlackKing().validateMove(board, movement);
-      default:
-        throw new Error("Invalid piece type");
-    }
+    return PieceFactory.getPiece(piece.type, piece.color).validateMove(
+      board,
+      movement
+    );
   }
 }
 

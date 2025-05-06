@@ -1,12 +1,12 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import Piece, { PieceColor } from "../piece";
-import PieceDirections from "../PieceDirections";
+import Piece, { PieceColor, PieceType } from "../piece";
+import PieceDirections from "./directions";
 
 export class Bishop extends Piece {
   protected readonly directions: Position[] = PieceDirections.Bishop;
 
   constructor(color: PieceColor) {
-    super(color, "Bishop");
+    super(color, PieceType.Bishop);
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
@@ -20,12 +20,12 @@ export class Bishop extends Piece {
 
 export class WhiteBishop extends Bishop {
   constructor() {
-    super("white");
+    super(PieceColor.White);
   }
 }
 
 export class BlackBishop extends Bishop {
   constructor() {
-    super("black");
+    super(PieceColor.Black);
   }
 }

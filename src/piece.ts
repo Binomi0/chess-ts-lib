@@ -6,18 +6,36 @@ import {
   isValidDestination,
 } from "./utils/helpers";
 
-export type PieceColor = "black" | "white";
-export type PieceType =
-  | "Pawn"
-  | "Rook"
-  | "Knight"
-  | "Bishop"
-  | "Queen"
-  | "King";
+// export type PieceColor = PieceColor.Black | PieceColor.White;
+// export type PieceType =
+//   | "Pawn"
+//   | "Rook"
+//   | "Knight"
+//   | "Bishop"
+//   | "Queen"
+//   | "King";
+export enum PieceType {
+  King = "King",
+  Queen = "Queen",
+  Rook = "Rook",
+  Bishop = "Bishop",
+  Knight = "Knight",
+  Pawn = "Pawn",
+}
+
+export enum PieceColor {
+  White = "white",
+  Black = "black",
+}
 
 interface Piece {
-  color: Readonly<PieceColor>;
-  type: Readonly<PieceType>;
+  color: PieceColor;
+  type: PieceType;
+  getAllAvailableMoves(
+    board: BoardCell[][],
+    from: Position,
+    directions: Position[]
+  ): Position[];
   validateMove(board: BoardCell[][], movement: Movement): boolean;
   validateSingleMove(
     board: BoardCell[][],

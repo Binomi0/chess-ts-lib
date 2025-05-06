@@ -28,17 +28,21 @@ class PieceFactory {
   private static getPieceInstance(type: PieceType, color: PieceColor) {
     switch (type) {
       case "Pawn":
-        return color === "white" ? new WhitePawn() : new BlackPawn();
+        return color === PieceColor.White ? new WhitePawn() : new BlackPawn();
       case "Rook":
-        return color === "white" ? new WhiteRook() : new BlackRook();
+        return color === PieceColor.White ? new WhiteRook() : new BlackRook();
       case "Bishop":
-        return color === "white" ? new WhiteBishop() : new BlackBishop();
+        return color === PieceColor.White
+          ? new WhiteBishop()
+          : new BlackBishop();
       case "King":
-        return color === "white" ? new WhiteKing() : new BlackKing();
+        return color === PieceColor.White ? new WhiteKing() : new BlackKing();
       case "Queen":
-        return color === "white" ? new WhiteQueen() : new BlackQueen();
+        return color === PieceColor.White ? new WhiteQueen() : new BlackQueen();
       case "Knight":
-        return color === "white" ? new WhiteKnight() : new BlackKnight();
+        return color === PieceColor.White
+          ? new WhiteKnight()
+          : new BlackKnight();
       default:
         throw new Error("Invalid piece type");
     }

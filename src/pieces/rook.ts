@@ -1,12 +1,12 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import Piece, { type PieceColor } from "../piece";
-import PieceDirections from "../PieceDirections";
+import Piece, { PieceColor, PieceType } from "../piece";
+import PieceDirections from "./directions";
 
 export class Rook extends Piece {
   protected readonly directions: Position[] = PieceDirections.Rook;
 
   constructor(color: PieceColor) {
-    super(color, "Rook");
+    super(color, PieceType.Rook);
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
@@ -20,12 +20,12 @@ export class Rook extends Piece {
 
 export class WhiteRook extends Rook {
   constructor() {
-    super("white");
+    super(PieceColor.White);
   }
 }
 
 export class BlackRook extends Rook {
   constructor() {
-    super("black");
+    super(PieceColor.Black);
   }
 }

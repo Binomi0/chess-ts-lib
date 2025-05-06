@@ -1,14 +1,13 @@
 import { BoardCell, Castling, Position } from "./chessBoard";
 import { PieceColor } from "./piece";
 import { BlackKing, WhiteKing } from "./pieces/king";
-import { Rook } from "./pieces/rook";
 
 type CastlingData = [Position, Position[], Position, Position];
 
 class CastlingManager {
   private static castlingRights: Record<PieceColor, boolean> = {
-    white: true,
-    black: true,
+    [PieceColor.White]: true,
+    [PieceColor.Black]: true,
   };
 
   static castle(
@@ -24,15 +23,7 @@ class CastlingManager {
         side
       );
 
-      if (piece.color === "white") {
-        board[7][4] = undefined;
-      } else if (piece.color === "black") {
-        board[0][4] = undefined;
-      }
-
-      board[newRookPos[0]][newRookPos[1]] = board[rookPos[0]][rookPos[1]];
-      board[rookPos[0]][rookPos[1]] = undefined;
-      board[newKingPos[0]][newKingPos[1]] = piece;
+      this.execCastling(board, piece, rookPos, newKingPos, newRookPos);
       this.setCastlingLocked(piece.color);
 
       return true;
@@ -54,8 +45,11 @@ class CastlingManager {
     return this.validateConditions(board, piece, rookPos, emptySquares);
   }
 
-  static getCastlingData(color: PieceColor, side: Castling): CastlingData {
-    const isWhite = color === "white";
+  private static getCastlingData(
+    color: PieceColor,
+    side: Castling
+  ): CastlingData {
+    const isWhite = color === PieceColor.White;
     const backRank = isWhite ? 7 : 0;
 
     if (side === "king") {
@@ -67,7 +61,7 @@ class CastlingManager {
     throw new Error("Wrong side for castling");
   }
 
-  static getKingSideData(backRank: number): CastlingData {
+  private static getKingSideData(backRank: number): CastlingData {
     return [
       [backRank, 7], // Rook position
       [
@@ -79,7 +73,7 @@ class CastlingManager {
     ];
   }
 
-  static getQueenSideData(backRank: number): CastlingData {
+  private static getQueenSideData(backRank: number): CastlingData {
     return [
       [backRank, 0],
       [
@@ -92,7 +86,7 @@ class CastlingManager {
     ];
   }
 
-  static validateConditions(
+  private static validateConditions(
     board: BoardCell[][],
     king: WhiteKing | BlackKing,
     rookPos: Position,
@@ -110,7 +104,25 @@ class CastlingManager {
     return emptySquares.every(([row, col]) => !board[row][col]);
   }
 
-  static setCastlingLocked(color: PieceColor): void {
+  private static execCastling(
+    board: BoardCell[][],
+    piece: WhiteKing | BlackKing,
+    rookPos: Position,
+    newKingPos: Position,
+    newRookPos: Position
+  ): void {
+    if (piece.color === PieceColor.White) {
+      board[7][4] = undefined;
+    } else if (piece.color === PieceColor.Black) {
+      board[0][4] = undefined;
+    }
+
+    board[newRookPos[0]][newRookPos[1]] = board[rookPos[0]][rookPos[1]];
+    board[rookPos[0]][rookPos[1]] = undefined;
+    board[newKingPos[0]][newKingPos[1]] = piece;
+  }
+
+  private static setCastlingLocked(color: PieceColor): void {
     this.castlingRights[color] = false;
   }
 }
