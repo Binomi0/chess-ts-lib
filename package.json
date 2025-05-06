@@ -6,6 +6,14 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Binomi0/chess-ts-lib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Binomi0/chess-ts-lib/issues"
+  },
+  "homepage": "https://github.com/Binomi0/chess-ts-lib#readme",
   "scripts": {
     "start": "npx -y tsx src/main.ts",
     "test": "jest",
