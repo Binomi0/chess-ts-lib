@@ -1,5 +1,5 @@
 import { PieceType, PieceColor } from "../piece";
-import PieceFactory from "./factory";
+import PieceFactory from "../factory";
 
 describe("PieceFactory", () => {
   it("should create a piece with the correct color and type", () => {

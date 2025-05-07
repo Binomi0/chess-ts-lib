@@ -1,5 +1,5 @@
 import { PieceType } from "../piece";
-import PieceDirections from "./directions";
+import PieceDirections from "../directions";
 
 describe("PieceDirections", () => {
   it("getPieceDirections should return the correct directions for each piece type", () => {
