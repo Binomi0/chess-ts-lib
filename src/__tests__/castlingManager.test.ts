@@ -1,5 +1,6 @@
 import CastlingManager from "../castlingManager";
 import ChessBoard, { Castling } from "../chessBoard";
+import GameManager from "../gameManager";
 import { PieceColor } from "../piece";
 import { King } from "../pieces/king";
 import { Rook } from "../pieces/rook";
@@ -10,7 +11,8 @@ describe("Castling Manager", () => {
     let chessBoard: ChessBoard;
 
     beforeEach(() => {
-      chessBoard = new ChessBoard();
+      const gameManager = new GameManager();
+      chessBoard = new ChessBoard(gameManager);
     });
 
     it("should not be able to castle at start for white king side", () => {
@@ -82,7 +84,8 @@ describe("Castling Manager", () => {
     let chessBoard: ChessBoard;
 
     beforeEach(() => {
-      chessBoard = new ChessBoard();
+      const gameManager = new GameManager();
+      chessBoard = new ChessBoard(gameManager);
     });
 
     it("should not be able to castle at start for white king side", () => {

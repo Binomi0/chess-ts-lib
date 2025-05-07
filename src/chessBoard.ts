@@ -1,14 +1,12 @@
 import Piece, { PieceColor, PieceType } from "./piece";
 import ChessBoardValidations from "./chessBoardValidations";
-import Player from "./player";
 import { createFreshBoard, logMovement } from "./utils/helpers";
 import PieceFactory from "./pieces/factory";
 import CastlingManager from "./castlingManager";
 import BoardMovements from "./board/boardMovements";
-import Game from "./game";
 import TurnManager from "./board/turnManager";
-import MovementExecutor from "./board/movementExecutor";
 import BoardStateManager from "./board/boardStateManager";
+import GameManager from "./gameManager";
 
 export type Movement = {
   from: Position;
@@ -24,14 +22,13 @@ export type Position = [number, number];
 
 class ChessBoard {
   board: BoardCell[][];
-  players: Map<PieceColor, Player> = new Map();
   lastTurn: Position | undefined;
   boardMovements: BoardMovements;
   movements: Movement[] = [];
   turnManager: TurnManager = new TurnManager();
   stateManager: BoardStateManager = new BoardStateManager();
 
-  constructor() {
+  constructor(private manager: GameManager) {
     // Define the initial positions of pieces on the board
     this.board = createFreshBoard();
     this.initializeBoard();
@@ -201,7 +198,7 @@ class ChessBoard {
       this.board[fromRow][fromCol] = undefined;
 
       if (this.isCheckMate()) {
-        Game.winner = pieceToMove?.color;
+        this.manager.winner = pieceToMove?.color;
       }
 
       logMovement(from, to, pieceToMove);

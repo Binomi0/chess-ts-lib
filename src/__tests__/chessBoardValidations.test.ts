@@ -1,5 +1,6 @@
 import ChessBoard from "../chessBoard";
 import ChessBoardValidations from "../chessBoardValidations";
+import GameManager from "../gameManager";
 import { PieceColor, PieceType } from "../piece";
 import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
@@ -9,7 +10,8 @@ describe("Chess Board Validations", () => {
   let chessBoard: ChessBoard;
 
   beforeEach(() => {
-    chessBoard = new ChessBoard();
+    const gameManager = new GameManager();
+    chessBoard = new ChessBoard(gameManager);
   });
 
   it("should check if a king is in check", () => {
