@@ -38,11 +38,5 @@ export function createFreshBoard(): BoardCell[][] {
 }
 
 export function cloneBoard(board: BoardCell[][]): BoardCell[][] {
-  return board.map((row) =>
-    row.map((piece) =>
-      piece
-        ? Object.assign(Object.create(Object.getPrototypeOf(piece)), piece)
-        : undefined,
-    ),
-  );
+  return board.map((row) => [...row]);
 }
