@@ -14,20 +14,11 @@ export enum PieceColor {
   Black = "black",
 }
 
-interface Piece {
-  color: PieceColor;
-  type: PieceType;
-  symbol: string;
-}
-
-abstract class Piece implements Piece {
-  color: PieceColor;
-  type: PieceType;
-
-  constructor(color: PieceColor, type: PieceType) {
-    this.color = color;
-    this.type = type;
-  }
+abstract class Piece {
+  constructor(
+    public color: PieceColor,
+    public type: PieceType,
+  ) {}
 
   abstract getAllAvailableMoves(
     board: BoardCell[][],

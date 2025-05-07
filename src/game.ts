@@ -3,14 +3,15 @@ import { PieceColor } from "./piece";
 import Player from "./player";
 
 class Game {
-  chessBoard: ChessBoard = new ChessBoard();
+  chessBoard: ChessBoard;
   static winner: PieceColor | undefined;
   started = false;
   timeElapsed: number = 0;
   notifier?: (message: string) => void;
 
-  constructor(notifier?: (message: string) => void) {
+  constructor(chessBoard?: ChessBoard, notifier?: (message: string) => void) {
     this.notifier = notifier;
+    this.chessBoard = chessBoard || new ChessBoard();
   }
 
   addPlayer(player: Player) {

@@ -27,17 +27,17 @@ class PieceFactory {
 
   private static getPieceInstance(type: PieceType, color: PieceColor) {
     switch (type) {
-      case "Pawn":
+      case PieceType.Pawn:
         return new Pawn(color);
-      case "Rook":
+      case PieceType.Rook:
         return new Rook(color);
-      case "Bishop":
+      case PieceType.Bishop:
         return new Bishop(color);
-      case "King":
+      case PieceType.King:
         return new King(color);
-      case "Queen":
+      case PieceType.Queen:
         return new Queen(color);
-      case "Knight":
+      case PieceType.Knight:
         return new Knight(color);
       default:
         throw new Error("Invalid piece type");

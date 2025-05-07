@@ -1,3 +1,4 @@
+import ChessBoard from "../chessBoard";
 import Game from "../game";
 import { PieceColor } from "../piece";
 import Player from "../player";
@@ -96,7 +97,8 @@ describe("Game", () => {
 
   it("should send game start notification", () => {
     const mockNotifier = jest.fn();
-    const game = new Game(mockNotifier);
+    const chessBoard = new ChessBoard();
+    const game = new Game(chessBoard, mockNotifier);
     game.addPlayer(new Player("Player 1"));
     game.addPlayer(new Player("Player 2"));
     game.start();
