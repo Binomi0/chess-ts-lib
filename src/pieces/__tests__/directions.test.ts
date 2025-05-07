@@ -1,4 +1,4 @@
-import { PieceType } from "../piece";
+import { PieceType } from "../../piece";
 import PieceDirections from "../directions";
 
 describe("PieceDirections", () => {
