@@ -26,6 +26,7 @@ class MovementExecutor {
   }
 
   executeEnPassant(from: Position, to: Position): void {
+    console.log({ from, to });
     // Implement en passant logic here
   }
 
