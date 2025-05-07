@@ -6,14 +6,18 @@ import PieceDirections from "./directions";
 export class Bishop extends Piece {
   readonly symbol: string;
   protected readonly directions: Position[] = PieceDirections.Bishop;
+  private readonly bishopSymbols = {
+    [PieceColor.White]: "♗",
+    [PieceColor.Black]: "♝",
+  };
 
   constructor(color: PieceColor) {
     super(color, PieceType.Bishop);
-    this.symbol = color === PieceColor.White ? "♗" : "♝";
+    this.symbol = this.bishopSymbols[color];
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return super.getAllAvailableMoves(board, from, this.directions);
+    return MultiMoveValidator.getAvailableMoves(board, this.directions, from);
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {

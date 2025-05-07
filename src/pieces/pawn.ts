@@ -1,5 +1,6 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
+import SingleMoveValidator from "../singleMoveValidator";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 
 export class Pawn extends Piece {
@@ -9,14 +10,18 @@ export class Pawn extends Piece {
     [1, 1],
     [1, -1],
   ];
+  private readonly pawnSymbols = {
+    [PieceColor.White]: "♙",
+    [PieceColor.Black]: "♟",
+  };
 
   constructor(color: PieceColor) {
     super(color, PieceType.Pawn);
-    this.symbol = color === PieceColor.White ? "♙" : "♟";
+    this.symbol = this.pawnSymbols[color];
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return super.getAllAvailableMoves(board, from, this.directions);
+    return SingleMoveValidator.getAvailableMoves(board, this.directions, from);
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {

@@ -17,10 +17,10 @@ class MultiMoveValidator {
     for (const [row, col] of directions) {
       let newRow = from[0] + row;
       let newCol = from[1] + col;
+      const piece = board[from[0]][from[1]];
 
       while (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
-        const piece = board[from[0]][from[1]];
 
         if (isCellEmpty(target)) {
           validMoves.push([newRow, newCol]);

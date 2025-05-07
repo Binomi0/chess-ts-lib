@@ -7,8 +7,11 @@ class Game {
   static winner: PieceColor | undefined;
   started = false;
   timeElapsed: number = 0;
+  notifier?: (message: string) => void;
 
-  constructor() {}
+  constructor(notifier?: (message: string) => void) {
+    this.notifier = notifier;
+  }
 
   addPlayer(player: Player) {
     if (!this.chessBoard) {
@@ -48,6 +51,7 @@ class Game {
     if (!this.started) {
       this.timeElapsed = Date.now();
       this.started = true;
+      this.notifier?.("Game started!");
     } else {
       throw new Error("Game has already been started");
     }

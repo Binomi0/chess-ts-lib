@@ -6,14 +6,18 @@ import PieceDirections from "./directions";
 export class Knight extends Piece {
   readonly symbol: string;
   protected readonly directions: Position[] = PieceDirections.Knight;
+  private readonly knightSymbols = {
+    [PieceColor.White]: "♘",
+    [PieceColor.Black]: "♞",
+  };
 
   constructor(color: PieceColor) {
     super(color, PieceType.Knight);
-    this.symbol = color === PieceColor.White ? "♘" : "♞";
+    this.symbol = this.knightSymbols[color];
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return super.getAllAvailableMoves(board, from, this.directions);
+    return SingleMoveValidator.getAvailableMoves(board, this.directions, from);
   }
 
   validateMove(board: BoardCell[][], movement: Movement): boolean {

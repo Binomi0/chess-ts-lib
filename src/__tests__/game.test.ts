@@ -92,4 +92,14 @@ describe("Game", () => {
       );
     }
   });
+
+  it("should send game start notification", () => {
+    const mockNotifier = jest.fn();
+    const game = new Game(mockNotifier);
+    game.addPlayer(new Player("Player 1"));
+    game.addPlayer(new Player("Player 2"));
+    game.start();
+    expect(mockNotifier).toHaveBeenCalled();
+    expect(mockNotifier).toHaveBeenCalledWith("Game started!");
+  });
 });

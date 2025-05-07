@@ -8,14 +8,22 @@ import PieceDirections from "./directions";
 export class King extends Piece {
   readonly symbol: string;
   protected readonly directions: Position[] = PieceDirections.King;
+  private readonly kingSymbols = {
+    [PieceColor.White]: "♔",
+    [PieceColor.Black]: "♚",
+  };
 
   constructor(color: PieceColor) {
     super(color, PieceType.King);
-    this.symbol = color === PieceColor.White ? "♔" : "♚";
+    this.symbol = this.kingSymbols[color];
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    const moves = super.getAllAvailableMoves(board, from, this.directions);
+    const moves = SingleMoveValidator.getAvailableMoves(
+      board,
+      this.directions,
+      from,
+    );
 
     const tempBoard = cloneBoard(board);
 
