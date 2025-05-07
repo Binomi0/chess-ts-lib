@@ -6,7 +6,7 @@ export default defineConfig({
   entry: ["src/index.ts"], // Ajusta según tu estructura
 
   // Solo necesitas ESM para frontend moderno
-  // format: ["esm"],
+  format: ["cjs"],
 
   // Generar declaraciones de tipo (opcional para frontend)
   dts: true, // Puedes cambiarlo a true si necesitas tipos
@@ -37,7 +37,7 @@ export default defineConfig({
     // Define variables de entorno
     options.define = {
       "process.env.NODE_ENV": JSON.stringify(
-        process.env.NODE_ENV || "production"
+        process.env.NODE_ENV || "production",
       ),
     };
   },

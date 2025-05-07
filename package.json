@@ -1,12 +1,14 @@
 {
   "name": "chess-ts-lib",
   "version": "0.2.3",
-  "description": "",
-  "type": "module",
+  "description": "Typescript base utilities for a chess game.",
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "import": "./dist/index.js"
+    }
   },
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Binomi0/chess-ts-lib.git"
