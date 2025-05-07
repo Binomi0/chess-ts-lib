@@ -1,6 +1,6 @@
-import Game from "./game";
-import { PieceColor } from "./piece";
-import Player from "./player";
+import Game from "../game";
+import { PieceColor } from "../piece";
+import Player from "../player";
 
 describe("Game", () => {
   it("should be defined", () => {
@@ -37,7 +37,7 @@ describe("Game", () => {
       expect(false).toBeTruthy();
     } catch (error) {
       expect((error as Error).message).toBe(
-        "Please add both players before starting the game."
+        "Please add both players before starting the game.",
       );
     }
   });
@@ -88,7 +88,7 @@ describe("Game", () => {
       expect(false).toBeTruthy();
     } catch (error) {
       expect((error as Error).message).toBe(
-        "Cannot add more than two players."
+        "Cannot add more than two players.",
       );
     }
   });

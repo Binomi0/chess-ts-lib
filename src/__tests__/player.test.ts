@@ -1,5 +1,5 @@
-import { PieceColor } from "./piece";
-import Player from "./player";
+import { PieceColor } from "../piece";
+import Player from "../player";
 
 describe("Player", () => {
   it("should create a new player with a name", () => {

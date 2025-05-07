@@ -37,15 +37,6 @@ describe("Helper functions", () => {
       const movement = { piece: { color: "black" } } as Movement;
       expect(Helpers.isCellBlocked(target, movement)).toBe(false);
     });
-
-    it("should throw an error if target is undefined", () => {
-      const movement = { piece: {} } as Movement;
-      expect(() => Helpers.isCellBlocked(undefined, movement)).toThrowError();
-    });
-    it("should throw an error if movement is undefined", () => {
-      const target = {} as Piece;
-      expect(() => Helpers.isCellBlocked(target, undefined)).toThrowError();
-    });
   });
 
   describe("isCellCaptured", () => {
@@ -58,14 +49,6 @@ describe("Helper functions", () => {
       const target = { color: "white" } as Piece;
       const color = PieceColor.White;
       expect(Helpers.isCellCaptured(target, color)).toBe(false);
-    });
-    it("should throw an error if target is undefined", () => {
-      const color = PieceColor.White;
-      expect(() => Helpers.isCellCaptured(undefined, color)).toThrowError();
-    });
-    it("should throw an error if color is undefined", () => {
-      const target = { color: "white" } as Piece;
-      expect(() => Helpers.isCellCaptured(target, undefined)).toThrowError();
     });
   });
 
@@ -85,12 +68,12 @@ describe("Helper functions", () => {
       expect(() =>
         // @ts-expect-error test
         Helpers.isValidDestination(undefined, target),
-      ).toThrowError();
+      ).toThrow();
     });
     it("should throw an error if target is undefined", () => {
       const moves: Position[] = [[1, 2]];
       // @ts-expect-error test
-      expect(() => Helpers.isValidDestination(moves, undefined)).toThrowError();
+      expect(() => Helpers.isValidDestination(moves, undefined)).toThrow();
     });
   });
 

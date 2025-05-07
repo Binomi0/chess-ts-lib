@@ -20,6 +20,8 @@
   "scripts": {
     "start": "npx -y tsx src/main.ts",
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "lint": "eslint src/**/*.ts --fix",
     "format": "prettier src/**/*.ts --write",
     "build": "tsup",
