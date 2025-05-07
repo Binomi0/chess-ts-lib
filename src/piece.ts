@@ -25,10 +25,11 @@ export enum PieceColor {
 interface Piece {
   color: PieceColor;
   type: PieceType;
+  symbol: string;
   getAllAvailableMoves(
     board: BoardCell[][],
     from: Position,
-    directions: Position[]
+    directions: Position[],
   ): Position[];
   validateMove(board: BoardCell[][], movement: Movement): boolean;
 }
@@ -45,7 +46,7 @@ class Piece implements Piece {
   getAllAvailableMoves(
     board: BoardCell[][],
     from: Position,
-    directions: Position[]
+    directions: Position[],
   ) {
     const piece = board[from[0]][from[1]];
     const validMoves: Position[] = [];
@@ -58,7 +59,11 @@ class Piece implements Piece {
         const target = board[newRow][newCol];
 
         if (isCellEmpty(target) || isCellCaptured(target, piece?.color)) {
-          validMoves.push([newRow, newCol]);
+          if (
+            !validMoves.some((move) => move[0] === newRow && move[1] === newCol)
+          ) {
+            validMoves.push([newRow, newCol]);
+          }
         }
       }
     }

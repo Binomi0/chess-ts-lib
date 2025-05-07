@@ -6,10 +6,12 @@ import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
 
 export class King extends Piece {
+  readonly symbol: string;
   protected readonly directions: Position[] = PieceDirections.King;
 
   constructor(color: PieceColor) {
     super(color, PieceType.King);
+    this.symbol = color === PieceColor.White ? "♔" : "♚";
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {

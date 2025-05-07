@@ -7,23 +7,24 @@ import {
 } from "./utils/helpers";
 
 class MultiMoveValidator {
-  static validateMove(
+  static getAvailableMoves(
     board: BoardCell[][],
     directions: Position[],
-    movement: Movement
+    from: Position,
   ) {
     const validMoves: Position[] = [];
 
     for (const [row, col] of directions) {
-      let newRow = movement.from[0] + row;
-      let newCol = movement.from[1] + col;
+      let newRow = from[0] + row;
+      let newCol = from[1] + col;
 
       while (isInBounds([newRow, newCol])) {
         const target = board[newRow][newCol];
+        const piece = board[from[0]][from[1]];
 
         if (isCellEmpty(target)) {
           validMoves.push([newRow, newCol]);
-        } else if (isCellCaptured(target, movement.piece.color)) {
+        } else if (isCellCaptured(target, piece?.color)) {
           validMoves.push([newRow, newCol]);
           break;
         } else {
@@ -34,13 +35,22 @@ class MultiMoveValidator {
         newCol += col;
       }
     }
+    return validMoves;
+  }
+
+  static validateMove(
+    board: BoardCell[][],
+    directions: Position[],
+    movement: Movement,
+  ) {
+    const validMoves = this.getAvailableMoves(board, directions, movement.from);
 
     if (isValidDestination(validMoves, movement.to)) {
       return true;
     }
 
     throw new Error(
-      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`
+      `Invalid move for ${movement.piece.type} from ${movement.from} to ${movement.to}`,
     );
   }
 }

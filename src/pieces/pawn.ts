@@ -3,6 +3,7 @@ import Piece, { PieceColor, PieceType } from "../piece";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 
 export class Pawn extends Piece {
+  readonly symbol: string;
   protected readonly directions: Position[] = [
     [1, 0],
     [1, 1],
@@ -11,6 +12,7 @@ export class Pawn extends Piece {
 
   constructor(color: PieceColor) {
     super(color, PieceType.Pawn);
+    this.symbol = color === PieceColor.White ? "♙" : "♟";
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {

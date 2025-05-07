@@ -4,10 +4,12 @@ import SingleMoveValidator from "../singleMoveValidator";
 import PieceDirections from "./directions";
 
 export class Knight extends Piece {
+  readonly symbol: string;
   protected readonly directions: Position[] = PieceDirections.Knight;
 
   constructor(color: PieceColor) {
     super(color, PieceType.Knight);
+    this.symbol = color === PieceColor.White ? "♘" : "♞";
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {

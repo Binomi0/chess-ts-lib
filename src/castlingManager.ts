@@ -16,7 +16,7 @@ class CastlingManager {
     if (this.canCastle(board, color, side)) {
       const [rookPos, _, newKingPos, newRookPos] = this.getCastlingData(
         color,
-        side
+        side,
       );
 
       this.execCastling(board, color, rookPos, newKingPos, newRookPos);
@@ -25,7 +25,7 @@ class CastlingManager {
       return true;
     }
 
-    return false;
+    throw new Error("Invalid castling move");
   }
 
   static canCastle(board: BoardCell[][], color: PieceColor, side: Castling) {
@@ -39,7 +39,7 @@ class CastlingManager {
 
   private static getCastlingData(
     color: PieceColor,
-    side: Castling
+    side: Castling,
   ): CastlingData {
     const isWhite = color === PieceColor.White;
     const backRank = isWhite ? 7 : 0;
@@ -82,7 +82,7 @@ class CastlingManager {
     board: BoardCell[][],
     color: PieceColor,
     rookPos: Position,
-    emptySquares: Position[]
+    emptySquares: Position[],
   ): boolean {
     const [rookRow, rookCol] = rookPos;
     const rook = board[rookRow][rookCol];
@@ -101,7 +101,7 @@ class CastlingManager {
     color: PieceColor,
     rookPos: Position,
     newKingPos: Position,
-    newRookPos: Position
+    newRookPos: Position,
   ): void {
     if (color === PieceColor.White) {
       board[7][4] = undefined;

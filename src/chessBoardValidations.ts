@@ -1,7 +1,9 @@
 import { BoardCell, Position } from "./chessBoard";
-import Piece, { PieceColor } from "./piece";
+import MultiMoveValidator from "./multiMoveValidator";
+import { PieceColor } from "./piece";
 import PieceDirections from "./pieces/directions";
 import PieceFactory from "./pieces/factory";
+import SingleMoveValidator from "./singleMoveValidator";
 import { cloneBoard, isInBounds } from "./utils/helpers";
 
 class ChessBoardValidations {
@@ -41,6 +43,8 @@ class ChessBoardValidations {
 
   // This should work under check
   static isCheckMate(board: BoardCell[][], turn: PieceColor): boolean {
+    let scapeMoves: Position[] = [];
+
     // Buscar todas las piezas del jugador en jaque
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -49,37 +53,43 @@ class ChessBoardValidations {
         if (piece && piece.color === turn) {
           const directions = PieceDirections.getPieceDirections(piece.type);
           const from: Position = [row, col];
+          let moves: Position[];
+          if (["Pawn", "Kink", "Knight"].includes(piece.type)) {
+            moves = SingleMoveValidator.getAvailableMoves(
+              board,
+              directions,
+              from,
+            );
+          } else {
+            moves = MultiMoveValidator.getAvailableMoves(
+              board,
+              directions,
+              from,
+            );
+          }
 
-          for (let [dr, dc] of directions) {
-            let moves: Position[] = [];
+          // Search for any move that can save king to be under check
+          for (let to of moves) {
+            let newRow = from[0] + to[0];
+            let newCol = from[1] + to[1];
+
+            if (!isInBounds([newRow, newCol])) continue;
+            const tempBoard = cloneBoard(board);
+
+            tempBoard[newRow][newCol] = piece;
 
             try {
-              if (piece instanceof Piece) {
-                moves = piece.getAllAvailableMoves(board, from, [[dr, dc]]);
+              if (!this.isKingInCheck(tempBoard, turn)) {
+                scapeMoves.push(to);
+                // return false; // hay una jugada legal
               }
-            } catch (_) {
-              continue;
-            }
-
-            // Search for any move that can save king to be under check
-            for (let to of moves) {
-              const tempBoard = cloneBoard(board);
-
-              tempBoard[to[0]][to[1]] = tempBoard[from[0]][from[1]];
-              tempBoard[from[0]][from[1]] = undefined;
-
-              try {
-                if (!this.isKingInCheck(tempBoard, turn)) {
-                  return false; // hay una jugada legal
-                }
-              } catch (_) {}
-            }
+            } catch (_) {}
           }
         }
       }
     }
 
-    return true; // No hay movimientos legales y el rey está en jaque
+    return scapeMoves.length === 0; // No hay movimientos legales y el rey está en jaque
   }
 
   static findKing(board: BoardCell[][], turn: PieceColor): Position | null {
@@ -99,7 +109,7 @@ class ChessBoardValidations {
   static isValidTurn(
     board: BoardCell[][],
     from: Position,
-    turn: PieceColor
+    turn: PieceColor,
   ): boolean {
     const currentPiece = board[from[0]][from[1]];
 
@@ -116,7 +126,7 @@ class ChessBoardValidations {
   static isValidMove(
     board: BoardCell[][],
     from: Position,
-    to: Position
+    to: Position,
   ): boolean {
     const [fromRow, fromCol] = from;
     const [toRow, toCol] = to;
@@ -141,7 +151,7 @@ class ChessBoardValidations {
 
     return PieceFactory.getPiece(piece.type, piece.color).validateMove(
       board,
-      movement
+      movement,
     );
   }
 }

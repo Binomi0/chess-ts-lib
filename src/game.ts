@@ -1,10 +1,10 @@
-import ChessBoard from "./chessBoard";
+import ChessBoard, { Position } from "./chessBoard";
 import { PieceColor } from "./piece";
 import Player from "./player";
 
 class Game {
   chessBoard: ChessBoard = new ChessBoard();
-  winner: PieceColor | undefined;
+  static winner: PieceColor | undefined;
   started = false;
   timeElapsed: number = 0;
 
@@ -24,6 +24,20 @@ class Game {
       : PieceColor.White;
     this.chessBoard.players.set(color, player);
     this.chessBoard.players.get(color)?.addSide(color);
+  }
+
+  move(from: Position, to: Position) {
+    if (!this.arePlayersReady) {
+      throw new Error("Please add both players before starting the game.");
+    }
+    if (Game.winner) {
+      throw new Error("Game has already ended.");
+    }
+    if (this.timeElapsed + 1000 < Date.now()) {
+      throw new Error("Time limit exceeded.");
+    }
+
+    return this.chessBoard.handleMove(from, to);
   }
 
   start() {
