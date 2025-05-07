@@ -4,6 +4,7 @@ import { PieceColor } from "./piece";
 import Player from "./player";
 import { Pawn } from "./pieces/pawn";
 import { Queen } from "./pieces/queen";
+import { Castling } from "./chessBoard";
 
 const game = new Game();
 
@@ -19,7 +20,11 @@ const castleWhiteKingSide = () => {
     game.chessBoard.board[7][6] = undefined;
     game.chessBoard.board[7][5] = undefined;
 
-    CastlingManager.castle(game.chessBoard.board, PieceColor.White, "king");
+    CastlingManager.castle(
+      game.chessBoard.board,
+      PieceColor.White,
+      Castling.King,
+    );
 
     console.log(game.chessBoard.players.get(PieceColor.White));
     console.log(game.chessBoard.players.get(PieceColor.Black));
@@ -32,7 +37,11 @@ const castleWhiteQueenSide = () => {
     game.chessBoard.board[7][2] = undefined;
     game.chessBoard.board[7][3] = undefined;
 
-    CastlingManager.castle(game.chessBoard.board, PieceColor.White, "queen");
+    CastlingManager.castle(
+      game.chessBoard.board,
+      PieceColor.White,
+      Castling.Queen,
+    );
 
     console.log(game.chessBoard.players.get(PieceColor.White));
     console.log(game.chessBoard.players.get(PieceColor.Black));

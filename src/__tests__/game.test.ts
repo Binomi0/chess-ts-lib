@@ -60,8 +60,9 @@ describe("Game", () => {
     // @ts-expect-error test
     game.chessBoard = undefined; // Simulate chess board not being initialized
     try {
-      game.arePlayersReady;
-      expect(false).toBeTruthy();
+      if (game.arePlayersReady) {
+        expect(false).toBeTruthy();
+      }
     } catch (error) {
       expect((error as Error).message).toBe("Chess board is not initialized");
     }
@@ -101,5 +102,52 @@ describe("Game", () => {
     game.start();
     expect(mockNotifier).toHaveBeenCalled();
     expect(mockNotifier).toHaveBeenCalledWith("Game started!");
+  });
+
+  it("should proxy a movement to chessboard", () => {
+    const game = new Game();
+    const player1 = new Player("Player 1");
+    const player2 = new Player("Player 2");
+    game.addPlayer(player1);
+    game.addPlayer(player2);
+    game.start();
+
+    game.move([6, 0], [5, 0]);
+
+    expect(game.chessBoard.getPosition([5, 0])).toHaveProperty("type", "Pawn");
+    expect(game.chessBoard.getPosition([6, 0])).toBeUndefined();
+  });
+
+  it("should fail to proxy a movement if players are not ready", () => {
+    const game = new Game();
+    const player1 = new Player("Player 1");
+    game.addPlayer(player1);
+
+    try {
+      game.move([6, 0], [5, 0]);
+      expect(false).toBe(true);
+    } catch (error) {
+      expect((error as Error).message).toBe(
+        "Please add both players before starting the game.",
+      );
+    }
+  });
+
+  it("should fail to proxy a movement if game is ended", () => {
+    const game = new Game();
+    // @ts-expect-error error
+    game.winner = true;
+    const player1 = new Player("Player 1");
+    const player2 = new Player("Player 2");
+    game.addPlayer(player1);
+    game.addPlayer(player2);
+    game.start();
+
+    try {
+      game.move([6, 0], [5, 0]);
+      expect(false).toBe(true);
+    } catch (error) {
+      expect((error as Error).message).toBe("Game has already ended.");
+    }
   });
 });

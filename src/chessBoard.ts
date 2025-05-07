@@ -6,6 +6,9 @@ import PieceFactory from "./pieces/factory";
 import CastlingManager from "./castlingManager";
 import BoardMovements from "./board/boardMovements";
 import Game from "./game";
+import TurnManager from "./board/turnManager";
+import MovementExecutor from "./board/movementExecutor";
+import BoardStateManager from "./board/boardStateManager";
 
 export type Movement = {
   from: Position;
@@ -21,11 +24,12 @@ export type Position = [number, number];
 
 class ChessBoard {
   board: BoardCell[][];
-  turn: PieceColor = PieceColor.White;
   players: Map<PieceColor, Player> = new Map();
   lastTurn: Position | undefined;
   boardMovements: BoardMovements;
   movements: Movement[] = [];
+  turnManager: TurnManager = new TurnManager();
+  stateManager: BoardStateManager = new BoardStateManager();
 
   constructor() {
     // Define the initial positions of pieces on the board
@@ -34,7 +38,12 @@ class ChessBoard {
     this.boardMovements = new BoardMovements(this.board);
   }
 
+  get turn() {
+    return this.turnManager.getCurrentTurn();
+  }
+
   private initializeBoard() {
+    this.stateManager.initializeBoard();
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         if (row === 0) {
@@ -138,13 +147,7 @@ class ChessBoard {
 
   // TODO: Set to private when ready
   nextTurn() {
-    if (this.turn === PieceColor.White) {
-      this.players.get(PieceColor.White)?.addMovement();
-      this.turn = PieceColor.Black;
-    } else {
-      this.players.get(PieceColor.Black)?.addMovement();
-      this.turn = PieceColor.White;
-    }
+    this.turnManager.switchTurn();
   }
 
   isKingInCheck() {

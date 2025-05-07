@@ -1,6 +1,5 @@
 import { BoardCell, Castling, Position } from "../chessBoard";
 import { PieceColor, PieceType } from "../piece";
-import PieceFactory from "../pieces/factory";
 
 export type CastlingType = [PieceColor, Castling];
 
@@ -12,19 +11,19 @@ class BoardMovements {
   }
 
   isCastlingMove(from: Position, to: Position): CastlingType | undefined {
-    const isWhiteQueenCastle = [
+    const isWhiteQueenCastle: Position[] = [
       [7, 4],
       [7, 0],
     ];
-    const isWhiteKingCastle = [
+    const isWhiteKingCastle: Position[] = [
       [7, 4],
       [7, 7],
     ];
-    const isBlackQueenCastle = [
+    const isBlackQueenCastle: Position[] = [
       [0, 4],
       [0, 0],
     ];
-    const isBlackKingCastle = [
+    const isBlackKingCastle: Position[] = [
       [0, 4],
       [0, 7],
     ];
@@ -35,7 +34,7 @@ class BoardMovements {
       isBlackQueenCastle,
       isBlackKingCastle,
     ].findIndex(
-      (castlingMove, index) =>
+      (castlingMove) =>
         castlingMove[0][0] === from[0] &&
         castlingMove[0][1] === from[1] &&
         castlingMove[1][0] === to[0] &&
