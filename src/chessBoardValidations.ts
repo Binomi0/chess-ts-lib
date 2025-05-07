@@ -1,6 +1,6 @@
 import { BoardCell, Position } from "./chessBoard";
 import MultiMoveValidator from "./multiMoveValidator";
-import { PieceColor } from "./piece";
+import { PieceColor, PieceType } from "./piece";
 import PieceDirections from "./pieces/directions";
 import PieceFactory from "./pieces/factory";
 import SingleMoveValidator from "./singleMoveValidator";
@@ -33,6 +33,7 @@ class ChessBoardValidations {
             ) {
               isValid = true;
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
           } catch (_) {}
         }
       }
@@ -43,7 +44,7 @@ class ChessBoardValidations {
 
   // This should work under check
   static isCheckMate(board: BoardCell[][], turn: PieceColor): boolean {
-    let scapeMoves: Position[] = [];
+    const scapeMoves: Position[] = [];
 
     // Buscar todas las piezas del jugador en jaque
     for (let row = 0; row < 8; row++) {
@@ -54,7 +55,11 @@ class ChessBoardValidations {
           const directions = PieceDirections.getPieceDirections(piece.type);
           const from: Position = [row, col];
           let moves: Position[];
-          if (["Pawn", "Kink", "Knight"].includes(piece.type)) {
+          if (
+            [PieceType.Pawn, PieceType.King, PieceType.Knight].includes(
+              piece.type,
+            )
+          ) {
             moves = SingleMoveValidator.getAvailableMoves(
               board,
               directions,
@@ -69,9 +74,9 @@ class ChessBoardValidations {
           }
 
           // Search for any move that can save king to be under check
-          for (let to of moves) {
-            let newRow = from[0] + to[0];
-            let newCol = from[1] + to[1];
+          for (const to of moves) {
+            const newRow = from[0] + to[0];
+            const newCol = from[1] + to[1];
 
             if (!isInBounds([newRow, newCol])) continue;
             const tempBoard = cloneBoard(board);
@@ -83,6 +88,7 @@ class ChessBoardValidations {
                 scapeMoves.push(to);
                 // return false; // hay una jugada legal
               }
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
             } catch (_) {}
           }
         }
