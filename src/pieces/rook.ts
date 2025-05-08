@@ -6,14 +6,10 @@ import PieceDirections from "./directions";
 export class Rook extends Piece {
   readonly symbol: string;
   protected readonly directions: Position[] = PieceDirections.Rook;
-  private readonly rookSymbols = {
-    [PieceColor.White]: "♖",
-    [PieceColor.Black]: "♜",
-  };
 
   constructor(color: PieceColor) {
     super(color, PieceType.Rook);
-    this.symbol = this.rookSymbols[color];
+    this.symbol = this.getSymbol();
   }
 
   getAllAvailableMoves(board: BoardCell[][], from: Position) {

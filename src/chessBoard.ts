@@ -1,9 +1,8 @@
-import Piece, { PieceColor, PieceType } from "./piece";
+import Piece, { PieceColor } from "./piece";
 import ChessBoardValidations from "./board/boardValidations";
-import { createFreshBoard, logMovement } from "./utils/helpers";
-import PieceFactory from "./pieces/factory";
+import { logMovement } from "./utils/helpers";
 import CastlingManager from "./castlingManager";
-import BoardMovements from "./board/boardMovements";
+import BoardMovements from "./board/movementManager";
 import TurnManager from "./board/turnManager";
 import BoardStateManager from "./board/boardStateManager";
 import GameManager from "./gameManager";
@@ -21,125 +20,16 @@ export type BoardCell = Piece | undefined;
 export type Position = [number, number];
 
 class ChessBoard {
-  board: BoardCell[][];
-  lastTurn: Position | undefined;
   boardMovements: BoardMovements;
-  movements: Movement[] = [];
   turnManager: TurnManager = new TurnManager();
   stateManager: BoardStateManager = new BoardStateManager();
 
   constructor(private manager: GameManager) {
-    // Define the initial positions of pieces on the board
-    this.board = createFreshBoard();
-    this.initializeBoard();
-    this.boardMovements = new BoardMovements(this.board);
+    this.boardMovements = new BoardMovements(this.stateManager);
   }
 
   get turn() {
     return this.turnManager.getCurrentTurn();
-  }
-
-  private initializeBoard() {
-    this.stateManager.initializeBoard();
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (row === 0) {
-          if (col === 0) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Rook,
-              PieceColor.Black,
-            );
-          } else if (col === 1) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Knight,
-              PieceColor.Black,
-            );
-          } else if (col === 2) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Bishop,
-              PieceColor.Black,
-            );
-          } else if (col === 3) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Queen,
-              PieceColor.Black,
-            );
-          } else if (col === 4) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.King,
-              PieceColor.Black,
-            );
-          } else if (col === 5) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Bishop,
-              PieceColor.Black,
-            );
-          } else if (col === 6) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Knight,
-              PieceColor.Black,
-            );
-          } else if (col === 7) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Rook,
-              PieceColor.Black,
-            );
-          }
-        } else if (row === 1) {
-          this.board[row][col] = PieceFactory.getPiece(
-            PieceType.Pawn,
-            PieceColor.Black,
-          );
-        } else if (row === 6) {
-          this.board[row][col] = PieceFactory.getPiece(
-            PieceType.Pawn,
-            PieceColor.White,
-          );
-        } else if (row === 7) {
-          if (col === 0) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Rook,
-              PieceColor.White,
-            );
-          } else if (col === 1) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Knight,
-              PieceColor.White,
-            );
-          } else if (col === 2) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Bishop,
-              PieceColor.White,
-            );
-          } else if (col === 3) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Queen,
-              PieceColor.White,
-            );
-          } else if (col === 4) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.King,
-              PieceColor.White,
-            );
-          } else if (col === 5) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Bishop,
-              PieceColor.White,
-            );
-          } else if (col === 6) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Knight,
-              PieceColor.White,
-            );
-          } else if (col === 7) {
-            this.board[row][col] = PieceFactory.getPiece(
-              PieceType.Rook,
-              PieceColor.White,
-            );
-          }
-        }
-      }
-    }
   }
 
   // TODO: Set to private when ready
@@ -148,41 +38,56 @@ class ChessBoard {
   }
 
   isKingInCheck() {
-    return ChessBoardValidations.isKingInCheck(this.board, this.turn);
+    return ChessBoardValidations.isKingInCheck(
+      this.stateManager.getBoardSnapshot(),
+      this.turn,
+    );
   }
 
   isCheckMate() {
-    return ChessBoardValidations.isCheckMate(this.board, this.turn);
+    return ChessBoardValidations.isCheckMate(
+      this.stateManager.getBoardSnapshot(),
+      this.turn,
+    );
   }
 
   getBoard(): BoardCell[][] {
-    return this.board;
+    return this.stateManager.getBoardSnapshot();
   }
 
   getPosition(coords: Position) {
-    return this.board[coords[0]][coords[1]];
+    return this.stateManager.getCell(coords);
   }
 
   handleMove(from: Position, to: Position) {
     try {
-      ChessBoardValidations.isValidTurn(this.board, from, this.turn);
+      const piece = this.stateManager.getCell(from);
+      if (!piece) {
+        throw new Error("Invalid move: No piece at the source position");
+      }
+      if (!this.turnManager.isValidTurn(piece.color)) {
+        throw new Error("Invalid Turn");
+      }
       const castlingMove = this.boardMovements.isCastlingMove(from, to);
 
+      const board = this.stateManager.getBoardSnapshot();
       if (castlingMove) {
         const [color, side] = castlingMove;
-        CastlingManager.castle(this.board, color, side);
+        CastlingManager.castle(this.stateManager, color, side);
       } else {
-        ChessBoardValidations.isValidMove(this.board, from, to);
+        ChessBoardValidations.isValidMove(board, from, to);
       }
     } catch (error) {
       console.error(error);
       throw error;
     }
 
-    this.executeMovement(from, to);
+    // this.executeMovement(from, to);
+    this.stateManager.movePiece(from, to);
 
     if (this.isKingInCheck()) {
-      this.executeMovement(to, from);
+      // this.executeMovement(to, from);
+      this.stateManager.movePiece(from, to);
     } else {
       this.nextTurn();
     }
@@ -192,10 +97,10 @@ class ChessBoard {
     try {
       const [fromRow, fromCol] = from;
       const [toRow, toCol] = to;
-      const pieceToMove = this.board[fromRow][fromCol];
+      const pieceToMove = this.stateManager.getCell([fromRow, fromCol]);
 
-      this.board[toRow][toCol] = pieceToMove;
-      this.board[fromRow][fromCol] = undefined;
+      this.stateManager.placePiece([toRow, toCol], pieceToMove!);
+      this.stateManager.removePiece([fromRow, fromCol]);
 
       if (this.isCheckMate()) {
         this.manager.winner = pieceToMove?.color;
@@ -209,7 +114,7 @@ class ChessBoard {
   }
 
   castling(type: Castling, color: PieceColor) {
-    CastlingManager.castle(this.board, color, type);
+    CastlingManager.castle(this.stateManager, color, type);
 
     this.nextTurn();
   }

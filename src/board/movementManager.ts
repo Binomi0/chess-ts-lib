@@ -1,14 +1,11 @@
-import { BoardCell, Castling, Position } from "../chessBoard";
+import { Castling, Position } from "../chessBoard";
 import { PieceColor, PieceType } from "../piece";
+import BoardStateManager from "./boardStateManager";
 
 export type CastlingType = [PieceColor, Castling];
 
-class BoardMovements {
-  private readonly board: BoardCell[][];
-
-  constructor(board: BoardCell[][]) {
-    this.board = board;
-  }
+class MovementManager {
+  constructor(private stateManager: BoardStateManager) {}
 
   isCastlingMove(from: Position, to: Position): CastlingType | undefined {
     const isWhiteQueenCastle: Position[] = [
@@ -67,4 +64,4 @@ class BoardMovements {
   }
 }
 
-export default BoardMovements;
+export default MovementManager;

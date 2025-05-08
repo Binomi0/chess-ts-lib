@@ -2,9 +2,12 @@ import CastlingManager from "../castlingManager";
 import ChessBoard, { Castling } from "../chessBoard";
 import GameManager from "../gameManager";
 import { PieceColor } from "../piece";
-import { King } from "../pieces/king";
-import { Rook } from "../pieces/rook";
-import { createFreshBoard } from "../utils/helpers";
+import {
+  blackKing,
+  blackRook,
+  whiteKing,
+  whiteRook,
+} from "../pieces/constants";
 
 describe("Castling Manager", () => {
   describe("White King", () => {
@@ -18,7 +21,7 @@ describe("Castling Manager", () => {
     it("should not be able to castle at start for white king side", () => {
       try {
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.White,
           Castling.King,
         );
@@ -30,7 +33,7 @@ describe("Castling Manager", () => {
     it("should not be able to castle at start for white queen side", () => {
       try {
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.White,
           Castling.Queen,
         );
@@ -40,40 +43,51 @@ describe("Castling Manager", () => {
     });
 
     it("should castle correctly for queen side", () => {
-      chessBoard.board = createFreshBoard();
-      chessBoard.board[7][4] = new King(PieceColor.White);
-      chessBoard.board[7][0] = new Rook(PieceColor.White);
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([7, 4], whiteKing);
+      chessBoard.stateManager.placePiece([7, 0], whiteRook);
 
       if (
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.White,
           Castling.Queen,
         )
       ) {
-        expect(chessBoard.board[7][2]).toHaveProperty("type", "King");
-        expect(chessBoard.board[7][3]).toHaveProperty("type", "Rook");
+        expect(chessBoard.stateManager.getCell([7, 2])).toHaveProperty(
+          "type",
+          "King",
+        );
+        expect(chessBoard.stateManager.getCell([7, 3])).toHaveProperty(
+          "type",
+          "Rook",
+        );
       } else {
         expect(false).toBe(true);
       }
     });
 
     it("should castle correctly for king side", () => {
-      // @ts-expect-error test
       CastlingManager.castlingRights.white = true;
-      chessBoard.board = createFreshBoard();
-      chessBoard.board[7][4] = new King(PieceColor.White);
-      chessBoard.board[7][7] = new Rook(PieceColor.White);
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([7, 4], whiteKing);
+      chessBoard.stateManager.placePiece([7, 7], whiteRook);
 
       if (
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.White,
           Castling.King,
         )
       ) {
-        expect(chessBoard.board[7][6]).toHaveProperty("type", "King");
-        expect(chessBoard.board[7][5]).toHaveProperty("type", "Rook");
+        expect(chessBoard.stateManager.getCell([7, 6])).toHaveProperty(
+          "type",
+          "King",
+        );
+        expect(chessBoard.stateManager.getCell([7, 5])).toHaveProperty(
+          "type",
+          "Rook",
+        );
       } else {
         expect(false).toBe(true);
       }
@@ -91,7 +105,7 @@ describe("Castling Manager", () => {
     it("should not be able to castle at start for white king side", () => {
       try {
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.Black,
           Castling.King,
         );
@@ -103,7 +117,7 @@ describe("Castling Manager", () => {
     it("should not be able to castle at start for White queen side", () => {
       try {
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.Black,
           Castling.Queen,
         );
@@ -113,40 +127,48 @@ describe("Castling Manager", () => {
     });
 
     it("should castle correctly for queen side", () => {
-      chessBoard.board = createFreshBoard();
-      chessBoard.board[0][4] = new King(PieceColor.Black);
-      chessBoard.board[0][0] = new Rook(PieceColor.Black);
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([0, 4], blackKing);
+      chessBoard.stateManager.placePiece([0, 0], blackRook);
 
       if (
         CastlingManager.castle(
-          chessBoard.board,
+          chessBoard.stateManager,
           PieceColor.Black,
           Castling.Queen,
         )
       ) {
-        expect(chessBoard.board[0][2]).toHaveProperty("type", "King");
-        expect(chessBoard.board[0][3]).toHaveProperty("type", "Rook");
+        expect(chessBoard.stateManager.getCell([0, 2])).toHaveProperty(
+          "type",
+          "King",
+        );
+        expect(chessBoard.stateManager.getCell([0, 3])).toHaveProperty(
+          "type",
+          "Rook",
+        );
       } else {
         expect(false).toBe(true);
       }
     });
 
     it("should castle correctly for king side", () => {
-      // @ts-expect-error test
       CastlingManager.castlingRights.black = true;
-      chessBoard.board = createFreshBoard();
-      chessBoard.board[0][4] = new King(PieceColor.Black);
-      chessBoard.board[0][7] = new Rook(PieceColor.Black);
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([0, 4], blackKing);
+      chessBoard.stateManager.placePiece([0, 7], blackRook);
 
-      if (
-        CastlingManager.castle(
-          chessBoard.board,
-          PieceColor.Black,
-          Castling.King,
-        )
-      ) {
-        expect(chessBoard.board[0][6]).toHaveProperty("type", "King");
-        expect(chessBoard.board[0][5]).toHaveProperty("type", "Rook");
+      const canCastle = CastlingManager.castle(
+        chessBoard.stateManager,
+        PieceColor.Black,
+        Castling.King,
+      );
+
+      if (canCastle) {
+        const piece1 = chessBoard.stateManager.getCell([0, 6]);
+        const piece2 = chessBoard.stateManager.getCell([0, 5]);
+
+        expect(piece1).toHaveProperty("type", "King");
+        expect(piece2).toHaveProperty("type", "Rook");
       } else {
         expect(false).toBe(true);
       }

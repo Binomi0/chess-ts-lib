@@ -23,18 +23,28 @@ class BoardValidations {
         const piece = board[row][col];
 
         if (piece && piece.color !== turn) {
-          try {
-            if (
-              piece.validateMove(board, {
-                from: current,
-                to: kingPosition,
-                piece,
-              })
-            ) {
+          const movements = piece.getAllAvailableMoves(
+            board,
+            current,
+            PieceDirections.getPieceDirections(piece.type),
+          );
+          for (const [row, col] of movements) {
+            if (row === kingPosition[0] || col === kingPosition[1]) {
               isValid = true;
             }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
-          } catch (_) {}
+          }
+          // try {
+          //   if (
+          //     piece.validateMove(board, {
+          //       from: current,
+          //       to: kingPosition,
+          //       piece,
+          //     })
+          //   ) {
+          //     isValid = true;
+          //   }
+          //   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
+          // } catch (_) {}
         }
       }
     }
