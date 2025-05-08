@@ -1,5 +1,5 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import ChessBoardValidations from "../board/boardValidations";
+import BoardValidations from "../board/boardValidations";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import Piece, { PieceColor, PieceType } from "../piece";
 import { cloneBoard } from "../utils/helpers";
@@ -31,7 +31,7 @@ export class King extends Piece {
       tempBoard[move[0]][move[1]] = this;
       tempBoard[from[0]][from[1]] = undefined;
 
-      return ChessBoardValidations.isKingInCheck(tempBoard, this.color);
+      return BoardValidations.isKingInCheck(tempBoard, this.color);
     });
   }
 

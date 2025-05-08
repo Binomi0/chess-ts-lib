@@ -1,6 +1,5 @@
 import Piece, { PieceColor } from "./piece";
 import ChessBoardValidations from "./board/boardValidations";
-import { logMovement } from "./utils/helpers";
 import CastlingManager from "./castlingManager";
 import BoardMovements from "./board/movementManager";
 import TurnManager from "./board/turnManager";
@@ -82,41 +81,19 @@ class ChessBoard {
       throw error;
     }
 
-    // this.executeMovement(from, to);
     this.stateManager.movePiece(from, to);
 
     if (this.isKingInCheck()) {
-      // this.executeMovement(to, from);
       this.stateManager.movePiece(from, to);
     } else {
-      this.nextTurn();
-    }
-  }
-
-  private executeMovement(from: Position, to: Position) {
-    try {
-      const [fromRow, fromCol] = from;
-      const [toRow, toCol] = to;
-      const pieceToMove = this.stateManager.getCell([fromRow, fromCol]);
-
-      this.stateManager.placePiece([toRow, toCol], pieceToMove!);
-      this.stateManager.removePiece([fromRow, fromCol]);
-
-      if (this.isCheckMate()) {
-        this.manager.winner = pieceToMove?.color;
-      }
-
-      logMovement(from, to, pieceToMove);
-    } catch (error) {
-      console.error(error);
-      throw error;
+      this.turnManager.switchTurn();
     }
   }
 
   castling(type: Castling, color: PieceColor) {
     CastlingManager.castle(this.stateManager, color, type);
 
-    this.nextTurn();
+    this.turnManager.switchTurn();
   }
 }
 

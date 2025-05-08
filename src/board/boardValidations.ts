@@ -7,10 +7,8 @@ import SingleMoveValidator from "../board/singleMoveValidator";
 import { cloneBoard, isInBounds } from "../utils/helpers";
 
 class BoardValidations {
-  private constructor() {}
-
   static isKingInCheck(board: BoardCell[][], turn: PieceColor): boolean {
-    const kingPosition = BoardValidations.findKing(board, turn);
+    const kingPosition = this.findKing(board, turn);
     if (!kingPosition) {
       throw new Error("King not found");
     }
@@ -33,18 +31,6 @@ class BoardValidations {
               isValid = true;
             }
           }
-          // try {
-          //   if (
-          //     piece.validateMove(board, {
-          //       from: current,
-          //       to: kingPosition,
-          //       piece,
-          //     })
-          //   ) {
-          //     isValid = true;
-          //   }
-          //   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
-          // } catch (_) {}
         }
       }
     }
@@ -52,15 +38,12 @@ class BoardValidations {
     return isValid;
   }
 
-  // This should work under check
   static isCheckMate(board: BoardCell[][], turn: PieceColor): boolean {
     const scapeMoves: Position[] = [];
 
-    // Buscar todas las piezas del jugador en jaque
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const piece = board[row][col];
-        // Look for own pieces
         if (piece && piece.color === turn) {
           const directions = PieceDirections.getPieceDirections(piece.type);
           const from: Position = [row, col];
@@ -83,7 +66,6 @@ class BoardValidations {
             );
           }
 
-          // Search for any move that can save king to be under check
           for (const to of moves) {
             const newRow = from[0] + to[0];
             const newCol = from[1] + to[1];
@@ -96,7 +78,6 @@ class BoardValidations {
             try {
               if (!this.isKingInCheck(tempBoard, turn)) {
                 scapeMoves.push(to);
-                // return false; // hay una jugada legal
               }
               // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
             } catch (_) {}
@@ -105,7 +86,7 @@ class BoardValidations {
       }
     }
 
-    return scapeMoves.length === 0; // No hay movimientos legales y el rey está en jaque
+    return scapeMoves.length === 0;
   }
 
   static findKing(board: BoardCell[][], turn: PieceColor): Position | null {
@@ -148,7 +129,6 @@ class BoardValidations {
     const [toRow, toCol] = to;
     const piece = board[fromRow][fromCol];
 
-    // La ficha no existe en esa posición
     if (piece === undefined) {
       throw new Error("No piece at that position");
     }

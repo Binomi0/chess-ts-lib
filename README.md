@@ -50,7 +50,7 @@ pnpm add chess-ts-lib
 ## ✅ Example Usage
 
 ```ts
-import { Game, PieceColor } from "chess-ts-lib";
+import { Game, Player, PieceColor } from "chess-ts-lib";
 
 const game = new Game(console.log);
 
@@ -62,6 +62,19 @@ game.manager.addPlayer(new Player("Bob"));
 if (game.arePlayersReady) {
   game.move([6, 4], [4, 4]); // Example: white pawn e2 to e4
 }
+```
+
+### Advanced Example: Custom Board Setup
+
+```ts
+import { Game, createFreshBoard, PieceFactory } from "chess-ts-lib";
+
+const customBoard = createFreshBoard();
+customBoard[0][0] = PieceFactory.create("rook", "black");
+customBoard[7][7] = PieceFactory.create("rook", "white");
+
+const game = new Game(console.log);
+game.start(customBoard);
 ```
 
 ---
@@ -80,6 +93,12 @@ You can validate board state, simulate castling or checkmate, and create custom 
 import { createFreshBoard, cloneBoard } from "chess-ts-lib";
 ```
 
+Run unit tests to ensure functionality:
+
+```bash
+pnpm test
+```
+
 ---
 
 ## 🎯 Utilities
@@ -92,6 +111,33 @@ import { createFreshBoard, cloneBoard } from "chess-ts-lib";
 
 ---
 
+## 📊 Architecture Diagram
+
+Below is a simplified UML diagram of the library's architecture:
+
+```plaintext
++-------------------+
+|      Game         |
++-------------------+
+         |
+         v
++-------------------+
+|    ChessBoard     |
++-------------------+
+         |
+         v
++-------------------+
+|      Piece        |
++-------------------+
+         |
+  +------+-------+
+  |      |       |
+  v      v       v
+Pawn   Rook    Bishop
+```
+
+---
+
 ## 🧩 Extendability
 
 The code is modular and open for extension. You can:
@@ -99,6 +145,32 @@ The code is modular and open for extension. You can:
 - Add new game modes
 - Implement timers or scoring
 - Integrate with UIs or online multiplayer systems
+
+### Adding a New Piece
+
+To add a new piece, extend the `Piece` class and implement its movement logic:
+
+```ts
+import { Piece } from "chess-ts-lib";
+
+class CustomPiece extends Piece {
+  getAvailableMoves() {
+    // Custom movement logic
+  }
+}
+```
+
+---
+
+## ❓ FAQ
+
+### How do I handle special moves like en passant?
+
+Special moves are handled automatically by the library if the board state is valid.
+
+### Can I integrate this library with a frontend?
+
+Yes, the library is designed to be UI-agnostic and can be integrated with any frontend framework.
 
 ---
 
@@ -110,4 +182,4 @@ MIT License
 
 ## 🙌 Contributions
 
-Pull requests and ideas are welcome!
+Pull requests and ideas are welcome! Please ensure your code follows the existing style and includes tests.
