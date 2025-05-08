@@ -1,16 +1,16 @@
-import { BoardCell, Position } from "./chessBoard";
-import MultiMoveValidator from "./multiMoveValidator";
-import { PieceColor, PieceType } from "./piece";
-import PieceDirections from "./pieces/directions";
-import PieceFactory from "./pieces/factory";
-import SingleMoveValidator from "./singleMoveValidator";
-import { cloneBoard, isInBounds } from "./utils/helpers";
+import { BoardCell, Position } from "../chessBoard";
+import MultiMoveValidator from "../board/multiMoveValidator";
+import { PieceColor, PieceType } from "../piece";
+import PieceDirections from "../pieces/directions";
+import PieceFactory from "../pieces/factory";
+import SingleMoveValidator from "../board/singleMoveValidator";
+import { cloneBoard, isInBounds } from "../utils/helpers";
 
-class ChessBoardValidations {
+class BoardValidations {
   private constructor() {}
 
   static isKingInCheck(board: BoardCell[][], turn: PieceColor): boolean {
-    const kingPosition = ChessBoardValidations.findKing(board, turn);
+    const kingPosition = BoardValidations.findKing(board, turn);
     if (!kingPosition) {
       throw new Error("King not found");
     }
@@ -162,4 +162,4 @@ class ChessBoardValidations {
   }
 }
 
-export default ChessBoardValidations;
+export default BoardValidations;

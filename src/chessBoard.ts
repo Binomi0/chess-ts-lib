@@ -1,5 +1,5 @@
 import Piece, { PieceColor, PieceType } from "./piece";
-import ChessBoardValidations from "./chessBoardValidations";
+import ChessBoardValidations from "./board/boardValidations";
 import { createFreshBoard, logMovement } from "./utils/helpers";
 import PieceFactory from "./pieces/factory";
 import CastlingManager from "./castlingManager";

@@ -2,7 +2,7 @@ export { default as Game } from "./game";
 export { default as Piece } from "./piece";
 export { default as Player } from "./player";
 export { default as ChessBoard } from "./chessBoard";
-export { default as ChessBoardValidations } from "./chessBoardValidations";
+export { default as ChessBoardValidations } from "./board/boardValidations";
 export { default as CastlingManager } from "./castlingManager";
 export { default as PieceFactory } from "./pieces/factory";
 export { default as PieceDirections } from "./pieces/directions";

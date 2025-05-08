@@ -1,5 +1,5 @@
 import ChessBoard, { Position } from "../chessBoard";
-import ChessBoardValidations from "../chessBoardValidations";
+import ChessBoardValidations from "../board/boardValidations";
 import { PieceColor, PieceType } from "../piece";
 import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";

@@ -1,10 +1,10 @@
-import { BoardCell, Position, Movement } from "./chessBoard";
+import { BoardCell, Position, Movement } from "../chessBoard";
 import {
   isInBounds,
   isCellEmpty,
   isCellCaptured,
   isValidDestination,
-} from "./utils/helpers";
+} from "../utils/helpers";
 
 class MultiMoveValidator {
   static getAvailableMoves(

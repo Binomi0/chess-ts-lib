@@ -1,10 +1,10 @@
-import ChessBoard from "../chessBoard";
-import ChessBoardValidations from "../chessBoardValidations";
-import GameManager from "../gameManager";
-import { PieceColor, PieceType } from "../piece";
-import PieceDirections from "../pieces/directions";
-import PieceFactory from "../pieces/factory";
-import { createFreshBoard } from "../utils/helpers";
+import ChessBoard from "../../chessBoard";
+import ChessBoardValidations from "../boardValidations";
+import GameManager from "../../gameManager";
+import { PieceColor, PieceType } from "../../piece";
+import PieceDirections from "../../pieces/directions";
+import PieceFactory from "../../pieces/factory";
+import { createFreshBoard } from "../../utils/helpers";
 
 describe("Chess Board Validations", () => {
   let chessBoard: ChessBoard;

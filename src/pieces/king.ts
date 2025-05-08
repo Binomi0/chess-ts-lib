@@ -1,7 +1,7 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import ChessBoardValidations from "../chessBoardValidations";
+import ChessBoardValidations from "../board/boardValidations";
+import SingleMoveValidator from "../board/singleMoveValidator";
 import Piece, { PieceColor, PieceType } from "../piece";
-import SingleMoveValidator from "../singleMoveValidator";
 import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
 

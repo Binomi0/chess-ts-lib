@@ -1,6 +1,6 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
-import SingleMoveValidator from "../singleMoveValidator";
+import SingleMoveValidator from "../board/singleMoveValidator";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 
 export class Pawn extends Piece {

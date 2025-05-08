@@ -1,5 +1,5 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
-import MultiMoveValidator from "../multiMoveValidator";
+import MultiMoveValidator from "../board/multiMoveValidator";
 import Piece, { PieceColor, PieceType } from "../piece";
 import PieceDirections from "./directions";
 

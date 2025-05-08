@@ -1,6 +1,6 @@
 import { BoardCell, Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
-import SingleMoveValidator from "../singleMoveValidator";
+import SingleMoveValidator from "../board/singleMoveValidator";
 import PieceDirections from "./directions";
 
 export class Knight extends Piece {
