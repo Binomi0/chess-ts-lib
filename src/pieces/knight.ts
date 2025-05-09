@@ -2,7 +2,7 @@ import { Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import PieceDirections from "./directions";
-import BoardStateManager from "../board/boardStateManager";
+import StateManager from "../board/stateManager";
 
 export class Knight extends Piece {
   readonly symbol: string;
@@ -17,7 +17,7 @@ export class Knight extends Piece {
     this.symbol = this.knightSymbols[color];
   }
 
-  getAllAvailableMoves(boardStateManager: BoardStateManager, from: Position) {
+  getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
     return SingleMoveValidator.getAvailableMoves(
       boardStateManager,
       this.directions,
@@ -25,10 +25,7 @@ export class Knight extends Piece {
     );
   }
 
-  validateMove(
-    boardStateManager: BoardStateManager,
-    movement: Movement,
-  ): boolean {
+  validateMove(boardStateManager: StateManager, movement: Movement): boolean {
     return SingleMoveValidator.validateMove(
       boardStateManager,
       this.directions,

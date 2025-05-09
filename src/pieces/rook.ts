@@ -2,7 +2,7 @@ import { Movement, Position } from "../chessBoard";
 import MultiMoveValidator from "../board/multiMoveValidator";
 import Piece, { PieceColor, PieceType } from "../piece";
 import PieceDirections from "./directions";
-import BoardStateManager from "../board/boardStateManager";
+import StateManager from "../board/stateManager";
 
 export class Rook extends Piece {
   readonly symbol: string;
@@ -13,7 +13,7 @@ export class Rook extends Piece {
     this.symbol = this.getSymbol();
   }
 
-  getAllAvailableMoves(boardStateManager: BoardStateManager, from: Position) {
+  getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
     return MultiMoveValidator.getAvailableMoves(
       boardStateManager,
       this.directions,
@@ -21,10 +21,7 @@ export class Rook extends Piece {
     );
   }
 
-  validateMove(
-    boardStateManager: BoardStateManager,
-    movement: Movement,
-  ): boolean {
+  validateMove(boardStateManager: StateManager, movement: Movement): boolean {
     return MultiMoveValidator.validateMove(
       boardStateManager,
       this.directions,

@@ -5,11 +5,11 @@ import {
   isCellCaptured,
   isValidDestination,
 } from "../utils/helpers";
-import BoardStateManager from "./boardStateManager";
+import StateManager from "./stateManager";
 
 class MultiMoveValidator {
   static getAvailableMoves(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     directions: Position[],
     from: Position,
   ) {
@@ -40,7 +40,7 @@ class MultiMoveValidator {
   }
 
   static validateMove(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     directions: Position[],
     movement: Movement,
   ) {

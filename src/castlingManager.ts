@@ -1,4 +1,4 @@
-import BoardStateManager from "./board/boardStateManager";
+import StateManager from "./board/stateManager";
 import { BoardCell, Castling, Position } from "./chessBoard";
 import { PieceColor, PieceType } from "./piece";
 import { King } from "./pieces/king";
@@ -11,11 +11,7 @@ class CastlingManager {
     [PieceColor.Black]: true,
   };
 
-  static castle(
-    stateManager: BoardStateManager,
-    color: PieceColor,
-    side: Castling,
-  ) {
+  static castle(stateManager: StateManager, color: PieceColor, side: Castling) {
     if (!this.castlingRights[color]) return false;
 
     if (this.canCastle(stateManager, color, side)) {
@@ -35,7 +31,7 @@ class CastlingManager {
   }
 
   static canCastle(
-    stateManager: BoardStateManager,
+    stateManager: StateManager,
     color: PieceColor,
     side: Castling,
   ) {
@@ -115,7 +111,7 @@ class CastlingManager {
   }
 
   private static execCastling(
-    stateManager: BoardStateManager,
+    stateManager: StateManager,
     color: PieceColor,
     rookPos: Position,
     newKingPos: Position,

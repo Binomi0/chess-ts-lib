@@ -16,7 +16,7 @@ import {
 } from "../pieces/constants";
 import { createFreshBoard } from "../utils/helpers";
 
-class BoardStateManager {
+class StateManager {
   private board: BoardCell[][];
 
   constructor() {
@@ -110,4 +110,4 @@ class BoardStateManager {
     return null;
   }
 }
-export default BoardStateManager;
+export default StateManager;

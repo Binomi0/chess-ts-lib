@@ -2,7 +2,7 @@ import { Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
-import BoardStateManager from "../board/boardStateManager";
+import StateManager from "../board/stateManager";
 
 export class Pawn extends Piece {
   readonly symbol: string;
@@ -21,7 +21,7 @@ export class Pawn extends Piece {
     this.symbol = this.pawnSymbols[color];
   }
 
-  getAllAvailableMoves(boardStateManager: BoardStateManager, from: Position) {
+  getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
     return SingleMoveValidator.getAvailableMoves(
       boardStateManager,
       this.directions,
@@ -29,10 +29,7 @@ export class Pawn extends Piece {
     );
   }
 
-  validateMove(
-    boardStateManager: BoardStateManager,
-    movement: Movement,
-  ): boolean {
+  validateMove(boardStateManager: StateManager, movement: Movement): boolean {
     const [fromRow, fromCol] = movement.from;
     const [toRow, toCol] = movement.to;
     const deltaRow = toRow - fromRow;

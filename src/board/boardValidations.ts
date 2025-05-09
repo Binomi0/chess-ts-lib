@@ -5,11 +5,11 @@ import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import { cloneBoard, isInBounds } from "../utils/helpers";
-import BoardStateManager from "./boardStateManager";
+import StateManager from "./stateManager";
 
 class BoardValidations {
   static isKingInCheck(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     board: BoardCell[][],
     turn: PieceColor,
   ): boolean {
@@ -44,7 +44,7 @@ class BoardValidations {
   }
 
   static isCheckMate(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     turn: PieceColor,
   ): boolean {
     const scapeMoves: Position[] = [];
@@ -99,7 +99,7 @@ class BoardValidations {
   }
 
   static isValidMove(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     from: Position,
     to: Position,
   ): boolean {

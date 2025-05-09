@@ -5,11 +5,11 @@ import {
   isCellCaptured,
   isValidDestination,
 } from "../utils/helpers";
-import BoardStateManager from "./boardStateManager";
+import StateManager from "./stateManager";
 
 class SingleMoveValidator {
   static getAvailableMoves(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     directions: Position[],
     from: Position,
   ) {
@@ -33,7 +33,7 @@ class SingleMoveValidator {
   }
 
   static validateMove(
-    boardStateManager: BoardStateManager,
+    boardStateManager: StateManager,
     directions: Position[],
     movement: Movement,
   ): boolean {

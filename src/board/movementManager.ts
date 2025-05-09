@@ -1,11 +1,11 @@
 import { Castling, Position } from "../chessBoard";
 import { PieceColor, PieceType } from "../piece";
-import BoardStateManager from "./boardStateManager";
+import StateManager from "./stateManager";
 
 export type CastlingType = [PieceColor, Castling];
 
 class MovementManager {
-  constructor(private stateManager: BoardStateManager) {}
+  constructor(private stateManager: StateManager) {}
 
   isCastlingMove(from: Position, to: Position): CastlingType | undefined {
     const isWhiteQueenCastle: Position[] = [

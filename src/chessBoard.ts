@@ -3,7 +3,7 @@ import ChessBoardValidations from "./board/boardValidations";
 import CastlingManager from "./castlingManager";
 import BoardMovements from "./board/movementManager";
 import TurnManager from "./board/turnManager";
-import BoardStateManager from "./board/boardStateManager";
+import StateManager from "./board/stateManager";
 import GameManager from "./gameManager";
 
 export type Movement = {
@@ -21,7 +21,7 @@ export type Position = [number, number];
 class ChessBoard {
   boardMovements: BoardMovements;
   turnManager: TurnManager = new TurnManager();
-  stateManager: BoardStateManager = new BoardStateManager();
+  stateManager: StateManager = new StateManager();
 
   constructor(private manager: GameManager) {
     this.boardMovements = new BoardMovements(this.stateManager);

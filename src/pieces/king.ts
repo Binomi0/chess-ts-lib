@@ -4,7 +4,7 @@ import SingleMoveValidator from "../board/singleMoveValidator";
 import Piece, { PieceColor, PieceType } from "../piece";
 import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
-import BoardStateManager from "../board/boardStateManager";
+import StateManager from "../board/stateManager";
 
 export class King extends Piece {
   readonly symbol: string;
@@ -19,7 +19,7 @@ export class King extends Piece {
     this.symbol = this.kingSymbols[color];
   }
 
-  getAllAvailableMoves(boardStateManager: BoardStateManager, from: Position) {
+  getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
     const moves = SingleMoveValidator.getAvailableMoves(
       boardStateManager,
       this.directions,
@@ -41,10 +41,7 @@ export class King extends Piece {
     });
   }
 
-  validateMove(
-    boardStateManager: BoardStateManager,
-    movement: Movement,
-  ): boolean {
+  validateMove(boardStateManager: StateManager, movement: Movement): boolean {
     return SingleMoveValidator.validateMove(
       boardStateManager,
       this.directions,
