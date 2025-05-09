@@ -1,10 +1,10 @@
-import { Movement, Position } from "../chessBoard";
 import BoardValidations from "../board/boardValidations";
 import SingleMove from "../board/singleMove";
-import Piece, { PieceColor, PieceType } from "../piece";
 import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
+import Piece from "../piece";
+import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class King extends Piece {
   readonly symbol: string;

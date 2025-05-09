@@ -1,4 +1,4 @@
-import { PieceType, PieceColor } from "../../piece";
+import { PieceType, PieceColor } from "../../types";
 import PieceFactory from "../factory";
 
 describe("PieceFactory", () => {

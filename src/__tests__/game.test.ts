@@ -1,6 +1,6 @@
 import Game from "../game";
-import { PieceColor } from "../piece";
 import Player from "../player";
+import { PieceColor } from "../types";
 
 describe("Game", () => {
   it("should be defined", () => {

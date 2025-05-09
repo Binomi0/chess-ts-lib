@@ -1,5 +1,5 @@
-import { Movement, Position } from "../chessBoard";
-import Piece, { PieceColor } from "../piece";
+import Piece from "../piece";
+import { Movement, PieceColor, Position } from "../types";
 import * as Helpers from "./helpers";
 
 describe("Helper functions", () => {

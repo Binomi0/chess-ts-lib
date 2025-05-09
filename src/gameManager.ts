@@ -1,8 +1,8 @@
 import TurnManager from "./board/turnManager";
-import { PieceColor } from "./piece";
 import Player from "./player";
+import { IGameManager, PieceColor } from "./types";
 
-class GameManager {
+class GameManager implements IGameManager {
   started = false;
   timeElapsed: number = 0;
   winner: PieceColor | undefined;
@@ -21,6 +21,8 @@ class GameManager {
 
     this.timeElapsed = Date.now();
     this.started = true;
+    this.winner = undefined;
+    this.turnManager.resetTurn();
   }
 
   addPlayer(player: Player) {

@@ -1,8 +1,8 @@
-import { Movement, Position } from "../chessBoard";
 import MultiMove from "../board/multiMove";
-import Piece, { PieceColor, PieceType } from "../piece";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
+import Piece from "../piece";
+import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class Rook extends Piece {
   readonly symbol: string;

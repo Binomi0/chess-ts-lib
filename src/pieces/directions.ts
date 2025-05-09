@@ -1,5 +1,4 @@
-import { Position } from "../chessBoard";
-import { PieceType } from "../piece";
+import { Position, PieceType } from "../types";
 
 class PieceDirections {
   static readonly King: Position[] = [

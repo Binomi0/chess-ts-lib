@@ -1,10 +1,11 @@
-import Piece, { PieceColor, PieceType } from "../piece";
+import Piece from "../piece";
 import { Pawn } from "./pawn";
 import { Rook } from "./rook";
 import { Knight } from "./knight";
 import { Queen } from "./queen";
 import { King } from "./king";
 import { Bishop } from "./bishop";
+import { PieceType, PieceColor } from "../types";
 
 class PieceFactory {
   private static piece: Map<PieceType, Map<PieceColor, Piece>> = new Map();

@@ -1,4 +1,4 @@
-import { PieceColor } from "../piece";
+import { PieceColor } from "../types";
 
 abstract class Turn {
   abstract switchTurn(): void;

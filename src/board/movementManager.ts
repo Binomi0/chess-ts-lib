@@ -1,24 +1,15 @@
-import { Castling, Movement, Position } from "../chessBoard";
-import { PieceColor, PieceType } from "../piece";
+import {
+  Position,
+  CastlingType,
+  PieceType,
+  PieceColor,
+  Movement,
+  Castling,
+  MoveManager,
+} from "../types";
 import MultiMove from "./multiMove";
 import SingleMove from "./singleMove";
 import type StateManager from "./stateManager";
-
-export type CastlingType = [PieceColor, Castling];
-export type MovementType = "multi" | "single";
-
-abstract class MoveManager {
-  abstract getAvailableMoves(from: Position): Position[];
-  abstract isCastlingMove(
-    from: Position,
-    to: Position,
-  ): CastlingType | undefined;
-  abstract isPromotion(
-    to: Position,
-    type: PieceType,
-    color: PieceColor,
-  ): boolean;
-}
 
 class MovementManager implements MoveManager {
   private readonly multiMoves = [

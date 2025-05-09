@@ -1,4 +1,4 @@
-import { Position, Movement } from "../chessBoard";
+import { Movement, Position } from "../types";
 import {
   isInBounds,
   isCellEmpty,

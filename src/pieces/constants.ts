@@ -1,4 +1,4 @@
-import { PieceColor, PieceType } from "../piece";
+import { PieceColor, PieceType } from "../types";
 import PieceFactory from "./factory";
 
 export const blackPawn = PieceFactory.getPiece(

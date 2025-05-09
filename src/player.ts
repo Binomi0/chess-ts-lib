@@ -1,4 +1,4 @@
-import { PieceColor } from "./piece";
+import { PieceColor } from "./types";
 
 class Player {
   movements: number = 0;

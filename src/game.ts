@@ -1,9 +1,10 @@
 import TurnManager from "./board/turnManager";
-import ChessBoard, { Position } from "./chessBoard";
+import ChessBoard from "./chessBoard";
 import GameManager from "./gameManager";
 import Player from "./player";
+import { IGame, Position } from "./types";
 
-class Game {
+class Game implements IGame {
   chessBoard: ChessBoard;
   manager: GameManager;
   turnManager: TurnManager;
@@ -16,6 +17,7 @@ class Game {
 
   start() {
     this.manager.startGame();
+    this.chessBoard.stateManager.initializeBoard();
     this.notifier?.("Game started!");
   }
 

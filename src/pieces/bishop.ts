@@ -1,8 +1,8 @@
-import { Movement, Position } from "../chessBoard";
 import MultiMove from "../board/multiMove";
-import Piece, { PieceColor, PieceType } from "../piece";
+import Piece from "../piece";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
+import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class Bishop extends Piece {
   readonly symbol: string;

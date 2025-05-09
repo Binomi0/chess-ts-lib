@@ -1,6 +1,5 @@
-import ChessBoard, { Position } from "../chessBoard";
+import ChessBoard from "../chessBoard";
 import BoardValidations from "../board/boardValidations";
-import { PieceColor, PieceType } from "../piece";
 import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
 import { Pawn } from "../pieces/pawn";
@@ -15,6 +14,7 @@ import {
   whiteRook,
 } from "../pieces/constants";
 import TurnManager from "../board/turnManager";
+import { PieceType, PieceColor, Position } from "../types";
 
 describe("Chess Board", () => {
   it("should be able to create an instance", () => {

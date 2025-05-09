@@ -1,8 +1,8 @@
-import { Movement, Position } from "../chessBoard";
-import Piece, { PieceColor, PieceType } from "../piece";
+import Piece from "../piece";
 import SingleMove from "../board/singleMove";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 import StateManager from "../board/stateManager";
+import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class Pawn extends Piece {
   readonly symbol: string;

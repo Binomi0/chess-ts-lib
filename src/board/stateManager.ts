@@ -1,5 +1,4 @@
-import { BoardCell, Position } from "../chessBoard";
-import Piece, { PieceColor } from "../piece";
+import Piece from "../piece";
 import {
   blackBishop,
   blackKing,
@@ -14,18 +13,8 @@ import {
   whiteQueen,
   whiteRook,
 } from "../pieces/constants";
+import { Position, BoardCell, PieceColor, State } from "../types";
 import { createFreshBoard } from "../utils/helpers";
-
-abstract class State {
-  abstract initializeBoard(): void;
-  abstract setEmptyBoard(): void;
-  abstract placePiece(position: Position, piece: Piece): void;
-  abstract getCell(position: Position): BoardCell;
-  abstract movePiece(from: Position, to: Position): void;
-  abstract getBoardSnapshot(): void;
-  abstract removePiece(position: Position): void;
-  abstract findKing(color: PieceColor): Position | null;
-}
 
 class StateManager implements State {
   private board: BoardCell[][];

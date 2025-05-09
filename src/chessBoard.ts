@@ -1,23 +1,17 @@
-import Piece, { PieceColor } from "./piece";
 import ChessBoardValidations from "./board/boardValidations";
 import CastlingManager from "./castlingManager";
 import StateManager from "./board/stateManager";
 import GameManager from "./gameManager";
 import MovementManager from "./board/movementManager";
+import {
+  BoardCell,
+  Position,
+  PieceColor,
+  Castling,
+  IChessBoard,
+} from "./types";
 
-export type Movement = {
-  from: Position;
-  to: Position;
-  piece: Piece;
-};
-export enum Castling {
-  Queen = "queen",
-  King = "king",
-}
-export type BoardCell = Piece | undefined;
-export type Position = [number, number];
-
-class ChessBoard {
+class ChessBoard implements IChessBoard {
   public stateManager: StateManager;
   public moveManager: MovementManager;
 

@@ -1,11 +1,10 @@
-import { BoardCell, Position } from "../chessBoard";
 import MultiMove from "./multiMove";
-import { PieceColor, PieceType } from "../piece";
 import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
 import SingleMove from "./singleMove";
 import { cloneBoard, isInBounds } from "../utils/helpers";
 import StateManager from "./stateManager";
+import { BoardCell, PieceColor, Position, PieceType } from "../types";
 
 class BoardValidations {
   static isKingInCheck(
