@@ -35,15 +35,6 @@ describe("Chess Board Validations", () => {
     expect(king).toEqual([0, 4]);
   });
 
-  it("should validate a turn based on piece color and current position", () => {
-    const isValidTurn = ChessBoardValidations.isValidTurn(
-      chessBoard.stateManager.getBoardSnapshot(),
-      [0, 4],
-      PieceColor.Black,
-    );
-    expect(isValidTurn).toBe(true); // Assuming the king can move to any adjacent square
-  });
-
   it("should check if there are any legal moves for the king", () => {
     chessBoard.stateManager.initializeBoard();
     chessBoard.stateManager.placePiece(

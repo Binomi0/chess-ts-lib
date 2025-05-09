@@ -9,6 +9,7 @@ import { Rook } from "../pieces/rook";
 import { Knight } from "../pieces/knight";
 import { Bishop } from "../pieces/bishop";
 import GameManager from "../gameManager";
+import { whiteKing, whitePawn } from "../pieces/constants";
 
 describe("Chess Board", () => {
   it("should be able to create an instance", () => {
@@ -77,10 +78,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally from start if enemy", () => {
-        chessBoard.stateManager.placePiece(
-          [2, 1],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([2, 1], whitePawn);
         try {
           chessBoard.stateManager.movePiece([1, 0], [2, 1]);
         } catch (error) {
@@ -151,10 +149,7 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to jump if it's blocked", () => {
-        chessBoard.stateManager.placePiece(
-          [2, 0],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([2, 0], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([1, 0], [3, 0]);
@@ -173,10 +168,7 @@ describe("Chess Board", () => {
       it("should be able to check", () => {
         chessBoard.stateManager.initializeBoard();
 
-        chessBoard.stateManager.placePiece(
-          [7, 0],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([7, 0], whiteKing);
         chessBoard.stateManager.placePiece(
           [5, 0],
           PieceFactory.getPiece(PieceType.Pawn, PieceColor.Black),
@@ -198,10 +190,7 @@ describe("Chess Board", () => {
       it("should be able to checkmate", () => {
         chessBoard.stateManager.initializeBoard();
 
-        chessBoard.stateManager.placePiece(
-          [7, 0],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([7, 0], whiteKing);
         chessBoard.stateManager.placePiece(
           [5, 0],
           PieceFactory.getPiece(PieceType.Pawn, PieceColor.Black),
@@ -332,10 +321,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to capture if target is enemy", () => {
-        chessBoard.stateManager.placePiece(
-          [5, 2],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([5, 2], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([6, 1], [5, 2]);
@@ -350,10 +336,7 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to jump if it's blocked", () => {
-        chessBoard.stateManager.placePiece(
-          [5, 0],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([5, 0], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([6, 0], [4, 0]);
@@ -456,10 +439,7 @@ describe("Chess Board", () => {
 
       it("should be able to move horizontally if there is a enemy in the target", () => {
         chessBoard.stateManager.removePiece([1, 0]);
-        chessBoard.stateManager.placePiece(
-          [3, 0],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 0], whitePawn);
 
         chessBoard.stateManager.movePiece([0, 0], [3, 0]);
         expect(chessBoard.stateManager.getCell([3, 0])?.type).toBe("Rook");
@@ -470,10 +450,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move away if there is a enemy in the middle", () => {
         chessBoard.stateManager.removePiece([1, 0]);
-        chessBoard.stateManager.placePiece(
-          [3, 0],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 0], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([0, 0], [4, 0]);
@@ -511,10 +488,7 @@ describe("Chess Board", () => {
 
       it("should be able to capture if there is a enemy in the target", () => {
         chessBoard.stateManager.removePiece([1, 0]);
-        chessBoard.stateManager.placePiece(
-          [3, 3],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 3], whitePawn);
         expect(chessBoard.stateManager.getCell([3, 3])?.type).toBe("Pawn");
         expect(chessBoard.stateManager.getCell([3, 3])?.color).toBe(
           PieceColor.White,
@@ -596,10 +570,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move horizontally if there is a piece in the way while moving forward", () => {
         try {
-          chessBoard.stateManager.placePiece(
-            [4, 5],
-            PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([4, 5], whitePawn);
           chessBoard.stateManager.placePiece(
             [4, 4],
             new Rook(PieceColor.White),
@@ -618,10 +589,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move horizontally if there is a piece in the way while moving backward", () => {
         try {
-          chessBoard.stateManager.placePiece(
-            [4, 5],
-            PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([4, 5], whitePawn);
           chessBoard.stateManager.placePiece(
             [4, 6],
             new Rook(PieceColor.White),
@@ -640,10 +608,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move horizontally if there is a piece in the way while moving downward", () => {
         try {
-          chessBoard.stateManager.placePiece(
-            [3, 0],
-            PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([3, 0], whitePawn);
           chessBoard.stateManager.placePiece(
             [4, 0],
             new Rook(PieceColor.White),
@@ -714,10 +679,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move away if there is an own piece in the middle", () => {
         chessBoard.stateManager.removePiece([6, 0]);
-        chessBoard.stateManager.placePiece(
-          [3, 0],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 0], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([7, 0], [4, 0]);
@@ -731,10 +693,7 @@ describe("Chess Board", () => {
       });
       it("should not be able to move away if there is an own piece in the middle while going backward", () => {
         chessBoard.stateManager.placePiece([4, 0], new Rook(PieceColor.White));
-        chessBoard.stateManager.placePiece(
-          [5, 0],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([5, 0], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([4, 0], [6, 0]);
@@ -869,10 +828,7 @@ describe("Chess Board", () => {
 
         it("should not be able to move if target is occupied by a piece of the same color", () => {
           try {
-            chessBoard.stateManager.placePiece(
-              [5, 2],
-              PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-            );
+            chessBoard.stateManager.placePiece([5, 2], whitePawn);
             chessBoard.stateManager.movePiece([7, 1], [5, 2]);
             expect(false).toBe(true);
           } catch (error) {
@@ -981,10 +937,7 @@ describe("Chess Board", () => {
           [4, 4],
           new Bishop(PieceColor.White),
         );
-        chessBoard.stateManager.placePiece(
-          [3, 3],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 3], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([4, 4], [3, 3]);
@@ -1070,10 +1023,7 @@ describe("Chess Board", () => {
           [4, 4],
           new Bishop(PieceColor.Black),
         );
-        chessBoard.stateManager.placePiece(
-          [3, 3],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 3], whitePawn);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 3]);
         expect(chessBoard.stateManager.getCell([3, 3])?.color).toBe(
@@ -1176,10 +1126,7 @@ describe("Chess Board", () => {
           [4, 4],
           PieceFactory.getPiece(PieceType.Queen, PieceColor.White),
         );
-        chessBoard.stateManager.placePiece(
-          [2, 4],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([2, 4], whitePawn);
         try {
           chessBoard.stateManager.movePiece([4, 4], [2, 4]);
           expect(false).toBe(true);
@@ -1220,10 +1167,7 @@ describe("Chess Board", () => {
           [4, 4],
           PieceFactory.getPiece(PieceType.Queen, PieceColor.Black),
         );
-        chessBoard.stateManager.placePiece(
-          [2, 2],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([2, 2], whitePawn);
         chessBoard.stateManager.movePiece([4, 4], [2, 2]);
         expect(chessBoard.stateManager.getCell([2, 2])?.color).toBe(
           PieceColor.Black,
@@ -1235,10 +1179,7 @@ describe("Chess Board", () => {
           [4, 4],
           PieceFactory.getPiece(PieceType.Queen, PieceColor.Black),
         );
-        chessBoard.stateManager.placePiece(
-          [4, 6],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 6], whitePawn);
         chessBoard.stateManager.movePiece([4, 4], [4, 6]);
         expect(chessBoard.stateManager.getCell([4, 6])?.color).toBe(
           PieceColor.Black,
@@ -1250,10 +1191,7 @@ describe("Chess Board", () => {
           [4, 4],
           PieceFactory.getPiece(PieceType.Queen, PieceColor.Black),
         );
-        chessBoard.stateManager.placePiece(
-          [2, 4],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([2, 4], whitePawn);
         chessBoard.stateManager.movePiece([4, 4], [2, 4]);
         expect(chessBoard.stateManager.getCell([2, 4])?.color).toBe(
           PieceColor.Black,
@@ -1309,10 +1247,12 @@ describe("Chess Board", () => {
         chessBoard.stateManager.placePiece(
           [4, 4],
           PieceFactory.getPiece(PieceType.King, PieceColor.Black),
-        ); // Place the king at position (4, 4)
+        );
         chessBoard.stateManager.movePiece([4, 4], [3, 4]);
 
-        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([3, 4])?.color).toBe(
           PieceColor.Black,
         );
@@ -1322,10 +1262,12 @@ describe("Chess Board", () => {
         chessBoard.stateManager.placePiece(
           [4, 4],
           PieceFactory.getPiece(PieceType.King, PieceColor.Black),
-        ); // Place the king at position (4, 4)
+        );
         chessBoard.stateManager.movePiece([4, 4], [4, 3]);
 
-        expect(chessBoard.stateManager.getCell([4, 3])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([4, 3])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([4, 3])?.color).toBe(
           PieceColor.Black,
         );
@@ -1335,10 +1277,12 @@ describe("Chess Board", () => {
         chessBoard.stateManager.placePiece(
           [4, 4],
           PieceFactory.getPiece(PieceType.King, PieceColor.Black),
-        ); // Place the king at position (4, 4)
+        );
         chessBoard.stateManager.movePiece([4, 4], [3, 3]);
 
-        expect(chessBoard.stateManager.getCell([3, 3])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([3, 3])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([3, 3])?.color).toBe(
           PieceColor.Black,
         );
@@ -1348,11 +1292,11 @@ describe("Chess Board", () => {
         chessBoard.stateManager.placePiece(
           [4, 4],
           PieceFactory.getPiece(PieceType.King, PieceColor.Black),
-        ); // Place the king at position (4, 4)
+        );
         chessBoard.stateManager.placePiece(
           [3, 4],
           PieceFactory.getPiece(PieceType.Pawn, PieceColor.Black),
-        ); // Place the king at position (4, 4)
+        );
 
         try {
           chessBoard.stateManager.movePiece([4, 4], [3, 4]);
@@ -1361,7 +1305,9 @@ describe("Chess Board", () => {
           expect((error as Error).message).toBe(
             "Invalid move: target cell is occupied",
           );
-          expect(chessBoard.stateManager.getCell([4, 4])?.type).toBe("King");
+          expect(chessBoard.stateManager.getCell([4, 4])?.type).toBe(
+            PieceType.King,
+          );
           expect(chessBoard.stateManager.getCell([4, 4])?.color).toBe(
             PieceColor.Black,
           );
@@ -1377,13 +1323,12 @@ describe("Chess Board", () => {
           [4, 4],
           PieceFactory.getPiece(PieceType.King, PieceColor.Black),
         );
-        chessBoard.stateManager.placePiece(
-          [3, 4],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([3, 4], whitePawn);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 4]);
-        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([3, 4])?.color).toBe(
           PieceColor.Black,
         );
@@ -1406,53 +1351,44 @@ describe("Chess Board", () => {
       });
 
       it("should move vertically", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        ); // Place the king at position (4, 4)
+        chessBoard.stateManager.placePiece([4, 4], whiteKing);
         chessBoard.stateManager.movePiece([4, 4], [3, 4]);
 
-        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([3, 4])?.color).toBe(
           PieceColor.White,
         );
       });
 
       it("should move horizontally", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        ); // Place the king at position (4, 4)
+        chessBoard.stateManager.placePiece([4, 4], whiteKing);
         chessBoard.stateManager.movePiece([4, 4], [4, 3]);
 
-        expect(chessBoard.stateManager.getCell([4, 3])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([4, 3])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([4, 3])?.color).toBe(
           PieceColor.White,
         );
       });
 
       it("should move diagonally", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        ); // Place the king at position (4, 4)
+        chessBoard.stateManager.placePiece([4, 4], whiteKing);
         chessBoard.stateManager.movePiece([4, 4], [3, 3]);
 
-        expect(chessBoard.stateManager.getCell([3, 3])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([3, 3])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([3, 3])?.color).toBe(
           PieceColor.White,
         );
       });
 
       it("should not be able to move if there is a piece in the way", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        ); // Place the king at position (4, 4)
-        chessBoard.stateManager.placePiece(
-          [3, 4],
-          PieceFactory.getPiece(PieceType.Pawn, PieceColor.White),
-        ); // Place the king at position (4, 4)
+        chessBoard.stateManager.placePiece([4, 4], whiteKing);
+        chessBoard.stateManager.placePiece([3, 4], whitePawn);
 
         try {
           chessBoard.stateManager.movePiece([4, 4], [3, 4]);
@@ -1461,7 +1397,9 @@ describe("Chess Board", () => {
           expect((error as Error).message).toBe(
             "Invalid move: target cell is occupied",
           );
-          expect(chessBoard.stateManager.getCell([4, 4])?.type).toBe("King");
+          expect(chessBoard.stateManager.getCell([4, 4])?.type).toBe(
+            PieceType.King,
+          );
           expect(chessBoard.stateManager.getCell([4, 4])?.color).toBe(
             PieceColor.White,
           );
@@ -1473,17 +1411,16 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move if there is an enemy in the target", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          PieceFactory.getPiece(PieceType.King, PieceColor.White),
-        ); // Place the king at position (4, 4)
+        chessBoard.stateManager.placePiece([4, 4], whiteKing);
         chessBoard.stateManager.placePiece(
           [3, 4],
           PieceFactory.getPiece(PieceType.Pawn, PieceColor.Black),
-        ); // Place the king at position (4, 4)
+        );
 
         chessBoard.stateManager.movePiece([4, 4], [3, 4]);
-        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe("King");
+        expect(chessBoard.stateManager.getCell([3, 4])?.type).toBe(
+          PieceType.King,
+        );
         expect(chessBoard.stateManager.getCell([3, 4])?.color).toBe(
           PieceColor.White,
         );

@@ -103,23 +103,6 @@ class BoardValidations {
     return null;
   }
 
-  static isValidTurn(
-    board: BoardCell[][],
-    from: Position,
-    turn: PieceColor,
-  ): boolean {
-    const currentPiece = board[from[0]][from[1]];
-
-    if (
-      (turn === PieceColor.White && currentPiece?.color === PieceColor.White) ||
-      (turn === PieceColor.Black && currentPiece?.color === PieceColor.Black)
-    ) {
-      return true;
-    }
-
-    throw new Error(`It's not ${turn}'s turn`);
-  }
-
   static isValidMove(
     board: BoardCell[][],
     from: Position,

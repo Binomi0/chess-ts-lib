@@ -12,7 +12,7 @@ class Game {
   }
 
   start() {
-    if (!this.arePlayersReady) {
+    if (!this.manager.arePlayersReady) {
       throw new Error("Please add both players before starting the game.");
     }
 

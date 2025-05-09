@@ -68,8 +68,10 @@ class BoardStateManager {
 
   movePiece(from: Position, to: Position): void {
     const fromCell = this.getCell(from);
-    if (!fromCell) throw new Error("Invalid move: source cell is empty");
-
+    console.log(fromCell);
+    if (!fromCell) {
+      throw new Error("Invalid move: source cell is empty");
+    }
     const toCell = this.getCell(to);
     if (toCell && toCell.color === fromCell.color) {
       throw new Error("Invalid move: target cell is occupied");

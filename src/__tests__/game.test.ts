@@ -17,7 +17,7 @@ describe("Game", () => {
     game.manager.addPlayer(new Player("Player 1"));
     game.manager.addPlayer(new Player("Player 2"));
     expect(game.manager.players.size).toBe(2);
-    expect(game.arePlayersReady).toBe(true);
+    expect(game.manager.arePlayersReady).toBe(true);
   });
 
   it("should switch turns between players", () => {
@@ -60,7 +60,7 @@ describe("Game", () => {
     // @ts-expect-error test
     game.chessBoard = undefined; // Simulate chess board not being initialized
     try {
-      if (game.arePlayersReady) {
+      if (game.manager.arePlayersReady) {
         expect(false).toBeTruthy();
       }
     } catch (error) {
