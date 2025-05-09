@@ -1,7 +1,8 @@
-import { BoardCell, Movement, Position } from "../chessBoard";
+import { Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import PieceDirections from "./directions";
+import BoardStateManager from "../board/boardStateManager";
 
 export class Knight extends Piece {
   readonly symbol: string;
@@ -16,11 +17,22 @@ export class Knight extends Piece {
     this.symbol = this.knightSymbols[color];
   }
 
-  getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return SingleMoveValidator.getAvailableMoves(board, this.directions, from);
+  getAllAvailableMoves(boardStateManager: BoardStateManager, from: Position) {
+    return SingleMoveValidator.getAvailableMoves(
+      boardStateManager,
+      this.directions,
+      from,
+    );
   }
 
-  validateMove(board: BoardCell[][], movement: Movement): boolean {
-    return SingleMoveValidator.validateMove(board, this.directions, movement);
+  validateMove(
+    boardStateManager: BoardStateManager,
+    movement: Movement,
+  ): boolean {
+    return SingleMoveValidator.validateMove(
+      boardStateManager,
+      this.directions,
+      movement,
+    );
   }
 }

@@ -1,7 +1,8 @@
-import { BoardCell, Movement, Position } from "../chessBoard";
+import { Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
+import BoardStateManager from "../board/boardStateManager";
 
 export class Pawn extends Piece {
   readonly symbol: string;
@@ -20,11 +21,18 @@ export class Pawn extends Piece {
     this.symbol = this.pawnSymbols[color];
   }
 
-  getAllAvailableMoves(board: BoardCell[][], from: Position) {
-    return SingleMoveValidator.getAvailableMoves(board, this.directions, from);
+  getAllAvailableMoves(boardStateManager: BoardStateManager, from: Position) {
+    return SingleMoveValidator.getAvailableMoves(
+      boardStateManager,
+      this.directions,
+      from,
+    );
   }
 
-  validateMove(board: BoardCell[][], movement: Movement): boolean {
+  validateMove(
+    boardStateManager: BoardStateManager,
+    movement: Movement,
+  ): boolean {
     const [fromRow, fromCol] = movement.from;
     const [toRow, toCol] = movement.to;
     const deltaRow = toRow - fromRow;
@@ -35,15 +43,18 @@ export class Pawn extends Piece {
 
     // Movimiento hacia delante
     if (deltaCol === 0) {
-      if (deltaRow === direction && isCellEmpty(board[toRow][toCol])) {
+      if (
+        deltaRow === direction &&
+        isCellEmpty(boardStateManager.getCell([toRow, toCol]))
+      ) {
         return true;
       }
 
       if (
         fromRow === startRow &&
         deltaRow === 2 * direction &&
-        isCellEmpty(board[fromRow + direction][toCol]) &&
-        isCellEmpty(board[toRow][toCol])
+        isCellEmpty(boardStateManager.getCell([fromRow + direction, toCol])) &&
+        isCellEmpty(boardStateManager.getCell([toRow, toCol]))
       ) {
         return true;
       }
@@ -53,8 +64,11 @@ export class Pawn extends Piece {
     if (
       Math.abs(deltaCol) === 1 &&
       deltaRow === direction &&
-      !isCellEmpty(board[toRow][toCol]) &&
-      isCellCaptured(board[toRow][toCol], movement.piece.color)
+      !isCellEmpty(boardStateManager.getCell([toRow, toCol])) &&
+      isCellCaptured(
+        boardStateManager.getCell([toRow, toCol]),
+        movement.piece.color,
+      )
     ) {
       return true;
     }

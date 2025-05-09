@@ -38,16 +38,14 @@ class ChessBoard {
 
   isKingInCheck() {
     return ChessBoardValidations.isKingInCheck(
+      this.stateManager,
       this.stateManager.getBoardSnapshot(),
       this.turn,
     );
   }
 
   isCheckMate() {
-    return ChessBoardValidations.isCheckMate(
-      this.stateManager.getBoardSnapshot(),
-      this.turn,
-    );
+    return ChessBoardValidations.isCheckMate(this.stateManager, this.turn);
   }
 
   getBoard(): BoardCell[][] {
@@ -69,12 +67,11 @@ class ChessBoard {
       }
       const castlingMove = this.boardMovements.isCastlingMove(from, to);
 
-      const board = this.stateManager.getBoardSnapshot();
       if (castlingMove) {
         const [color, side] = castlingMove;
         CastlingManager.castle(this.stateManager, color, side);
       } else {
-        ChessBoardValidations.isValidMove(board, from, to);
+        ChessBoardValidations.isValidMove(this.stateManager, from, to);
       }
     } catch (error) {
       console.error(error);

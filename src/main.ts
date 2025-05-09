@@ -1,62 +1,61 @@
-import CastlingManager from "./castlingManager";
+// import CastlingManager from "./castlingManager";
 import Game from "./game";
-import { PieceColor } from "./piece";
+// import { PieceColor } from "./piece";
 import Player from "./player";
-import { Pawn } from "./pieces/pawn";
-import { Queen } from "./pieces/queen";
-import { Castling } from "./chessBoard";
+// import { Castling } from "./chessBoard";
+import { blackPawn, whiteQueen } from "./pieces/constants";
 
 const game = new Game();
 
 const player1 = new Player("Alice");
 const player2 = new Player("Bob");
 
-game.addPlayer(player1);
-game.addPlayer(player2);
+game.manager.addPlayer(player1);
+game.manager.addPlayer(player2);
 game.start();
 
-const castleWhiteKingSide = () => {
-  if (game.chessBoard) {
-    game.chessBoard.board[7][6] = undefined;
-    game.chessBoard.board[7][5] = undefined;
+// const castleWhiteKingSide = () => {
+//   if (game.chessBoard) {
+//     game.chessBoard.stateManager.removePiece([7, 6]);
+//     game.chessBoard.stateManager.removePiece([7, 5]);
 
-    CastlingManager.castle(
-      game.chessBoard.board,
-      PieceColor.White,
-      Castling.King,
-    );
+//     CastlingManager.castle(
+//       game.chessBoard.stateManager,
+//       PieceColor.White,
+//       Castling.King,
+//     );
 
-    console.log(game.chessBoard.players.get(PieceColor.White));
-    console.log(game.chessBoard.players.get(PieceColor.Black));
-  }
-};
+//     console.log(game.manager.players.get(PieceColor.White));
+//     console.log(game.manager.players.get(PieceColor.Black));
+//   }
+// };
 
-const castleWhiteQueenSide = () => {
-  if (game.chessBoard) {
-    game.chessBoard.board[7][1] = undefined;
-    game.chessBoard.board[7][2] = undefined;
-    game.chessBoard.board[7][3] = undefined;
+// const castleWhiteQueenSide = () => {
+//   if (game.chessBoard) {
+//     game.chessBoard.stateManager.removePiece([7, 1]);
+//     game.chessBoard.stateManager.removePiece([7, 2]);
+//     game.chessBoard.stateManager.removePiece([7, 3]);
 
-    CastlingManager.castle(
-      game.chessBoard.board,
-      PieceColor.White,
-      Castling.Queen,
-    );
+//     CastlingManager.castle(
+//       game.chessBoard.stateManager,
+//       PieceColor.White,
+//       Castling.Queen,
+//     );
 
-    console.log(game.chessBoard.players.get(PieceColor.White));
-    console.log(game.chessBoard.players.get(PieceColor.Black));
-  }
-};
+//     console.log(game.manager.players.get(PieceColor.White));
+//     console.log(game.manager.players.get(PieceColor.Black));
+//   }
+// };
 
 const canCheck = () => {
   if (game.chessBoard) {
-    game.chessBoard.board[1][4] = undefined;
-    game.chessBoard.board[0][5] = new Pawn(PieceColor.Black);
-    game.chessBoard.board[0][3] = new Pawn(PieceColor.Black);
+    game.chessBoard.stateManager.removePiece([1, 4]);
+    game.chessBoard.stateManager.placePiece([0, 5], blackPawn);
+    game.chessBoard.stateManager.placePiece([0, 3], blackPawn);
 
-    console.log(game.chessBoard.getPosition([0, 4]));
-    game.chessBoard.board[6][4] = new Queen(PieceColor.White);
-    game.chessBoard.nextTurn();
+    console.log(game.chessBoard.stateManager.getCell([0, 4]));
+    game.chessBoard.stateManager.placePiece([6, 4], whiteQueen);
+    game.chessBoard.turnManager.switchTurn();
 
     const isCheck = game.chessBoard.isKingInCheck();
     if (isCheck) {

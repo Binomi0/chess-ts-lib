@@ -1,0 +1,11 @@
+name: New File System
+version: 0.0.1
+schema: v1
+
+mcpServers:
+  - name: Custom File System
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-filesystem"
+      - "${workspaceFolder}"

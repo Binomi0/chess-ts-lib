@@ -1,26 +1,27 @@
-import { BoardCell, Position, Movement } from "../chessBoard";
+import { Position, Movement } from "../chessBoard";
 import {
   isInBounds,
   isCellEmpty,
   isCellCaptured,
   isValidDestination,
 } from "../utils/helpers";
+import BoardStateManager from "./boardStateManager";
 
 class MultiMoveValidator {
   static getAvailableMoves(
-    board: BoardCell[][],
+    boardStateManager: BoardStateManager,
     directions: Position[],
     from: Position,
   ) {
     const validMoves: Position[] = [];
+    const piece = boardStateManager.getCell([from[0], from[1]]);
 
     for (const [row, col] of directions) {
       let newRow = from[0] + row;
       let newCol = from[1] + col;
-      const piece = board[from[0]][from[1]];
 
       while (isInBounds([newRow, newCol])) {
-        const target = board[newRow][newCol];
+        const target = boardStateManager.getCell([newRow, newCol]);
 
         if (isCellEmpty(target)) {
           validMoves.push([newRow, newCol]);
@@ -39,11 +40,15 @@ class MultiMoveValidator {
   }
 
   static validateMove(
-    board: BoardCell[][],
+    boardStateManager: BoardStateManager,
     directions: Position[],
     movement: Movement,
   ) {
-    const validMoves = this.getAvailableMoves(board, directions, movement.from);
+    const validMoves = this.getAvailableMoves(
+      boardStateManager,
+      directions,
+      movement.from,
+    );
 
     if (isValidDestination(validMoves, movement.to)) {
       return true;

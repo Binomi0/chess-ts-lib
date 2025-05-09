@@ -1,15 +1,19 @@
 import ChessBoard, { Position } from "../chessBoard";
-import ChessBoardValidations from "../board/boardValidations";
+import BoardValidations from "../board/boardValidations";
 import { PieceColor, PieceType } from "../piece";
 import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
 import { Pawn } from "../pieces/pawn";
 import { Queen } from "../pieces/queen";
-import { Rook } from "../pieces/rook";
 import { Knight } from "../pieces/knight";
-import { Bishop } from "../pieces/bishop";
 import GameManager from "../gameManager";
-import { whiteKing, whitePawn } from "../pieces/constants";
+import {
+  blackBishop,
+  whiteBishop,
+  whiteKing,
+  whitePawn,
+  whiteRook,
+} from "../pieces/constants";
 
 describe("Chess Board", () => {
   it("should be able to create an instance", () => {
@@ -180,7 +184,8 @@ describe("Chess Board", () => {
         chessBoard.nextTurn();
 
         expect(
-          ChessBoardValidations.isKingInCheck(
+          BoardValidations.isKingInCheck(
+            chessBoard.stateManager,
             chessBoard.stateManager.getBoardSnapshot(),
             chessBoard.turn,
           ),
@@ -202,8 +207,8 @@ describe("Chess Board", () => {
         );
 
         expect(
-          ChessBoardValidations.isCheckMate(
-            chessBoard.stateManager.getBoardSnapshot(),
+          BoardValidations.isCheckMate(
+            chessBoard.stateManager,
             chessBoard.turn,
           ),
         ).toBe(true);
@@ -551,7 +556,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move horizontally", () => {
-        chessBoard.stateManager.placePiece([3, 0], new Rook(PieceColor.White));
+        chessBoard.stateManager.placePiece([3, 0], whiteRook);
 
         chessBoard.stateManager.movePiece([3, 0], [3, 7]);
         expect(chessBoard.stateManager.getCell([3, 7])?.color).toBe(
@@ -571,10 +576,7 @@ describe("Chess Board", () => {
       it("should not be able to move horizontally if there is a piece in the way while moving forward", () => {
         try {
           chessBoard.stateManager.placePiece([4, 5], whitePawn);
-          chessBoard.stateManager.placePiece(
-            [4, 4],
-            new Rook(PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([4, 4], whiteRook);
           chessBoard.stateManager.movePiece([4, 4], [4, 6]);
         } catch (error) {
           expect((error as Error).message).toMatch(
@@ -590,10 +592,7 @@ describe("Chess Board", () => {
       it("should not be able to move horizontally if there is a piece in the way while moving backward", () => {
         try {
           chessBoard.stateManager.placePiece([4, 5], whitePawn);
-          chessBoard.stateManager.placePiece(
-            [4, 6],
-            new Rook(PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([4, 6], whiteRook);
           chessBoard.stateManager.movePiece([4, 6], [4, 4]);
         } catch (error) {
           expect((error as Error).message).toMatch(
@@ -609,10 +608,7 @@ describe("Chess Board", () => {
       it("should not be able to move horizontally if there is a piece in the way while moving downward", () => {
         try {
           chessBoard.stateManager.placePiece([3, 0], whitePawn);
-          chessBoard.stateManager.placePiece(
-            [4, 0],
-            new Rook(PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([4, 0], whiteRook);
           chessBoard.stateManager.movePiece([4, 0], [2, 0]);
           expect(false).toBe(true);
         } catch (error) {
@@ -628,10 +624,7 @@ describe("Chess Board", () => {
 
       it("should not be able to move if no changes", () => {
         try {
-          chessBoard.stateManager.placePiece(
-            [4, 0],
-            new Rook(PieceColor.White),
-          );
+          chessBoard.stateManager.placePiece([4, 0], whiteRook);
           chessBoard.stateManager.movePiece([4, 0], [4, 0]);
           expect(false).toBe(true);
         } catch (error) {
@@ -692,7 +685,7 @@ describe("Chess Board", () => {
         }
       });
       it("should not be able to move away if there is an own piece in the middle while going backward", () => {
-        chessBoard.stateManager.placePiece([4, 0], new Rook(PieceColor.White));
+        chessBoard.stateManager.placePiece([4, 0], whiteRook);
         chessBoard.stateManager.placePiece([5, 0], whitePawn);
 
         try {
@@ -864,10 +857,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally bottom left", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 4], whiteBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 3]);
         expect(chessBoard.stateManager.getCell([3, 3])?.color).toBe(
@@ -877,10 +867,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally top right", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 4], whiteBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [5, 5]);
         expect(chessBoard.stateManager.getCell([5, 5])?.color).toBe(
@@ -890,10 +877,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally top left", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 4], whiteBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [5, 3]);
         expect(chessBoard.stateManager.getCell([5, 3])?.color).toBe(
@@ -903,10 +887,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally bottom right", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 4], whiteBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 5]);
         expect(chessBoard.stateManager.getCell([3, 5])?.color).toBe(
@@ -916,10 +897,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally to a target position", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 4], whiteBishop);
         chessBoard.stateManager.placePiece(
           [3, 3],
           PieceFactory.getPiece(PieceType.Pawn, PieceColor.Black),
@@ -933,10 +911,7 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to move diagonally if the target position is occupied by a piece of the same color", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.White),
-        );
+        chessBoard.stateManager.placePiece([4, 4], whiteBishop);
         chessBoard.stateManager.placePiece([3, 3], whitePawn);
 
         try {
@@ -967,10 +942,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally bottom left", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.Black),
-        );
+        chessBoard.stateManager.placePiece([4, 4], blackBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 3]);
         expect(chessBoard.stateManager.getCell([3, 3])?.color).toBe(
@@ -980,10 +952,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally top right", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.Black),
-        );
+        chessBoard.stateManager.placePiece([4, 4], blackBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [5, 5]);
         expect(chessBoard.stateManager.getCell([5, 5])?.color).toBe(
@@ -993,10 +962,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally top left", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.Black),
-        );
+        chessBoard.stateManager.placePiece([4, 4], blackBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [5, 3]);
         expect(chessBoard.stateManager.getCell([5, 3])?.color).toBe(
@@ -1006,10 +972,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally bottom right", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.Black),
-        );
+        chessBoard.stateManager.placePiece([4, 4], blackBishop);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 5]);
         expect(chessBoard.stateManager.getCell([3, 5])?.color).toBe(
@@ -1019,10 +982,7 @@ describe("Chess Board", () => {
       });
 
       it("should be able to move diagonally to a target position", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.Black),
-        );
+        chessBoard.stateManager.placePiece([4, 4], blackBishop);
         chessBoard.stateManager.placePiece([3, 3], whitePawn);
 
         chessBoard.stateManager.movePiece([4, 4], [3, 3]);
@@ -1033,10 +993,7 @@ describe("Chess Board", () => {
       });
 
       it("should not be able to move diagonally if the target position is occupied by a piece of the same color", () => {
-        chessBoard.stateManager.placePiece(
-          [4, 4],
-          new Bishop(PieceColor.Black),
-        );
+        chessBoard.stateManager.placePiece([4, 4], blackBishop);
         chessBoard.stateManager.placePiece(
           [3, 3],
           PieceFactory.getPiece(PieceType.Pawn, PieceColor.Black),
@@ -1441,7 +1398,7 @@ describe("Chess Board", () => {
         );
 
         const availableMoves = whiteKing.getAllAvailableMoves(
-          chessBoard.stateManager.getBoardSnapshot(),
+          chessBoard.stateManager,
           [7, 0],
           PieceDirections.King,
         );
@@ -1452,7 +1409,8 @@ describe("Chess Board", () => {
           chessBoard.stateManager.removePiece([7, 0]);
 
           if (
-            !ChessBoardValidations.isKingInCheck(
+            !BoardValidations.isKingInCheck(
+              chessBoard.stateManager,
               chessBoard.stateManager.getBoardSnapshot(),
               chessBoard.turn,
             )

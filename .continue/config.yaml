@@ -126,8 +126,11 @@ mcpServers:
     args:
       - "-y"
       - "@modelcontextprotocol/server-filesystem"
-      - "/Users/bino"
+      - "/Users/bino/Projects/chess"
 
   - name: Prices
     command: npx
-    args: ["-y", "tsx", "/Users/bino/Projects/continue/pool-prices/main.ts"]
+    args:
+      - "-y"
+      - "tsx"
+      - "/Users/bino/Projects/continue/pool-prices/main.ts"

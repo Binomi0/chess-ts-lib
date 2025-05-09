@@ -21,6 +21,7 @@ describe("Chess Board Validations", () => {
 
     expect(
       ChessBoardValidations.isKingInCheck(
+        chessBoard.stateManager,
         chessBoard.stateManager.getBoardSnapshot(),
         PieceColor.Black,
       ),
@@ -28,10 +29,7 @@ describe("Chess Board Validations", () => {
   });
 
   it("should find the king's position on the board", () => {
-    const king = ChessBoardValidations.findKing(
-      chessBoard.stateManager.getBoardSnapshot(),
-      PieceColor.Black,
-    );
+    const king = chessBoard.stateManager.findKing(PieceColor.Black);
     expect(king).toEqual([0, 4]);
   });
 
@@ -49,7 +47,7 @@ describe("Chess Board Validations", () => {
     const validMoves = chessBoard.stateManager
       .getCell([7, 0])
       ?.getAllAvailableMoves(
-        chessBoard.stateManager.getBoardSnapshot(),
+        chessBoard.stateManager,
         [7, 0],
         PieceDirections.King,
       );
@@ -75,7 +73,7 @@ describe("Chess Board Validations", () => {
     );
 
     const checkMate = ChessBoardValidations.isCheckMate(
-      chessBoard.stateManager.getBoardSnapshot(),
+      chessBoard.stateManager,
       PieceColor.White,
     );
     expect(checkMate).toBe(true);

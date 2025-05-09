@@ -1,5 +1,5 @@
 import { BoardCell, Position } from "../chessBoard";
-import Piece from "../piece";
+import Piece, { PieceColor } from "../piece";
 import {
   blackBishop,
   blackKing,
@@ -68,7 +68,6 @@ class BoardStateManager {
 
   movePiece(from: Position, to: Position): void {
     const fromCell = this.getCell(from);
-    console.log(fromCell);
     if (!fromCell) {
       throw new Error("Invalid move: source cell is empty");
     }
@@ -77,7 +76,7 @@ class BoardStateManager {
       throw new Error("Invalid move: target cell is occupied");
     }
 
-    fromCell.validateMove(this.board, { from, to, piece: fromCell });
+    fromCell.validateMove(this, { from, to, piece: fromCell });
 
     this.placePiece(to, fromCell);
     this.removePiece(from);
@@ -95,6 +94,20 @@ class BoardStateManager {
 
   getBoardSnapshot(): BoardCell[][] {
     return [...this.board.map((row) => [...row])];
+  }
+
+  findKing(turn: PieceColor): Position | null {
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (
+          this.board[row][col]?.color === turn &&
+          this.board[row][col]?.type === "King"
+        ) {
+          return [row, col];
+        }
+      }
+    }
+    return null;
   }
 }
 export default BoardStateManager;

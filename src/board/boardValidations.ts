@@ -5,10 +5,15 @@ import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
 import SingleMoveValidator from "../board/singleMoveValidator";
 import { cloneBoard, isInBounds } from "../utils/helpers";
+import BoardStateManager from "./boardStateManager";
 
 class BoardValidations {
-  static isKingInCheck(board: BoardCell[][], turn: PieceColor): boolean {
-    const kingPosition = this.findKing(board, turn);
+  static isKingInCheck(
+    boardStateManager: BoardStateManager,
+    board: BoardCell[][],
+    turn: PieceColor,
+  ): boolean {
+    const kingPosition = boardStateManager.findKing(turn);
     if (!kingPosition) {
       throw new Error("King not found");
     }
@@ -22,7 +27,7 @@ class BoardValidations {
 
         if (piece && piece.color !== turn) {
           const movements = piece.getAllAvailableMoves(
-            board,
+            boardStateManager,
             current,
             PieceDirections.getPieceDirections(piece.type),
           );
@@ -38,12 +43,16 @@ class BoardValidations {
     return isValid;
   }
 
-  static isCheckMate(board: BoardCell[][], turn: PieceColor): boolean {
+  static isCheckMate(
+    boardStateManager: BoardStateManager,
+    turn: PieceColor,
+  ): boolean {
     const scapeMoves: Position[] = [];
+    const board = boardStateManager.getBoardSnapshot();
 
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
-        const piece = board[row][col];
+        const piece = boardStateManager.getCell([row, col]);
         if (piece && piece.color === turn) {
           const directions = PieceDirections.getPieceDirections(piece.type);
           const from: Position = [row, col];
@@ -54,13 +63,13 @@ class BoardValidations {
             )
           ) {
             moves = SingleMoveValidator.getAvailableMoves(
-              board,
+              boardStateManager,
               directions,
               from,
             );
           } else {
             moves = MultiMoveValidator.getAvailableMoves(
-              board,
+              boardStateManager,
               directions,
               from,
             );
@@ -76,7 +85,7 @@ class BoardValidations {
             tempBoard[newRow][newCol] = piece;
 
             try {
-              if (!this.isKingInCheck(tempBoard, turn)) {
+              if (!this.isKingInCheck(boardStateManager, tempBoard, turn)) {
                 scapeMoves.push(to);
               }
               // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
@@ -89,34 +98,20 @@ class BoardValidations {
     return scapeMoves.length === 0;
   }
 
-  static findKing(board: BoardCell[][], turn: PieceColor): Position | null {
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (
-          board[row][col]?.color === turn &&
-          board[row][col]?.type === "King"
-        ) {
-          return [row, col];
-        }
-      }
-    }
-    return null;
-  }
-
   static isValidMove(
-    board: BoardCell[][],
+    boardStateManager: BoardStateManager,
     from: Position,
     to: Position,
   ): boolean {
     const [fromRow, fromCol] = from;
     const [toRow, toCol] = to;
-    const piece = board[fromRow][fromCol];
+    const piece = boardStateManager.getCell([fromRow, fromCol]);
 
     if (piece === undefined) {
       throw new Error("No piece at that position");
     }
 
-    const destinationPiece = board[toRow][toCol];
+    const destinationPiece = boardStateManager.getCell([toRow, toCol]);
 
     if (destinationPiece && destinationPiece.color === piece.color) {
       throw new Error("Can't capture own piece");
@@ -129,7 +124,7 @@ class BoardValidations {
     const movement = { from, to, piece };
 
     return PieceFactory.getPiece(piece.type, piece.color).validateMove(
-      board,
+      boardStateManager,
       movement,
     );
   }

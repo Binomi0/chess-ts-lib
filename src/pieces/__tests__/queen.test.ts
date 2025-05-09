@@ -1,45 +1,47 @@
-import { BoardCell, Position } from "../../chessBoard";
-import { PieceColor, PieceType } from "../../piece";
-import { createFreshBoard } from "../../utils/helpers";
-import PieceFactory from "../factory";
+import ChessBoard, { Position } from "../../chessBoard";
+import GameManager from "../../gameManager";
+import { PieceColor } from "../../piece";
+import { whitePawn } from "../constants";
 import { Queen } from "../queen";
 
 describe("Queen", () => {
-  let chessBoard: BoardCell[][];
+  let chessBoard: ChessBoard;
   let queen: Queen;
   beforeEach(() => {
-    chessBoard = createFreshBoard();
+    const gameManager = new GameManager();
+    chessBoard = new ChessBoard(gameManager);
     queen = new Queen(PieceColor.White);
+    chessBoard.stateManager.setEmptyBoard();
   });
 
   it("should be able to move in all directions", () => {
     const from: Position = [0, 0];
-    const moves = queen.getAllAvailableMoves(chessBoard, from);
+    const moves = queen.getAllAvailableMoves(chessBoard.stateManager, from);
     expect(moves.length).toBe(21);
   });
 
   it("should not be able to jump over other pieces", () => {
     const from: Position = [0, 0];
-    chessBoard[0][0] = queen;
-    chessBoard[1][1] = PieceFactory.getPiece(PieceType.Pawn, PieceColor.White);
-    const moves = queen.getAllAvailableMoves(chessBoard, from);
+    chessBoard.stateManager.placePiece([0, 0], queen);
+    chessBoard.stateManager.placePiece([1, 1], whitePawn);
+    const moves = queen.getAllAvailableMoves(chessBoard.stateManager, from);
     expect(moves.length).toBe(14);
   });
 
   it("should not be able to move diagonally if there is a piece in the way", () => {
     const from: Position = [0, 0];
-    chessBoard[0][0] = queen;
-    chessBoard[1][1] = PieceFactory.getPiece(PieceType.Pawn, PieceColor.White);
-    const moves = queen.getAllAvailableMoves(chessBoard, from);
+    chessBoard.stateManager.placePiece([0, 0], queen);
+    chessBoard.stateManager.placePiece([1, 1], whitePawn);
+    const moves = queen.getAllAvailableMoves(chessBoard.stateManager, from);
     expect(moves.length).toBe(14);
   });
 
   it("should not be able to move horizontally or vertically if there is a piece in the way", () => {
     const from: Position = [0, 0];
-    chessBoard[0][0] = queen;
-    chessBoard[1][0] = PieceFactory.getPiece(PieceType.Pawn, PieceColor.White);
-    chessBoard[0][1] = PieceFactory.getPiece(PieceType.Pawn, PieceColor.White);
-    const moves = queen.getAllAvailableMoves(chessBoard, from);
+    chessBoard.stateManager.placePiece([0, 0], queen);
+    chessBoard.stateManager.placePiece([1, 0], whitePawn);
+    chessBoard.stateManager.placePiece([0, 1], whitePawn);
+    const moves = queen.getAllAvailableMoves(chessBoard.stateManager, from);
     expect(moves.length).toBe(7);
   });
 });

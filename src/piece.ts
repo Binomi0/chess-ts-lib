@@ -1,4 +1,5 @@
-import { BoardCell, Movement, Position } from "./chessBoard";
+import BoardStateManager from "./board/boardStateManager";
+import { Movement, Position } from "./chessBoard";
 
 export enum PieceType {
   King = "King",
@@ -45,11 +46,14 @@ abstract class Piece {
   }
 
   abstract getAllAvailableMoves(
-    board: BoardCell[][],
+    boardStateManager: BoardStateManager,
     from: Position,
     directions: Position[],
   ): Position[];
-  abstract validateMove(board: BoardCell[][], movement: Movement): boolean;
+  abstract validateMove(
+    boardStateManager: BoardStateManager,
+    movement: Movement,
+  ): boolean;
 }
 
 export default Piece;

@@ -1,14 +1,15 @@
-import { BoardCell, Position, Movement } from "../chessBoard";
+import { Position, Movement } from "../chessBoard";
 import {
   isInBounds,
   isCellEmpty,
   isCellCaptured,
   isValidDestination,
 } from "../utils/helpers";
+import BoardStateManager from "./boardStateManager";
 
 class SingleMoveValidator {
   static getAvailableMoves(
-    board: BoardCell[][],
+    boardStateManager: BoardStateManager,
     directions: Position[],
     from: Position,
   ) {
@@ -19,8 +20,8 @@ class SingleMoveValidator {
       const newCol = from[1] + col;
 
       if (isInBounds([newRow, newCol])) {
-        const piece = board[from[0]][from[1]];
-        const target = board[newRow][newCol];
+        const piece = boardStateManager.getCell([from[0], from[1]]);
+        const target = boardStateManager.getCell([newRow, newCol]);
 
         if (isCellEmpty(target) || isCellCaptured(target, piece?.color)) {
           validMoves.push([newRow, newCol]);
@@ -32,11 +33,15 @@ class SingleMoveValidator {
   }
 
   static validateMove(
-    board: BoardCell[][],
+    boardStateManager: BoardStateManager,
     directions: Position[],
     movement: Movement,
   ): boolean {
-    const validMoves = this.getAvailableMoves(board, directions, movement.from);
+    const validMoves = this.getAvailableMoves(
+      boardStateManager,
+      directions,
+      movement.from,
+    );
 
     if (isValidDestination(validMoves, movement.to)) {
       return true;
