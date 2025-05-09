@@ -1,10 +1,10 @@
 import Piece, { PieceColor } from "./piece";
 import ChessBoardValidations from "./board/boardValidations";
 import CastlingManager from "./castlingManager";
-import BoardMovements from "./board/movementManager";
 import TurnManager from "./board/turnManager";
 import StateManager from "./board/stateManager";
 import GameManager from "./gameManager";
+import MovementManager from "./board/movementManager";
 
 export type Movement = {
   from: Position;
@@ -19,12 +19,15 @@ export type BoardCell = Piece | undefined;
 export type Position = [number, number];
 
 class ChessBoard {
-  boardMovements: BoardMovements;
-  turnManager: TurnManager = new TurnManager();
-  stateManager: StateManager = new StateManager();
+  public stateManager: StateManager;
+  public moveManager: MovementManager;
 
-  constructor(private manager: GameManager) {
-    this.boardMovements = new BoardMovements(this.stateManager);
+  constructor(
+    public gameManager: GameManager,
+    public turnManager: TurnManager,
+  ) {
+    this.stateManager = new StateManager();
+    this.moveManager = new MovementManager(this.stateManager);
   }
 
   get turn() {
@@ -65,7 +68,7 @@ class ChessBoard {
       if (!this.turnManager.isValidTurn(piece.color)) {
         throw new Error("Invalid Turn");
       }
-      const castlingMove = this.boardMovements.isCastlingMove(from, to);
+      const castlingMove = this.moveManager.isCastlingMove(from, to);
 
       if (castlingMove) {
         const [color, side] = castlingMove;

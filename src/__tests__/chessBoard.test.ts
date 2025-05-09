@@ -14,18 +14,22 @@ import {
   whitePawn,
   whiteRook,
 } from "../pieces/constants";
+import TurnManager from "../board/turnManager";
 
 describe("Chess Board", () => {
   it("should be able to create an instance", () => {
     const gameManager = new GameManager();
-    const chessBoard = new ChessBoard(gameManager);
+    const turnManager = new TurnManager();
+    const chessBoard = new ChessBoard(gameManager, turnManager);
     expect(chessBoard).toBeDefined();
   });
 
   describe("handleMove", () => {
     it("should be defined", () => {
       const gameManager = new GameManager();
-      const chessBoard = new ChessBoard(gameManager);
+      const turnManager = new TurnManager();
+
+      const chessBoard = new ChessBoard(gameManager, turnManager);
       expect(chessBoard.stateManager.movePiece).toBeDefined();
     });
 
@@ -34,7 +38,8 @@ describe("Chess Board", () => {
 
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
         chessBoard.nextTurn();
       });
 
@@ -220,7 +225,8 @@ describe("Chess Board", () => {
 
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
       });
 
       it("should be able to create a white pawn", () => {
@@ -363,7 +369,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
         chessBoard.nextTurn();
       });
 
@@ -514,7 +521,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
       });
 
       it("should not be able to move vertically at start", () => {
@@ -733,7 +741,8 @@ describe("Chess Board", () => {
         let chessBoard: ChessBoard;
         beforeEach(() => {
           const gameManager = new GameManager();
-          chessBoard = new ChessBoard(gameManager);
+          const turnManager = new TurnManager();
+          chessBoard = new ChessBoard(gameManager, turnManager);
           chessBoard.nextTurn();
         });
 
@@ -774,7 +783,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
       });
 
       it("should be defined", () => {
@@ -853,7 +863,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
       });
 
       it("should be able to move diagonally bottom left", () => {
@@ -937,7 +948,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
         chessBoard.nextTurn();
       });
 
@@ -1022,7 +1034,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
       });
 
       it("should be defined", () => {
@@ -1107,7 +1120,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
         chessBoard.nextTurn();
       });
 
@@ -1188,7 +1202,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
         chessBoard.nextTurn();
       });
 
@@ -1296,7 +1311,8 @@ describe("Chess Board", () => {
       let chessBoard: ChessBoard;
       beforeEach(() => {
         const gameManager = new GameManager();
-        chessBoard = new ChessBoard(gameManager);
+        const turnManager = new TurnManager();
+        chessBoard = new ChessBoard(gameManager, turnManager);
       });
 
       it("should be defined", () => {

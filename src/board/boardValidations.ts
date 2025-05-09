@@ -1,9 +1,9 @@
 import { BoardCell, Position } from "../chessBoard";
-import MultiMoveValidator from "../board/multiMoveValidator";
+import MultiMove from "./multiMove";
 import { PieceColor, PieceType } from "../piece";
 import PieceDirections from "../pieces/directions";
 import PieceFactory from "../pieces/factory";
-import SingleMoveValidator from "../board/singleMoveValidator";
+import SingleMove from "./singleMove";
 import { cloneBoard, isInBounds } from "../utils/helpers";
 import StateManager from "./stateManager";
 
@@ -54,7 +54,6 @@ class BoardValidations {
       for (let col = 0; col < 8; col++) {
         const piece = boardStateManager.getCell([row, col]);
         if (piece && piece.color === turn) {
-          const directions = PieceDirections.getPieceDirections(piece.type);
           const from: Position = [row, col];
           let moves: Position[];
           if (
@@ -62,17 +61,17 @@ class BoardValidations {
               piece.type,
             )
           ) {
-            moves = SingleMoveValidator.getAvailableMoves(
-              boardStateManager,
-              directions,
+            moves = SingleMove.getAvailableMoves(boardStateManager, {
               from,
-            );
+              piece,
+              to: [0, 0],
+            });
           } else {
-            moves = MultiMoveValidator.getAvailableMoves(
-              boardStateManager,
-              directions,
+            moves = MultiMove.getAvailableMoves(boardStateManager, {
               from,
-            );
+              piece,
+              to: [0, 0],
+            });
           }
 
           for (const to of moves) {

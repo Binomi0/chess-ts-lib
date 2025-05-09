@@ -1,6 +1,13 @@
 import { PieceColor } from "../piece";
 
-class TurnManager {
+abstract class Turn {
+  abstract switchTurn(): void;
+  abstract getCurrentTurn(): PieceColor;
+  abstract resetTurn(): void;
+  abstract isValidTurn(pieceColor: PieceColor): boolean;
+}
+
+class TurnManager implements Turn {
   private currentTurn: PieceColor = PieceColor.White;
 
   constructor() {}

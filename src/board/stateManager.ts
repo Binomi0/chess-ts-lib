@@ -16,7 +16,18 @@ import {
 } from "../pieces/constants";
 import { createFreshBoard } from "../utils/helpers";
 
-class StateManager {
+abstract class State {
+  abstract initializeBoard(): void;
+  abstract setEmptyBoard(): void;
+  abstract placePiece(position: Position, piece: Piece): void;
+  abstract getCell(position: Position): BoardCell;
+  abstract movePiece(from: Position, to: Position): void;
+  abstract getBoardSnapshot(): void;
+  abstract removePiece(position: Position): void;
+  abstract findKing(color: PieceColor): Position | null;
+}
+
+class StateManager implements State {
   private board: BoardCell[][];
 
   constructor() {

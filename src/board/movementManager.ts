@@ -1,11 +1,61 @@
-import { Castling, Position } from "../chessBoard";
+import { Castling, Movement, Position } from "../chessBoard";
 import { PieceColor, PieceType } from "../piece";
-import StateManager from "./stateManager";
+import MultiMove from "./multiMove";
+import SingleMove from "./singleMove";
+import type StateManager from "./stateManager";
 
 export type CastlingType = [PieceColor, Castling];
+export type MovementType = "multi" | "single";
 
-class MovementManager {
+abstract class MoveManager {
+  abstract getAvailableMoves(from: Position): Position[];
+  abstract isCastlingMove(
+    from: Position,
+    to: Position,
+  ): CastlingType | undefined;
+  abstract isPromotion(
+    to: Position,
+    type: PieceType,
+    color: PieceColor,
+  ): boolean;
+}
+
+class MovementManager implements MoveManager {
+  private readonly multiMoves = [
+    PieceType.Rook,
+    PieceType.Queen,
+    PieceType.Bishop,
+  ];
+  private readonly singleMoves = [
+    PieceType.Knight,
+    PieceType.King,
+    PieceType.Pawn,
+  ];
+
   constructor(private stateManager: StateManager) {}
+
+  private getManager(type: PieceType) {
+    if (this.multiMoves.includes(type)) {
+      return MultiMove;
+    }
+    if (this.singleMoves.includes(type)) {
+      return SingleMove;
+    }
+
+    throw new Error("Invalid piece type");
+  }
+
+  getAvailableMoves(from: Position): Position[] {
+    const piece = this.stateManager.getCell(from);
+    if (!piece) {
+      throw new Error("No piece found at the given position");
+    }
+
+    const manager = this.getManager(piece.type);
+    const movement: Movement = { from, piece, to: [0, 0] };
+
+    return manager.getAvailableMoves(this.stateManager, movement);
+  }
 
   isCastlingMove(from: Position, to: Position): CastlingType | undefined {
     const isWhiteQueenCastle: Position[] = [

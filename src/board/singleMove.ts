@@ -7,20 +7,22 @@ import {
 } from "../utils/helpers";
 import StateManager from "./stateManager";
 
-class SingleMoveValidator {
+class SingleMove {
   static getAvailableMoves(
     boardStateManager: StateManager,
-    directions: Position[],
-    from: Position,
+    movement: Movement,
   ) {
     const validMoves: Position[] = [];
 
-    for (const [row, col] of directions) {
-      const newRow = from[0] + row;
-      const newCol = from[1] + col;
+    for (const [row, col] of movement.piece.directions) {
+      const newRow = movement.from[0] + row;
+      const newCol = movement.from[1] + col;
 
       if (isInBounds([newRow, newCol])) {
-        const piece = boardStateManager.getCell([from[0], from[1]]);
+        const piece = boardStateManager.getCell([
+          movement.from[0],
+          movement.from[1],
+        ]);
         const target = boardStateManager.getCell([newRow, newCol]);
 
         if (isCellEmpty(target) || isCellCaptured(target, piece?.color)) {
@@ -34,14 +36,9 @@ class SingleMoveValidator {
 
   static validateMove(
     boardStateManager: StateManager,
-    directions: Position[],
     movement: Movement,
   ): boolean {
-    const validMoves = this.getAvailableMoves(
-      boardStateManager,
-      directions,
-      movement.from,
-    );
+    const validMoves = this.getAvailableMoves(boardStateManager, movement);
 
     if (isValidDestination(validMoves, movement.to)) {
       return true;
@@ -53,4 +50,4 @@ class SingleMoveValidator {
   }
 }
 
-export default SingleMoveValidator;
+export default SingleMove;

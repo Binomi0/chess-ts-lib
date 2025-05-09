@@ -21,7 +21,7 @@ abstract class Piece {
     public type: PieceType,
   ) {}
   abstract symbol: string;
-  protected readonly directions: Position[] = [];
+  readonly directions: Position[] = [];
   private readonly pieceSymbols = {
     [PieceColor.White]: {
       [PieceType.King]: "♔",

@@ -1,14 +1,16 @@
+import TurnManager from "./board/turnManager";
 import ChessBoard from "./chessBoard";
 import GameManager from "./gameManager";
 
 class Game {
   chessBoard: ChessBoard;
   manager: GameManager;
+  turnManager: TurnManager = new TurnManager();
 
   constructor(public notifier?: (message: string) => void) {
     this.notifier = notifier;
     this.manager = new GameManager();
-    this.chessBoard = new ChessBoard(this.manager);
+    this.chessBoard = new ChessBoard(this.manager, this.turnManager);
   }
 
   start() {

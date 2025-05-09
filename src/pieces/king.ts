@@ -1,6 +1,6 @@
 import { Movement, Position } from "../chessBoard";
 import BoardValidations from "../board/boardValidations";
-import SingleMoveValidator from "../board/singleMoveValidator";
+import SingleMove from "../board/singleMove";
 import Piece, { PieceColor, PieceType } from "../piece";
 import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
@@ -8,7 +8,7 @@ import StateManager from "../board/stateManager";
 
 export class King extends Piece {
   readonly symbol: string;
-  protected readonly directions: Position[] = PieceDirections.King;
+  directions: Position[] = PieceDirections.King;
   private readonly kingSymbols = {
     [PieceColor.White]: "♔",
     [PieceColor.Black]: "♚",
@@ -20,11 +20,8 @@ export class King extends Piece {
   }
 
   getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
-    const moves = SingleMoveValidator.getAvailableMoves(
-      boardStateManager,
-      this.directions,
-      from,
-    );
+    const movement: Movement = { from, piece: this, to: [0, 0] };
+    const moves = SingleMove.getAvailableMoves(boardStateManager, movement);
 
     const tempBoard = cloneBoard(boardStateManager.getBoardSnapshot());
 
@@ -42,10 +39,6 @@ export class King extends Piece {
   }
 
   validateMove(boardStateManager: StateManager, movement: Movement): boolean {
-    return SingleMoveValidator.validateMove(
-      boardStateManager,
-      this.directions,
-      movement,
-    );
+    return SingleMove.validateMove(boardStateManager, movement);
   }
 }

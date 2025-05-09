@@ -1,12 +1,12 @@
 import { Movement, Position } from "../chessBoard";
 import Piece, { PieceColor, PieceType } from "../piece";
-import SingleMoveValidator from "../board/singleMoveValidator";
+import SingleMove from "../board/singleMove";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 import StateManager from "../board/stateManager";
 
 export class Pawn extends Piece {
   readonly symbol: string;
-  protected readonly directions: Position[] = [
+  readonly directions: Position[] = [
     [1, 0],
     [1, 1],
     [1, -1],
@@ -22,11 +22,8 @@ export class Pawn extends Piece {
   }
 
   getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
-    return SingleMoveValidator.getAvailableMoves(
-      boardStateManager,
-      this.directions,
-      from,
-    );
+    const movement: Movement = { from, piece: this, to: [0, 0] };
+    return SingleMove.getAvailableMoves(boardStateManager, movement);
   }
 
   validateMove(boardStateManager: StateManager, movement: Movement): boolean {

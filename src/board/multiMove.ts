@@ -7,18 +7,20 @@ import {
 } from "../utils/helpers";
 import StateManager from "./stateManager";
 
-class MultiMoveValidator {
+class MultiMove {
   static getAvailableMoves(
     boardStateManager: StateManager,
-    directions: Position[],
-    from: Position,
+    movement: Movement,
   ) {
     const validMoves: Position[] = [];
-    const piece = boardStateManager.getCell([from[0], from[1]]);
+    const piece = boardStateManager.getCell([
+      movement.from[0],
+      movement.from[1],
+    ]);
 
-    for (const [row, col] of directions) {
-      let newRow = from[0] + row;
-      let newCol = from[1] + col;
+    for (const [row, col] of movement.piece.directions) {
+      let newRow = movement.from[0] + row;
+      let newCol = movement.from[1] + col;
 
       while (isInBounds([newRow, newCol])) {
         const target = boardStateManager.getCell([newRow, newCol]);
@@ -39,16 +41,8 @@ class MultiMoveValidator {
     return validMoves;
   }
 
-  static validateMove(
-    boardStateManager: StateManager,
-    directions: Position[],
-    movement: Movement,
-  ) {
-    const validMoves = this.getAvailableMoves(
-      boardStateManager,
-      directions,
-      movement.from,
-    );
+  static validateMove(boardStateManager: StateManager, movement: Movement) {
+    const validMoves = this.getAvailableMoves(boardStateManager, movement);
 
     if (isValidDestination(validMoves, movement.to)) {
       return true;
@@ -60,4 +54,4 @@ class MultiMoveValidator {
   }
 }
 
-export default MultiMoveValidator;
+export default MultiMove;

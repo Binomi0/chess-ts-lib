@@ -1,12 +1,12 @@
 import { Movement, Position } from "../chessBoard";
-import MultiMoveValidator from "../board/multiMoveValidator";
+import MultiMove from "../board/multiMove";
 import Piece, { PieceColor, PieceType } from "../piece";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
 
 export class Rook extends Piece {
   readonly symbol: string;
-  protected readonly directions: Position[] = PieceDirections.Rook;
+  readonly directions: Position[] = PieceDirections.Rook;
 
   constructor(color: PieceColor) {
     super(color, PieceType.Rook);
@@ -14,18 +14,11 @@ export class Rook extends Piece {
   }
 
   getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
-    return MultiMoveValidator.getAvailableMoves(
-      boardStateManager,
-      this.directions,
-      from,
-    );
+    const movement: Movement = { from, piece: this, to: [0, 0] };
+    return MultiMove.getAvailableMoves(boardStateManager, movement);
   }
 
   validateMove(boardStateManager: StateManager, movement: Movement): boolean {
-    return MultiMoveValidator.validateMove(
-      boardStateManager,
-      this.directions,
-      movement,
-    );
+    return MultiMove.validateMove(boardStateManager, movement);
   }
 }

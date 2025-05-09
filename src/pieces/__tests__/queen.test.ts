@@ -1,3 +1,4 @@
+import TurnManager from "../../board/turnManager";
 import ChessBoard, { Position } from "../../chessBoard";
 import GameManager from "../../gameManager";
 import { PieceColor } from "../../piece";
@@ -9,7 +10,8 @@ describe("Queen", () => {
   let queen: Queen;
   beforeEach(() => {
     const gameManager = new GameManager();
-    chessBoard = new ChessBoard(gameManager);
+    const turnManager = new TurnManager();
+    chessBoard = new ChessBoard(gameManager, turnManager);
     queen = new Queen(PieceColor.White);
     chessBoard.stateManager.setEmptyBoard();
   });

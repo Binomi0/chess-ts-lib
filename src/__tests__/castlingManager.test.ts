@@ -1,3 +1,4 @@
+import TurnManager from "../board/turnManager";
 import CastlingManager from "../castlingManager";
 import ChessBoard, { Castling } from "../chessBoard";
 import GameManager from "../gameManager";
@@ -15,7 +16,8 @@ describe("Castling Manager", () => {
 
     beforeEach(() => {
       const gameManager = new GameManager();
-      chessBoard = new ChessBoard(gameManager);
+      const turnManager = new TurnManager();
+      chessBoard = new ChessBoard(gameManager, turnManager);
     });
 
     it("should not be able to castle at start for white king side", () => {
@@ -99,7 +101,8 @@ describe("Castling Manager", () => {
 
     beforeEach(() => {
       const gameManager = new GameManager();
-      chessBoard = new ChessBoard(gameManager);
+      const turnManager = new TurnManager();
+      chessBoard = new ChessBoard(gameManager, turnManager);
     });
 
     it("should not be able to castle at start for white king side", () => {

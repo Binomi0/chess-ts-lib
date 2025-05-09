@@ -5,13 +5,15 @@ import { PieceColor, PieceType } from "../../piece";
 import PieceDirections from "../../pieces/directions";
 import PieceFactory from "../../pieces/factory";
 import { blackKing, whiteRook } from "../../pieces/constants";
+import TurnManager from "../turnManager";
 
 describe("Chess Board Validations", () => {
   let chessBoard: ChessBoard;
 
   beforeEach(() => {
     const gameManager = new GameManager();
-    chessBoard = new ChessBoard(gameManager);
+    const turnManager = new TurnManager();
+    chessBoard = new ChessBoard(gameManager, turnManager);
   });
 
   it("should check if a king is in check", () => {
