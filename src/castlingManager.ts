@@ -1,5 +1,5 @@
 import StateManager from "./board/stateManager";
-import { King } from "./pieces/king";
+import { King } from "./model/king";
 import { Position, PieceColor, Castling, BoardCell, PieceType } from "./types";
 
 type CastlingData = [Position, Position[], Position, Position];

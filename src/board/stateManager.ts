@@ -12,7 +12,7 @@ import {
   whitePawn,
   whiteQueen,
   whiteRook,
-} from "../pieces/constants";
+} from "../model/constants";
 import { Position, BoardCell, PieceColor, State } from "../types";
 import { createFreshBoard } from "../utils/helpers";
 

@@ -1,10 +1,10 @@
 import ChessBoard from "../chessBoard";
 import BoardValidations from "../board/boardValidations";
-import PieceDirections from "../pieces/directions";
-import PieceFactory from "../pieces/factory";
-import { Pawn } from "../pieces/pawn";
-import { Queen } from "../pieces/queen";
-import { Knight } from "../pieces/knight";
+import PieceDirections from "../model/directions";
+import PieceFactory from "../model/factory";
+import { Pawn } from "../model/pawn";
+import { Queen } from "../model/queen";
+import { Knight } from "../model/knight";
 import GameManager from "../gameManager";
 import {
   blackBishop,
@@ -12,7 +12,7 @@ import {
   whiteKing,
   whitePawn,
   whiteRook,
-} from "../pieces/constants";
+} from "../model/constants";
 import TurnManager from "../board/turnManager";
 import { PieceType, PieceColor, Position } from "../types";
 

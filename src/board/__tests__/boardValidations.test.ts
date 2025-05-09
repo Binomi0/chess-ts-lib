@@ -1,9 +1,9 @@
 import ChessBoard from "../../chessBoard";
 import ChessBoardValidations from "../boardValidations";
 import GameManager from "../../gameManager";
-import PieceDirections from "../../pieces/directions";
-import PieceFactory from "../../pieces/factory";
-import { blackKing, whiteRook } from "../../pieces/constants";
+import PieceDirections from "../../model/directions";
+import PieceFactory from "../../model/factory";
+import { blackKing, whiteRook } from "../../model/constants";
 import TurnManager from "../turnManager";
 import { PieceColor, PieceType } from "../../types";
 

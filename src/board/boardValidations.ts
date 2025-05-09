@@ -1,6 +1,6 @@
 import MultiMove from "./multiMove";
-import PieceDirections from "../pieces/directions";
-import PieceFactory from "../pieces/factory";
+import PieceDirections from "../model/directions";
+import PieceFactory from "../model/factory";
 import SingleMove from "./singleMove";
 import { cloneBoard, isInBounds } from "../utils/helpers";
 import StateManager from "./stateManager";

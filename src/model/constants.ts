@@ -1,3 +1,4 @@
+import Piece from "../piece";
 import { PieceColor, PieceType } from "../types";
 import PieceFactory from "./factory";
 
@@ -50,3 +51,12 @@ export const whiteQueen = PieceFactory.getPiece(
   PieceType.Queen,
   PieceColor.White,
 );
+
+export const black: Record<PieceType, Piece> = {
+  [PieceType.Pawn]: blackPawn,
+  [PieceType.Rook]: blackRook,
+  [PieceType.Knight]: blackKnight,
+  [PieceType.Bishop]: blackBishop,
+  [PieceType.Queen]: blackQueen,
+  [PieceType.King]: blackKing,
+};

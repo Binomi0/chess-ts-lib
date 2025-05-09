@@ -3,7 +3,7 @@ import Game from "./game";
 // import { PieceColor } from "./piece";
 import Player from "./player";
 // import { Castling } from "./chessBoard";
-import { blackPawn, whiteQueen } from "./pieces/constants";
+import { blackPawn, whiteQueen } from "./model/constants";
 
 const game = new Game();
 

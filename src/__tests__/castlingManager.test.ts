@@ -2,12 +2,7 @@ import TurnManager from "../board/turnManager";
 import CastlingManager from "../castlingManager";
 import ChessBoard from "../chessBoard";
 import GameManager from "../gameManager";
-import {
-  blackKing,
-  blackRook,
-  whiteKing,
-  whiteRook,
-} from "../pieces/constants";
+import { blackKing, blackRook, whiteKing, whiteRook } from "../model/constants";
 import { Castling, PieceColor } from "../types";
 
 describe("Castling Manager", () => {
