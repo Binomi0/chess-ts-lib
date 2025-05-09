@@ -1,7 +1,6 @@
 import Piece, { PieceColor } from "./piece";
 import ChessBoardValidations from "./board/boardValidations";
 import CastlingManager from "./castlingManager";
-import TurnManager from "./board/turnManager";
 import StateManager from "./board/stateManager";
 import GameManager from "./gameManager";
 import MovementManager from "./board/movementManager";
@@ -22,21 +21,18 @@ class ChessBoard {
   public stateManager: StateManager;
   public moveManager: MovementManager;
 
-  constructor(
-    public gameManager: GameManager,
-    public turnManager: TurnManager,
-  ) {
+  constructor(public gameManager: GameManager) {
     this.stateManager = new StateManager();
     this.moveManager = new MovementManager(this.stateManager);
   }
 
   get turn() {
-    return this.turnManager.getCurrentTurn();
+    return this.gameManager.turnManager.getCurrentTurn();
   }
 
   // TODO: Set to private when ready
   nextTurn() {
-    this.turnManager.switchTurn();
+    this.gameManager.turnManager.switchTurn();
   }
 
   isKingInCheck() {
@@ -65,7 +61,7 @@ class ChessBoard {
       if (!piece) {
         throw new Error("Invalid move: No piece at the source position");
       }
-      if (!this.turnManager.isValidTurn(piece.color)) {
+      if (!this.gameManager.turnManager.isValidTurn(piece.color)) {
         throw new Error("Invalid Turn");
       }
       const castlingMove = this.moveManager.isCastlingMove(from, to);
@@ -86,14 +82,14 @@ class ChessBoard {
     if (this.isKingInCheck()) {
       this.stateManager.movePiece(from, to);
     } else {
-      this.turnManager.switchTurn();
+      this.gameManager.turnManager.switchTurn();
     }
   }
 
   castling(type: Castling, color: PieceColor) {
     CastlingManager.castle(this.stateManager, color, type);
 
-    this.turnManager.switchTurn();
+    this.gameManager.turnManager.switchTurn();
   }
 }
 

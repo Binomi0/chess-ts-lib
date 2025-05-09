@@ -15,9 +15,9 @@ describe("Castling Manager", () => {
     let chessBoard: ChessBoard;
 
     beforeEach(() => {
-      const gameManager = new GameManager();
       const turnManager = new TurnManager();
-      chessBoard = new ChessBoard(gameManager, turnManager);
+      const gameManager = new GameManager(turnManager);
+      chessBoard = new ChessBoard(gameManager);
     });
 
     it("should not be able to castle at start for white king side", () => {
@@ -100,9 +100,9 @@ describe("Castling Manager", () => {
     let chessBoard: ChessBoard;
 
     beforeEach(() => {
-      const gameManager = new GameManager();
       const turnManager = new TurnManager();
-      chessBoard = new ChessBoard(gameManager, turnManager);
+      const gameManager = new GameManager(turnManager);
+      chessBoard = new ChessBoard(gameManager);
     });
 
     it("should not be able to castle at start for white king side", () => {

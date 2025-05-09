@@ -11,9 +11,9 @@ describe("Chess Board Validations", () => {
   let chessBoard: ChessBoard;
 
   beforeEach(() => {
-    const gameManager = new GameManager();
     const turnManager = new TurnManager();
-    chessBoard = new ChessBoard(gameManager, turnManager);
+    const gameManager = new GameManager(turnManager);
+    chessBoard = new ChessBoard(gameManager);
   });
 
   it("should check if a king is in check", () => {

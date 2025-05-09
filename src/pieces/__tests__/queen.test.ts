@@ -9,9 +9,9 @@ describe("Queen", () => {
   let chessBoard: ChessBoard;
   let queen: Queen;
   beforeEach(() => {
-    const gameManager = new GameManager();
     const turnManager = new TurnManager();
-    chessBoard = new ChessBoard(gameManager, turnManager);
+    const gameManager = new GameManager(turnManager);
+    chessBoard = new ChessBoard(gameManager);
     queen = new Queen(PieceColor.White);
     chessBoard.stateManager.setEmptyBoard();
   });

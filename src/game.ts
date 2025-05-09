@@ -1,32 +1,35 @@
 import TurnManager from "./board/turnManager";
-import ChessBoard from "./chessBoard";
+import ChessBoard, { Position } from "./chessBoard";
 import GameManager from "./gameManager";
+import Player from "./player";
 
 class Game {
   chessBoard: ChessBoard;
   manager: GameManager;
-  turnManager: TurnManager = new TurnManager();
+  turnManager: TurnManager;
 
   constructor(public notifier?: (message: string) => void) {
-    this.notifier = notifier;
-    this.manager = new GameManager();
-    this.chessBoard = new ChessBoard(this.manager, this.turnManager);
+    this.turnManager = new TurnManager();
+    this.manager = new GameManager(this.turnManager);
+    this.chessBoard = new ChessBoard(this.manager);
   }
 
   start() {
-    if (!this.manager.arePlayersReady) {
-      throw new Error("Please add both players before starting the game.");
-    }
-
     this.manager.startGame();
     this.notifier?.("Game started!");
   }
 
-  get arePlayersReady(): boolean {
-    if (!this.chessBoard) {
-      throw new Error("Chess board is not initialized");
-    }
+  addPlayer(player: Player) {
+    this.manager.addPlayer(player);
+    this.notifier?.("Player added");
+  }
 
+  move(from: Position, to: Position) {
+    this.chessBoard.handleMove(from, to);
+    this.notifier?.("Move executed");
+  }
+
+  get arePlayersReady(): boolean {
     return this.manager.arePlayersReady;
   }
 }

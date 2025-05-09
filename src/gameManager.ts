@@ -1,3 +1,4 @@
+import TurnManager from "./board/turnManager";
 import { PieceColor } from "./piece";
 import Player from "./player";
 
@@ -7,12 +8,17 @@ class GameManager {
   winner: PieceColor | undefined;
   players: Map<PieceColor, Player> = new Map();
 
-  constructor() {}
+  constructor(public turnManager: TurnManager) {}
 
   startGame() {
     if (this.started) {
       throw new Error("Game has already started.");
     }
+
+    if (!this.arePlayersReady) {
+      throw new Error("Please add both players before starting the game.");
+    }
+
     this.timeElapsed = Date.now();
     this.started = true;
   }
