@@ -1,5 +1,5 @@
 import TurnManager from "../../board/turnManager";
-import ChessBoard from "../../chessBoard";
+import ChessBoard from "../../board/chessBoard";
 import GameManager from "../../gameManager";
 import { PieceColor, Position } from "../../types";
 import { whitePawn } from "../constants";

@@ -1,4 +1,4 @@
-import Piece from "../piece";
+import Piece from "./piece";
 import { Pawn } from "./pawn";
 import { Rook } from "./rook";
 import { Knight } from "./knight";

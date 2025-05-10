@@ -1,15 +1,15 @@
-import ChessBoardValidations from "./board/boardValidations";
+import ChessBoardValidations from "./boardValidations";
 import CastlingManager from "./castlingManager";
-import StateManager from "./board/stateManager";
-import GameManager from "./gameManager";
-import MovementManager from "./board/movementManager";
+import StateManager from "./stateManager";
+import GameManager from "../gameManager";
+import MovementManager from "./movementManager";
 import {
   BoardCell,
   Position,
   PieceColor,
   Castling,
   IChessBoard,
-} from "./types";
+} from "../types";
 
 class ChessBoard implements IChessBoard {
   public stateManager: StateManager;
@@ -24,7 +24,6 @@ class ChessBoard implements IChessBoard {
     return this.gameManager.turnManager.getCurrentTurn();
   }
 
-  // TODO: Set to private when ready
   nextTurn() {
     this.gameManager.turnManager.switchTurn();
   }

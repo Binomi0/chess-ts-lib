@@ -1,4 +1,3 @@
-import Piece from "../piece";
 import {
   blackBishop,
   blackKing,
@@ -13,7 +12,8 @@ import {
   whiteQueen,
   whiteRook,
 } from "../model/constants";
-import { Position, BoardCell, PieceColor, State } from "../types";
+import type Piece from "../model/piece";
+import type { Position, BoardCell, PieceColor, State } from "../types";
 import { createFreshBoard } from "../utils/helpers";
 
 class StateManager implements State {

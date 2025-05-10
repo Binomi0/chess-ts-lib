@@ -25,9 +25,9 @@ describe("Game", () => {
     game.manager.addPlayer(new Player("Player 1"));
     game.manager.addPlayer(new Player("Player 2"));
     game.start();
-    expect(game.chessBoard.turn).toBe(PieceColor.White);
-    game.chessBoard.nextTurn();
-    expect(game.chessBoard.turn).toBe(PieceColor.Black);
+    expect(game.board.turn).toBe(PieceColor.White);
+    game.board.nextTurn();
+    expect(game.board.turn).toBe(PieceColor.Black);
   });
 
   it("should throw an error if missing any or both players", () => {
@@ -58,7 +58,7 @@ describe("Game", () => {
   it("should throw an error if chess board is not initialized", () => {
     const game = new Game();
     // @ts-expect-error test
-    game.chessBoard = undefined; // Simulate chess board not being initialized
+    game.board = undefined; // Simulate chess board not being initialized
     try {
       if (game.manager.arePlayersReady) {
         expect(false).toBeTruthy();

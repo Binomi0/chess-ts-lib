@@ -1,5 +1,5 @@
-import type Piece from "../piece";
-import { Position, Movement, PieceColor, BoardCell } from "../types";
+import type Piece from "../model/piece";
+import type { Position, Movement, BoardCell, PieceColor } from "../types";
 
 export function isInBounds([x, y]: Position) {
   return x >= 0 && x < 8 && y >= 0 && y < 8;

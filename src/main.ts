@@ -1,9 +1,9 @@
-// import CastlingManager from "./castlingManager";
 import Game from "./game";
-// import { PieceColor } from "./piece";
 import Player from "./player";
-// import { Castling } from "./chessBoard";
 import { blackPawn, whiteQueen } from "./model/constants";
+// import CastlingManager from "./castlingManager";
+// import { PieceColor } from "./piece";
+// import { Castling } from "./chessBoard";
 
 const game = new Game();
 
@@ -48,19 +48,19 @@ game.start();
 // };
 
 const canCheck = () => {
-  if (game.chessBoard) {
-    game.chessBoard.stateManager.removePiece([1, 4]);
-    game.chessBoard.stateManager.placePiece([0, 5], blackPawn);
-    game.chessBoard.stateManager.placePiece([0, 3], blackPawn);
+  if (game.board) {
+    game.board.stateManager.removePiece([1, 4]);
+    game.board.stateManager.placePiece([0, 5], blackPawn);
+    game.board.stateManager.placePiece([0, 3], blackPawn);
 
-    console.log(game.chessBoard.stateManager.getCell([0, 4]));
-    game.chessBoard.stateManager.placePiece([6, 4], whiteQueen);
+    console.log(game.board.stateManager.getCell([0, 4]));
+    game.board.stateManager.placePiece([6, 4], whiteQueen);
     game.turnManager.switchTurn();
 
-    const isCheck = game.chessBoard.isKingInCheck();
+    const isCheck = game.board.isKingInCheck();
     if (isCheck) {
       console.log({ isCheck });
-      const isCheckMate = game.chessBoard.isCheckMate();
+      const isCheckMate = game.board.isCheckMate();
       console.log({ isCheckMate });
     }
   }

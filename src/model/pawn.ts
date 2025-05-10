@@ -1,4 +1,4 @@
-import Piece from "../piece";
+import Piece from "./piece";
 import SingleMove from "../board/singleMove";
 import { isCellEmpty, isCellCaptured } from "../utils/helpers";
 import StateManager from "../board/stateManager";

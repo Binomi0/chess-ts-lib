@@ -1,9 +1,9 @@
 import TurnManager from "../board/turnManager";
-import CastlingManager from "../castlingManager";
-import ChessBoard from "../chessBoard";
+import ChessBoard from "../board/chessBoard";
 import GameManager from "../gameManager";
 import { blackKing, blackRook, whiteKing, whiteRook } from "../model/constants";
 import { Castling, PieceColor } from "../types";
+import CastlingManager from "../board/castlingManager";
 
 describe("Castling Manager", () => {
   describe("White King", () => {

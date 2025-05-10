@@ -1,24 +1,26 @@
 import TurnManager from "./board/turnManager";
-import ChessBoard from "./chessBoard";
+import ChessBoard from "./board/chessBoard";
 import GameManager from "./gameManager";
 import Player from "./player";
 import { IGame, Position } from "./types";
 
 class Game implements IGame {
-  chessBoard: ChessBoard;
+  board: ChessBoard;
   manager: GameManager;
   turnManager: TurnManager;
 
   constructor(public notifier?: (message: string) => void) {
     this.turnManager = new TurnManager();
     this.manager = new GameManager(this.turnManager);
-    this.chessBoard = new ChessBoard(this.manager);
+    this.board = new ChessBoard(this.manager);
   }
 
-  start() {
-    this.manager.startGame();
-    this.chessBoard.stateManager.initializeBoard();
-    this.notifier?.("Game started!");
+  get arePlayersReady(): boolean {
+    return this.manager.arePlayersReady;
+  }
+
+  get turn() {
+    return this.manager.turnManager.getCurrentTurn();
   }
 
   addPlayer(player: Player) {
@@ -26,13 +28,15 @@ class Game implements IGame {
     this.notifier?.("Player added");
   }
 
-  move(from: Position, to: Position) {
-    this.chessBoard.handleMove(from, to);
-    this.notifier?.("Move executed");
+  start() {
+    this.manager.startGame();
+    this.board.stateManager.initializeBoard();
+    this.notifier?.("Game started!");
   }
 
-  get arePlayersReady(): boolean {
-    return this.manager.arePlayersReady;
+  move(from: Position, to: Position) {
+    this.board.handleMove(from, to);
+    this.notifier?.("Move executed");
   }
 }
 

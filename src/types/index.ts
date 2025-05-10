@@ -1,8 +1,8 @@
-import MovementManager from "../board/movementManager";
-import StateManager from "../board/stateManager";
-import TurnManager from "../board/turnManager";
-import Piece from "../piece";
-import Player from "../player";
+import type MovementManager from "../board/movementManager";
+import type StateManager from "../board/stateManager";
+import type TurnManager from "../board/turnManager";
+import type Piece from "../model/piece";
+import type Player from "../player";
 
 export enum Castling {
   Queen = "queen",

@@ -1,4 +1,4 @@
-import ChessBoard from "../chessBoard";
+import ChessBoard from "../board/chessBoard";
 import BoardValidations from "../board/boardValidations";
 import PieceDirections from "../model/directions";
 import PieceFactory from "../model/factory";

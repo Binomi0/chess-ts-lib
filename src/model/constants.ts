@@ -1,4 +1,4 @@
-import Piece from "../piece";
+import Piece from "./piece";
 import { PieceColor, PieceType } from "../types";
 import PieceFactory from "./factory";
 

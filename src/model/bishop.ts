@@ -1,5 +1,5 @@
 import MultiMove from "../board/multiMove";
-import Piece from "../piece";
+import Piece from "./piece";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
 import { Position, PieceColor, PieceType, Movement } from "../types";

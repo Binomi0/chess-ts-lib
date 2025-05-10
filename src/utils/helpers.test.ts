@@ -1,4 +1,4 @@
-import Piece from "../piece";
+import type Piece from "../model/piece";
 import { Movement, PieceColor, Position } from "../types";
 import * as Helpers from "./helpers";
 

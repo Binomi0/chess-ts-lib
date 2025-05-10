@@ -3,7 +3,7 @@ import SingleMove from "../board/singleMove";
 import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
-import Piece from "../piece";
+import Piece from "./piece";
 import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class King extends Piece {
@@ -21,12 +21,12 @@ export class King extends Piece {
 
   getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
     const movement: Movement = { from, piece: this, to: [0, 0] };
-    const moves = SingleMove.getAvailableMoves(boardStateManager, movement);
+    const kingMoves = SingleMove.getAvailableMoves(boardStateManager, movement);
 
     const tempBoard = cloneBoard(boardStateManager.getBoardSnapshot());
 
     const piece = boardStateManager.getCell(from);
-    return moves.filter((move) => {
+    return kingMoves.filter((move) => {
       tempBoard[move[0]][move[1]] = piece;
       tempBoard[from[0]][from[1]] = undefined;
 

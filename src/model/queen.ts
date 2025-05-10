@@ -1,7 +1,7 @@
 import MultiMove from "../board/multiMove";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
-import Piece from "../piece";
+import Piece from "./piece";
 import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class Queen extends Piece {

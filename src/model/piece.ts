@@ -1,11 +1,8 @@
-import StateManager from "./board/stateManager";
-import { PieceColor, PieceType, Position, Movement } from "./types";
+import StateManager from "../board/stateManager";
+import PieceDirections from "../model/directions";
+import { PieceColor, PieceType, Position, Movement } from "../types";
 
 abstract class Piece {
-  constructor(
-    public color: PieceColor,
-    public type: PieceType,
-  ) {}
   abstract symbol: string;
   readonly directions: Position[] = [];
   private readonly pieceSymbols = {
@@ -26,6 +23,13 @@ abstract class Piece {
       [PieceType.Pawn]: "♟",
     },
   };
+
+  constructor(
+    public color: PieceColor,
+    public type: PieceType,
+  ) {
+    this.directions = PieceDirections.getPieceDirections(type);
+  }
 
   getSymbol(): string {
     return this.pieceSymbols[this.color][this.type];
