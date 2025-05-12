@@ -16,3 +16,4 @@ export * from "./model/knight";
 export * from "./model/pawn";
 export * from "./model/queen";
 export * from "./model/rook";
+export * from "./types";
