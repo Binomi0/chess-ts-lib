@@ -17,7 +17,10 @@ class ChessBoard implements IChessBoard {
 
   constructor(public gameManager: GameManager) {
     this.stateManager = new StateManager();
-    this.moveManager = new MovementManager(this.stateManager);
+    this.moveManager = new MovementManager(
+      this.stateManager,
+      gameManager.turnManager,
+    );
   }
 
   get turn() {
@@ -31,7 +34,7 @@ class ChessBoard implements IChessBoard {
   isKingInCheck() {
     return ChessBoardValidations.isKingInCheck(
       this.stateManager,
-      this.stateManager.getBoardSnapshot(),
+      this.getBoard(),
       this.turn,
     );
   }
@@ -63,7 +66,13 @@ class ChessBoard implements IChessBoard {
         const [color, side] = castlingMove;
         CastlingManager.castle(this.stateManager, color, side);
       } else {
-        ChessBoardValidations.isValidMove(this.stateManager, from, to);
+        if (ChessBoardValidations.isValidMove(this.stateManager, from, to)) {
+          throw new Error("invalid move");
+        }
+
+        if (piece.validateMove(this.stateManager, { from, to, piece })) {
+          throw new Error("invalid move");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -73,7 +82,7 @@ class ChessBoard implements IChessBoard {
     this.stateManager.movePiece(from, to);
 
     if (this.isKingInCheck()) {
-      this.stateManager.movePiece(from, to);
+      this.stateManager.movePiece(to, from);
     } else {
       this.gameManager.turnManager.switchTurn();
     }

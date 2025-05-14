@@ -1,6 +1,7 @@
-export { default as Game } from "./game";
+// export { default as Game } from "./game";
 export { default as Piece } from "./model/piece";
 export { default as Player } from "./player";
+export { default as Game } from "./game";
 export { default as ChessBoard } from "./board/chessBoard";
 export { default as ChessBoardValidations } from "./board/boardValidations";
 export { default as CastlingManager } from "./board/castlingManager";

@@ -1,20 +1,13 @@
-import type MovementManager from "../board/movementManager";
-import type StateManager from "../board/stateManager";
-import type TurnManager from "../board/turnManager";
-import type Piece from "../model/piece";
-import type Player from "../player";
+import type MovementManager from "./board/movementManager";
+import type StateManager from "./board/stateManager";
+import type TurnManager from "./board/turnManager";
+import type Piece from "./model/piece";
+import type Player from "./player";
 
 export enum Castling {
   Queen = "queen",
   King = "king",
 }
-export type CastlingType = [PieceColor, Castling];
-export type MovementType = "multi" | "single";
-export type Movement = {
-  from: Position;
-  to: Position;
-  piece: Piece;
-};
 
 export enum PieceType {
   King = "King",
@@ -29,6 +22,14 @@ export enum PieceColor {
   White = "white",
   Black = "black",
 }
+
+export type CastlingType = [PieceColor, Castling];
+export type MovementType = "multi" | "single";
+export type Movement = {
+  from: Position;
+  to: Position;
+  piece: Piece;
+};
 
 export type BoardCell = Piece | undefined;
 export type Position = [number, number];

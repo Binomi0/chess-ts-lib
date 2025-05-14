@@ -1,6 +1,4 @@
 import MultiMove from "./multiMove";
-import PieceDirections from "../model/directions";
-import PieceFactory from "../model/factory";
 import SingleMove from "./singleMove";
 import { cloneBoard, isInBounds } from "../utils/helpers";
 import StateManager from "./stateManager";
@@ -24,14 +22,17 @@ class BoardValidations {
         const current: Position = [row, col];
         const piece = board[row][col];
 
-        if (piece && piece.color !== turn) {
+        if (piece?.type === PieceType.King) {
+          continue;
+        } else if (piece && piece.color !== turn) {
           const movements = piece.getAllAvailableMoves(
             boardStateManager,
             current,
-            PieceDirections.getPieceDirections(piece.type),
+            piece.directions,
           );
           for (const [row, col] of movements) {
             if (row === kingPosition[0] || col === kingPosition[1]) {
+              console.log({ row, col, piece, kingPosition });
               isValid = true;
             }
           }
@@ -110,7 +111,6 @@ class BoardValidations {
     }
 
     const destinationPiece = boardStateManager.getCell([toRow, toCol]);
-
     if (destinationPiece && destinationPiece.color === piece.color) {
       throw new Error("Can't capture own piece");
     }
@@ -119,12 +119,7 @@ class BoardValidations {
       throw new Error("Out of bounds");
     }
 
-    const movement = { from, to, piece };
-
-    return PieceFactory.getPiece(piece.type, piece.color).validateMove(
-      boardStateManager,
-      movement,
-    );
+    return true;
   }
 }
 

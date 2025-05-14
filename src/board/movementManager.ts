@@ -7,9 +7,11 @@ import {
   Castling,
   MoveManager,
 } from "../types";
+import BoardValidations from "./boardValidations";
 import MultiMove from "./multiMove";
 import SingleMove from "./singleMove";
 import type StateManager from "./stateManager";
+import TurnManager from "./turnManager";
 
 class MovementManager implements MoveManager {
   private readonly multiMoves = [
@@ -23,7 +25,10 @@ class MovementManager implements MoveManager {
     PieceType.Pawn,
   ];
 
-  constructor(private stateManager: StateManager) {}
+  constructor(
+    private stateManager: StateManager,
+    private turnManager: TurnManager,
+  ) {}
 
   private getManager(type: PieceType) {
     if (this.multiMoves.includes(type)) {
@@ -36,11 +41,25 @@ class MovementManager implements MoveManager {
     throw new Error("Invalid piece type");
   }
 
-  getAvailableMoves(from: Position): Position[] {
+  validateMove(from: Position, to: Position) {
     const piece = this.stateManager.getCell(from);
     if (!piece) {
-      throw new Error("No piece found at the given position");
+      throw new Error("Missing piece at from location");
     }
+
+    if (piece.color === this.turnManager.getCurrentTurn()) {
+      if (BoardValidations.isValidMove(this.stateManager, from, to)) {
+        this.stateManager.movePiece(from, to);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  getAvailableMoves(from: Position): Position[] {
+    const piece = this.stateManager.getCell(from);
+    if (!piece) return [];
 
     const manager = this.getManager(piece.type);
     const movement: Movement = { from, piece, to: [0, 0] };
