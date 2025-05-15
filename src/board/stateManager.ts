@@ -24,6 +24,10 @@ class StateManager implements State {
     this.initializeBoard();
   }
 
+  setBoard(board: BoardCell[][]) {
+    this.board = board;
+  }
+
   setEmptyBoard() {
     this.board = createFreshBoard();
   }
@@ -59,6 +63,10 @@ class StateManager implements State {
     this.placePiece([7, 5], whiteBishop);
     this.placePiece([7, 6], whiteKnight);
     this.placePiece([7, 7], whiteRook);
+  }
+
+  clone() {
+    return this;
   }
 
   getCell(position: Position): BoardCell {

@@ -1,10 +1,9 @@
-import BoardValidations from "../board/boardValidations";
 import SingleMove from "../board/singleMove";
-import { cloneBoard } from "../utils/helpers";
 import PieceDirections from "./directions";
 import StateManager from "../board/stateManager";
 import Piece from "./piece";
 import { Position, PieceColor, PieceType, Movement } from "../types";
+import { isSamePosition } from "../utils/helpers";
 
 export class King extends Piece {
   readonly symbol: string;
@@ -23,19 +22,68 @@ export class King extends Piece {
     const movement: Movement = { from, piece: this, to: [0, 0] };
     const kingMoves = SingleMove.getAvailableMoves(boardStateManager, movement);
 
-    const tempBoard = cloneBoard(boardStateManager.getBoardSnapshot());
+    const king = boardStateManager.getCell(from);
+    let availableMoves: Position[] = [];
 
-    const piece = boardStateManager.getCell(from);
-    return kingMoves.filter((move) => {
-      tempBoard[move[0]][move[1]] = piece;
-      tempBoard[from[0]][from[1]] = undefined;
+    boardStateManager.removePiece(from);
 
-      return BoardValidations.isKingInCheck(
-        boardStateManager,
-        tempBoard,
-        this.color,
-      );
-    });
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const enemy = boardStateManager.getCell([row, col]);
+        if (!enemy || enemy.color === king?.color) {
+          continue;
+        }
+        if (enemy?.type === king?.type && enemy?.color === king?.color) {
+          continue;
+        }
+
+        if (row === from[0] && col === from[1]) {
+          continue;
+        }
+
+        kingMoves.forEach((kingMove) => {
+          if (isSamePosition(kingMove, [row, col])) {
+            return;
+          }
+          const current = boardStateManager.getCell(kingMove);
+          boardStateManager.placePiece(kingMove, king!);
+
+          const enemyMovements = enemy.getAllAvailableMoves(
+            boardStateManager,
+            [row, col],
+            enemy.directions,
+          );
+
+          const canCheck = enemyMovements.some((enemyMove) =>
+            isSamePosition(kingMove, enemyMove),
+          );
+
+          if (canCheck) {
+            availableMoves = availableMoves.filter(
+              (am) => !isSamePosition(am, kingMove),
+            );
+            boardStateManager.removePiece(kingMove);
+            if (current) {
+              boardStateManager.placePiece(kingMove, current);
+            }
+            return;
+          }
+
+          // Avoid duplicates
+          if (!availableMoves.some((move) => isSamePosition(move, kingMove))) {
+            availableMoves.push(kingMove);
+          }
+
+          boardStateManager.removePiece(kingMove);
+          if (current) {
+            boardStateManager.placePiece(kingMove, current);
+          }
+        });
+      }
+    }
+
+    boardStateManager.placePiece(from, king!);
+    return availableMoves;
   }
 
   validateMove(boardStateManager: StateManager, movement: Movement): boolean {

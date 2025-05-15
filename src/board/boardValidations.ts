@@ -1,8 +1,6 @@
-import MultiMove from "./multiMove";
-import SingleMove from "./singleMove";
-import { cloneBoard, isInBounds } from "../utils/helpers";
+import { isInBounds, isSamePosition } from "../utils/helpers";
 import StateManager from "./stateManager";
-import { BoardCell, PieceColor, Position, PieceType } from "../types";
+import { BoardCell, PieceColor, Position } from "../types";
 
 class BoardValidations {
   static isKingInCheck(
@@ -15,85 +13,68 @@ class BoardValidations {
       throw new Error("King not found");
     }
 
-    let isValid = false;
+    const king = boardStateManager.getCell(kingPosition);
+    if (!king) {
+      throw new Error("King should exists");
+    }
+
+    let isCheck = false;
 
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const current: Position = [row, col];
-        const piece = board[row][col];
+        const enemy = boardStateManager.getCell(current);
 
-        if (piece?.type === PieceType.King) {
+        if (!enemy || enemy.color === king?.color) {
           continue;
-        } else if (piece && piece.color !== turn) {
-          const movements = piece.getAllAvailableMoves(
-            boardStateManager,
-            current,
-            piece.directions,
-          );
-          for (const [row, col] of movements) {
-            if (row === kingPosition[0] || col === kingPosition[1]) {
-              console.log({ row, col, piece, kingPosition });
-              isValid = true;
-            }
-          }
         }
+
+        if (enemy?.type === king?.type && enemy?.color === king?.color) {
+          continue;
+        }
+
+        if (row === kingPosition[0] && col === kingPosition[1]) {
+          continue;
+        }
+
+        const enemyMovements = enemy.getAllAvailableMoves(
+          boardStateManager,
+          current,
+          enemy.directions,
+        );
+
+        enemyMovements.forEach((enemyMovement) => {
+          if (isSamePosition(kingPosition, enemyMovement)) {
+            isCheck = true;
+          }
+        });
       }
     }
 
-    return isValid;
+    return isCheck;
   }
 
   static isCheckMate(
     boardStateManager: StateManager,
     turn: PieceColor,
   ): boolean {
-    const scapeMoves: Position[] = [];
-    const board = boardStateManager.getBoardSnapshot();
-
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        const piece = boardStateManager.getCell([row, col]);
-        if (piece && piece.color === turn) {
-          const from: Position = [row, col];
-          let moves: Position[];
-          if (
-            [PieceType.Pawn, PieceType.King, PieceType.Knight].includes(
-              piece.type,
-            )
-          ) {
-            moves = SingleMove.getAvailableMoves(boardStateManager, {
-              from,
-              piece,
-              to: [0, 0],
-            });
-          } else {
-            moves = MultiMove.getAvailableMoves(boardStateManager, {
-              from,
-              piece,
-              to: [0, 0],
-            });
-          }
-
-          for (const to of moves) {
-            const newRow = from[0] + to[0];
-            const newCol = from[1] + to[1];
-
-            if (!isInBounds([newRow, newCol])) continue;
-            const tempBoard = cloneBoard(board);
-
-            tempBoard[newRow][newCol] = piece;
-
-            try {
-              if (!this.isKingInCheck(boardStateManager, tempBoard, turn)) {
-                scapeMoves.push(to);
-              }
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
-            } catch (_) {}
-          }
-        }
-      }
+    const kingPosition = boardStateManager.findKing(turn);
+    if (!kingPosition) {
+      throw new Error("King not found");
     }
 
+    const king = boardStateManager.getCell(kingPosition);
+    if (!king) {
+      throw new Error("King should exists");
+    }
+
+    const scapeMoves = king.getAllAvailableMoves(
+      boardStateManager,
+      kingPosition,
+      king.directions,
+    );
+
+    console.log({ scapeMoves });
     return scapeMoves.length === 0;
   }
 

@@ -1,16 +1,22 @@
 import Piece from "./piece";
-import SingleMove from "../board/singleMove";
-import { isCellEmpty, isCellCaptured } from "../utils/helpers";
+import { isCellEmpty, isCellCaptured, isInBounds } from "../utils/helpers";
 import StateManager from "../board/stateManager";
 import { Position, PieceColor, PieceType, Movement } from "../types";
 
 export class Pawn extends Piece {
   readonly symbol: string;
-  readonly directions: Position[] = [
-    [1, 0],
-    [1, 1],
-    [1, -1],
-  ];
+  readonly directions: Position[] =
+    this.color === PieceColor.Black
+      ? [
+          [1, 0],
+          [1, 1],
+          [1, -1],
+        ]
+      : [
+          [-1, 0],
+          [-1, -1],
+          [-1, 1],
+        ];
   private readonly pawnSymbols = {
     [PieceColor.White]: "♙",
     [PieceColor.Black]: "♟",
@@ -22,8 +28,31 @@ export class Pawn extends Piece {
   }
 
   getAllAvailableMoves(boardStateManager: StateManager, from: Position) {
-    const movement: Movement = { from, piece: this, to: [0, 0] };
-    return SingleMove.getAvailableMoves(boardStateManager, movement);
+    const validMoves: Position[] = [];
+
+    for (const [row, col] of this.directions) {
+      const [fromRow, fromCol] = from;
+      const newRow = fromRow + row;
+      const newCol = fromCol + col;
+
+      if (isInBounds([newRow, newCol])) {
+        const piece = boardStateManager.getCell([fromRow, fromCol]);
+        const target = boardStateManager.getCell([newRow, newCol]);
+
+        if (isCellEmpty(target) || isCellCaptured(target, piece?.color)) {
+          validMoves.push([newRow, newCol]);
+        }
+      }
+    }
+
+    const [row] = from;
+    if (row === 1 && this.color === PieceColor.Black) {
+      validMoves.push([row + 2, from[1]]);
+    } else if (row === 6 && this.color === PieceColor.White) {
+      validMoves.push([row - 2, from[1]]);
+    }
+
+    return validMoves;
   }
 
   validateMove(boardStateManager: StateManager, movement: Movement): boolean {

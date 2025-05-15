@@ -55,7 +55,7 @@ const canCheck = () => {
 
     console.log(game.board.stateManager.getCell([0, 4]));
     game.board.stateManager.placePiece([6, 4], whiteQueen);
-    game.turnManager.switchTurn();
+    game.manager.turnManager.switchTurn();
 
     const isCheck = game.board.isKingInCheck();
     if (isCheck) {

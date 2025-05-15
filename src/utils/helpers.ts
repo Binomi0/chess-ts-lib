@@ -39,3 +39,7 @@ export function createFreshBoard(): BoardCell[][] {
 export function cloneBoard(board: BoardCell[][]): BoardCell[][] {
   return board.map((row) => [...row]);
 }
+
+export function isSamePosition(a: Position, b: Position): boolean {
+  return a[0] === b[0] && a[1] === b[1];
+}
