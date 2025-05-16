@@ -4,6 +4,8 @@ import GameManager from "../../gameManager";
 import { PieceColor, Position } from "../../types";
 import { whitePawn } from "../constants";
 import { Queen } from "../queen";
+import MovementManager from "../../board/movementManager";
+import StateManager from "../../board/stateManager";
 
 describe("Queen", () => {
   let chessBoard: ChessBoard;
@@ -11,7 +13,9 @@ describe("Queen", () => {
   beforeEach(() => {
     const turnManager = new TurnManager();
     const gameManager = new GameManager(turnManager);
-    chessBoard = new ChessBoard(gameManager);
+    const stateManager = new StateManager();
+    const moveManager = new MovementManager(stateManager, turnManager);
+    chessBoard = new ChessBoard(gameManager, stateManager, moveManager);
     queen = new Queen(PieceColor.White);
     chessBoard.stateManager.setEmptyBoard();
   });

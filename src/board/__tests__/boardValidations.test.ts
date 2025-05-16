@@ -12,6 +12,8 @@ import {
 } from "../../model/constants";
 import TurnManager from "../turnManager";
 import { PieceColor, PieceType } from "../../types";
+import MovementManager from "../movementManager";
+import StateManager from "../stateManager";
 
 describe("Chess Board Validations", () => {
   let chessBoard: ChessBoard;
@@ -19,7 +21,9 @@ describe("Chess Board Validations", () => {
   beforeEach(() => {
     const turnManager = new TurnManager();
     const gameManager = new GameManager(turnManager);
-    chessBoard = new ChessBoard(gameManager);
+    const stateManager = new StateManager();
+    const moveManager = new MovementManager(stateManager, turnManager);
+    chessBoard = new ChessBoard(gameManager, stateManager, moveManager);
   });
 
   it("should check if a king is in check", () => {
@@ -30,7 +34,6 @@ describe("Chess Board Validations", () => {
     expect(
       ChessBoardValidations.isKingInCheck(
         chessBoard.stateManager,
-        chessBoard.getBoard(),
         PieceColor.Black,
       ),
     ).toBe(true);
@@ -43,7 +46,6 @@ describe("Chess Board Validations", () => {
     expect(
       ChessBoardValidations.isKingInCheck(
         chessBoard.stateManager,
-        chessBoard.getBoard(),
         PieceColor.Black,
       ),
     ).toBe(false);

@@ -1,11 +1,10 @@
 import { isInBounds, isSamePosition } from "../utils/helpers";
 import StateManager from "./stateManager";
-import { BoardCell, PieceColor, Position } from "../types";
+import { PieceColor, Position } from "../types";
 
 class BoardValidations {
   static isKingInCheck(
     boardStateManager: StateManager,
-    board: BoardCell[][],
     turn: PieceColor,
   ): boolean {
     const kingPosition = boardStateManager.findKing(turn);
@@ -24,16 +23,14 @@ class BoardValidations {
       for (let col = 0; col < 8; col++) {
         const current: Position = [row, col];
         const enemy = boardStateManager.getCell(current);
-
-        if (!enemy || enemy.color === king?.color) {
+        if (!enemy) continue;
+        if (enemy.color === king.color) {
           continue;
         }
-
-        if (enemy?.type === king?.type && enemy?.color === king?.color) {
+        if (enemy.type === king.type && enemy.color === king.color) {
           continue;
         }
-
-        if (row === kingPosition[0] && col === kingPosition[1]) {
+        if (isSamePosition(kingPosition, [row, col])) {
           continue;
         }
 

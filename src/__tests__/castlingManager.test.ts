@@ -4,6 +4,8 @@ import GameManager from "../gameManager";
 import { blackKing, blackRook, whiteKing, whiteRook } from "../model/constants";
 import { Castling, PieceColor } from "../types";
 import CastlingManager from "../board/castlingManager";
+import MovementManager from "../board/movementManager";
+import StateManager from "../board/stateManager";
 
 describe("Castling Manager", () => {
   describe("White King", () => {
@@ -12,7 +14,9 @@ describe("Castling Manager", () => {
     beforeEach(() => {
       const turnManager = new TurnManager();
       const gameManager = new GameManager(turnManager);
-      chessBoard = new ChessBoard(gameManager);
+      const stateManager = new StateManager();
+      const moveManager = new MovementManager(stateManager, turnManager);
+      chessBoard = new ChessBoard(gameManager, stateManager, moveManager);
     });
 
     it("should not be able to castle at start for white king side", () => {
@@ -97,7 +101,9 @@ describe("Castling Manager", () => {
     beforeEach(() => {
       const turnManager = new TurnManager();
       const gameManager = new GameManager(turnManager);
-      chessBoard = new ChessBoard(gameManager);
+      const stateManager = new StateManager();
+      const moveManager = new MovementManager(stateManager, turnManager);
+      chessBoard = new ChessBoard(gameManager, stateManager, moveManager);
     });
 
     it("should not be able to castle at start for white king side", () => {

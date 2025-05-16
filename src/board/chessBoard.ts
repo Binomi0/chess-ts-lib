@@ -12,16 +12,11 @@ import {
 } from "../types";
 
 class ChessBoard implements IChessBoard {
-  public stateManager: StateManager;
-  public moveManager: MovementManager;
-
-  constructor(public gameManager: GameManager) {
-    this.stateManager = new StateManager();
-    this.moveManager = new MovementManager(
-      this.stateManager,
-      gameManager.turnManager,
-    );
-  }
+  constructor(
+    public gameManager: GameManager,
+    public stateManager: StateManager,
+    public moveManager: MovementManager,
+  ) {}
 
   get turn() {
     return this.gameManager.turnManager.getCurrentTurn();
@@ -32,11 +27,7 @@ class ChessBoard implements IChessBoard {
   }
 
   isKingInCheck() {
-    return ChessBoardValidations.isKingInCheck(
-      this.stateManager,
-      this.getBoard(),
-      this.turn,
-    );
+    return ChessBoardValidations.isKingInCheck(this.stateManager, this.turn);
   }
 
   isCheckMate() {
@@ -66,13 +57,11 @@ class ChessBoard implements IChessBoard {
         const [color, side] = castlingMove;
         CastlingManager.castle(this.stateManager, color, side);
       } else {
-        if (ChessBoardValidations.isValidMove(this.stateManager, from, to)) {
-          throw new Error("invalid move");
-        }
+        ChessBoardValidations.isValidMove(this.stateManager, from, to);
 
-        if (piece.validateMove(this.stateManager, { from, to, piece })) {
-          throw new Error("invalid move");
-        }
+        // if (piece.validateMove(this.stateManager, { from, to, piece })) {
+        //   throw new Error("invalid move");
+        // }
       }
     } catch (error) {
       console.error(error);

@@ -1,4 +1,6 @@
 import ChessBoard from "../../board/chessBoard";
+import MovementManager from "../../board/movementManager";
+import StateManager from "../../board/stateManager";
 import TurnManager from "../../board/turnManager";
 import GameManager from "../../gameManager";
 import { blackPawn, blackQueen, blackRook, whiteKing } from "../constants";
@@ -10,7 +12,9 @@ describe("King", () => {
     beforeEach(() => {
       const turn = new TurnManager();
       const manager = new GameManager(turn);
-      chessBoard = new ChessBoard(manager);
+      const stateManager = new StateManager();
+      const moveManager = new MovementManager(stateManager, turn);
+      chessBoard = new ChessBoard(manager, stateManager, moveManager);
       chessBoard.stateManager.setEmptyBoard();
     });
 

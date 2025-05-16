@@ -3,6 +3,8 @@ import ChessBoard from "./board/chessBoard";
 import GameManager from "./gameManager";
 import Player from "./player";
 import { IGame, PieceColor, Position } from "./types";
+import StateManager from "./board/stateManager";
+import MovementManager from "./board/movementManager";
 
 class Game implements IGame {
   board: ChessBoard;
@@ -12,7 +14,9 @@ class Game implements IGame {
   constructor(public notifier?: (message: string) => void) {
     this.turnManager = new TurnManager();
     this.manager = new GameManager(this.turnManager);
-    this.board = new ChessBoard(this.manager);
+    const stateManager = new StateManager();
+    const moveManager = new MovementManager(stateManager, this.turnManager);
+    this.board = new ChessBoard(this.manager, stateManager, moveManager);
   }
 
   get arePlayersReady(): boolean {

@@ -33,7 +33,10 @@ export class King extends Piece {
         if (!enemy || enemy.color === king?.color) {
           continue;
         }
-        if (enemy?.type === king?.type && enemy?.color === king?.color) {
+        // if (enemy?.type === king?.type && enemy?.color === king?.color) {
+        //   continue;
+        // }
+        if (enemy?.type === king?.type) {
           continue;
         }
 
