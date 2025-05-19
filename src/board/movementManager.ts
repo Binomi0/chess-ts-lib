@@ -114,7 +114,7 @@ class MovementManager implements MoveManager {
 
   isPromotion(to: Position, type: PieceType, color: PieceColor): boolean {
     if (type !== PieceType.Pawn) {
-      throw new Error("Only Pawn can promotion");
+      return false;
     }
 
     const promotionRow = color === PieceColor.White ? 0 : 7;

@@ -71,7 +71,6 @@ class BoardValidations {
       king.directions,
     );
 
-    console.log({ scapeMoves });
     return scapeMoves.length === 0;
   }
 

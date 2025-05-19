@@ -234,6 +234,7 @@ describe("ChessBoard", () => {
       chessBoard = new ChessBoard(gameManager, stateManager, moveManager);
       chessBoard.stateManager.initializeBoard();
     });
+
     it("should be a function", () => {
       expect(typeof chessBoard.handleMove).toBe("function");
     });
@@ -244,6 +245,7 @@ describe("ChessBoard", () => {
       chessBoard.stateManager.placePiece([0, 4], whiteKing);
       chessBoard.stateManager.placePiece([0, 0], whiteRook);
       chessBoard.handleMove([0, 0], [7, 0]);
+
       expect(chessBoard.getPosition([0, 0])).toBe(undefined);
       expect(chessBoard.getPosition([7, 0])).toHaveProperty(
         "type",
@@ -253,6 +255,40 @@ describe("ChessBoard", () => {
         "color",
         PieceColor.White,
       );
+    });
+
+    it("should throw an error if no piece found at from position", () => {
+      chessBoard.stateManager.setEmptyBoard();
+      try {
+        chessBoard.handleMove([0, 0], [7, 0]);
+        expect(false).toBe(true);
+      } catch (error) {
+        expect((error as Error).message).toBe(
+          "Invalid move: No piece at the source position",
+        );
+      }
+    });
+
+    it("should throw an error if its not the right turn", () => {
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([0, 0], blackRook);
+      try {
+        chessBoard.handleMove([0, 0], [7, 0]);
+        expect(false).toBe(true);
+      } catch (error) {
+        expect((error as Error).message).toBe("Invalid Turn");
+      }
+    });
+
+    it("should revert the movement if king is at check after move", () => {
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([0, 0], blackKing);
+      chessBoard.stateManager.placePiece([2, 0], blackRook);
+      chessBoard.stateManager.placePiece([4, 0], whiteRook);
+      chessBoard.nextTurn();
+      chessBoard.handleMove([2, 0], [2, 1]);
+      expect(chessBoard.isKingInCheck()).toBe(false);
+      expect(chessBoard.getPosition([2, 0])).toEqual(blackRook);
     });
   });
 

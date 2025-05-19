@@ -59,9 +59,7 @@ const canCheck = () => {
 
     const isCheck = game.board.isKingInCheck();
     if (isCheck) {
-      console.log({ isCheck });
-      const isCheckMate = game.board.isCheckMate();
-      console.log({ isCheckMate });
+      game.board.isCheckMate();
     }
   }
 };
