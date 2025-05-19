@@ -59,12 +59,8 @@ class ChessBoard implements IChessBoard {
         CastlingManager.castle(this.stateManager, color, side);
       } else {
         ChessBoardValidations.isValidMove(this.stateManager, from, to);
-
-        // if (piece.validateMove(this.stateManager, { from, to, piece })) {
-        //   throw new Error("invalid move");
-        // }
+        this.stateManager.movePiece(from, to);
       }
-      this.stateManager.movePiece(from, to);
 
       if (this.isKingInCheck()) {
         this.stateManager.movePiece(to, from);

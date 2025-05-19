@@ -39,7 +39,6 @@ describe("King", () => {
         whiteKing.directions,
       );
 
-      console.log(chessBoard.getBoard());
       expect(validMoves).toHaveLength(6);
     });
 
@@ -79,6 +78,17 @@ describe("King", () => {
       );
 
       expect(validMoves).toHaveLength(0);
+    });
+
+    it("should return true for a valid move", () => {
+      chessBoard.stateManager.placePiece([0, 0], whiteKing);
+
+      const isValidMove = whiteKing.validateMove(chessBoard.stateManager, {
+        from: [0, 0],
+        to: [1, 0],
+        piece: whiteKing,
+      });
+      expect(isValidMove).toBe(true);
     });
   });
 });
