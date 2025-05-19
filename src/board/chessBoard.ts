@@ -9,6 +9,7 @@ import {
   PieceColor,
   Castling,
   IChessBoard,
+  PieceType,
 } from "../types";
 
 class ChessBoard implements IChessBoard {
@@ -63,17 +64,19 @@ class ChessBoard implements IChessBoard {
         //   throw new Error("invalid move");
         // }
       }
+      this.stateManager.movePiece(from, to);
+
+      if (this.isKingInCheck()) {
+        this.stateManager.movePiece(to, from);
+      } else {
+        this.gameManager.turnManager.switchTurn();
+        if (piece.type === PieceType.King) {
+          CastlingManager.setCastlingLocked(piece.color);
+        }
+      }
     } catch (error) {
       console.error(error);
       throw error;
-    }
-
-    this.stateManager.movePiece(from, to);
-
-    if (this.isKingInCheck()) {
-      this.stateManager.movePiece(to, from);
-    } else {
-      this.gameManager.turnManager.switchTurn();
     }
   }
 

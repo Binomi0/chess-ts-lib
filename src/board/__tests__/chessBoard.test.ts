@@ -4,6 +4,7 @@ import {
   blackQueen,
   blackRook,
   whiteKing,
+  whitePawn,
   whiteRook,
 } from "../../model/constants";
 import { Castling, PieceColor, PieceType } from "../../types";
@@ -339,10 +340,8 @@ describe("ChessBoard", () => {
     it("should handle a valid castling move for white king on king side", () => {
       chessBoard.stateManager.placePiece([7, 7], whiteRook);
       chessBoard.stateManager.placePiece([7, 4], whiteKing);
-      chessBoard.nextTurn();
       chessBoard.castling(Castling.King, PieceColor.White);
 
-      console.log(chessBoard.getBoard());
       expect(chessBoard.getPosition([7, 5])).toHaveProperty(
         "type",
         PieceType.Rook,
@@ -359,6 +358,50 @@ describe("ChessBoard", () => {
         "color",
         PieceColor.White,
       );
+    });
+
+    it("should fail to castle if king has been moved before", () => {
+      chessBoard.stateManager.placePiece([7, 7], whiteRook);
+      chessBoard.stateManager.placePiece([7, 4], whiteKing);
+      chessBoard.handleMove([7, 4], [7, 5]);
+      chessBoard.nextTurn();
+      chessBoard.handleMove([7, 5], [7, 4]);
+
+      try {
+        chessBoard.castling(Castling.King, PieceColor.White);
+        expect(false).toBe(true);
+      } catch (error) {
+        expect((error as Error).message).toBe("Invalid castling move");
+        expect(chessBoard.getPosition([7, 5])).toBe(undefined);
+        expect(chessBoard.getPosition([7, 6])).toBe(undefined);
+      }
+    });
+
+    it("should fail to castle if king is not in position.", () => {
+      chessBoard.stateManager.placePiece([7, 7], whiteRook);
+
+      try {
+        chessBoard.castling(Castling.King, PieceColor.White);
+        expect(false).toBe(true);
+      } catch (error) {
+        expect((error as Error).message).toBe("Invalid castling move");
+        expect(chessBoard.getPosition([7, 5])).toBe(undefined);
+        expect(chessBoard.getPosition([7, 6])).toBe(undefined);
+      }
+    });
+
+    it("should fail to castle if rook is not in position.", () => {
+      chessBoard.stateManager.placePiece([7, 7], whitePawn);
+      chessBoard.stateManager.placePiece([7, 4], whiteKing);
+
+      try {
+        chessBoard.castling(Castling.King, PieceColor.White);
+        expect(false).toBe(true);
+      } catch (error) {
+        expect((error as Error).message).toBe("Invalid castling move");
+        expect(chessBoard.getPosition([7, 5])).toBe(undefined);
+        expect(chessBoard.getPosition([7, 6])).toBe(undefined);
+      }
     });
   });
 });

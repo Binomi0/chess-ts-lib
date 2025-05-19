@@ -11,8 +11,6 @@ class CastlingManager {
   };
 
   static castle(stateManager: StateManager, color: PieceColor, side: Castling) {
-    if (!this.castlingRights[color]) return false;
-
     if (this.canCastle(stateManager, color, side)) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [rookPos, _, newKingPos, newRookPos] = this.getCastlingData(
@@ -37,13 +35,19 @@ class CastlingManager {
     if (!this.castlingRights[color]) return false;
 
     const [rookPos, emptySquares] = this.getCastlingData(color, side);
+    const isWhite = color === PieceColor.White;
+    const kingPos = stateManager.getCell([isWhite ? 7 : 0, 4]);
 
-    return this.validateConditions(
-      stateManager.getBoardSnapshot(),
-      color,
-      rookPos,
-      emptySquares,
-    );
+    if (kingPos?.type === PieceType.King) {
+      return this.validateConditions(
+        stateManager.getBoardSnapshot(),
+        color,
+        rookPos,
+        emptySquares,
+      );
+    }
+
+    return false;
   }
 
   private static getCastlingData(
@@ -105,6 +109,7 @@ class CastlingManager {
       const piece = board[row][col];
       return piece === undefined;
     });
+    // Verificar que el rey está en su posición inicial y nunca se ha movido antes
 
     return isWayFree;
   }
@@ -131,7 +136,7 @@ class CastlingManager {
     stateManager.placePiece([newKingPos[0], newKingPos[1]], new King(color));
   }
 
-  private static setCastlingLocked(color: PieceColor): void {
+  static setCastlingLocked(color: PieceColor): void {
     this.castlingRights[color] = false;
   }
 }
