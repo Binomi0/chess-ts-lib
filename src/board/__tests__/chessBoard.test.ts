@@ -3,8 +3,10 @@ import {
   blackKing,
   blackQueen,
   blackRook,
+  whiteBishop,
   whiteKing,
   whitePawn,
+  whiteQueen,
   whiteRook,
 } from "../../model/constants";
 import { Castling, PieceColor, PieceType } from "../../types";
@@ -75,7 +77,7 @@ describe("ChessBoard", () => {
     });
   });
 
-  describe("isCheckMate", () => {
+  describe.only("isCheckMate", () => {
     let chessBoard: ChessBoard;
     beforeEach(() => {
       const turnManager = new TurnManager();
@@ -95,13 +97,27 @@ describe("ChessBoard", () => {
       chessBoard.stateManager.placePiece([7, 0], whiteKing);
       chessBoard.stateManager.placePiece([4, 1], blackRook);
       chessBoard.stateManager.placePiece([6, 1], blackQueen);
-      expect(chessBoard.isCheckMate()).toBe(true); // King on [7, 0] is under attack by Queen on [4, 0]
+      expect(chessBoard.isCheckMate()).toBe(true);
+    });
+
+    it("should return true if the king is in checkmate 2", () => {
+      chessBoard.stateManager.initializeBoard();
+      chessBoard.stateManager.placePiece([1, 5], whiteQueen);
+      chessBoard.stateManager.placePiece([4, 1], whiteBishop);
+      expect(chessBoard.isCheckMate()).toBe(true);
     });
 
     it("should return false if the king is not in checkmate", () => {
       chessBoard.stateManager.setEmptyBoard();
       chessBoard.stateManager.placePiece([7, 0], whiteKing);
-      chessBoard.stateManager.placePiece([5, 0], blackQueen); // King on [7, 0] is not under attack by Queen on [5, 0]
+      chessBoard.stateManager.placePiece([5, 0], blackQueen);
+      expect(chessBoard.isCheckMate()).toBe(false);
+    });
+
+    it("should return false if the king is not in checkmate but in check", () => {
+      chessBoard.stateManager.setEmptyBoard();
+      chessBoard.stateManager.placePiece([7, 0], whiteKing);
+      chessBoard.stateManager.placePiece([4, 0], blackQueen); // King on [7, 0] is under attack by Queen on [6, 1]
       expect(chessBoard.isCheckMate()).toBe(false);
     });
   });
