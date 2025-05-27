@@ -3,7 +3,6 @@ import {
   blackKing,
   blackQueen,
   blackRook,
-  whiteBishop,
   whiteKing,
   whitePawn,
   whiteQueen,
@@ -77,7 +76,7 @@ describe("ChessBoard", () => {
     });
   });
 
-  describe.only("isCheckMate", () => {
+  describe("isCheckMate", () => {
     let chessBoard: ChessBoard;
     beforeEach(() => {
       const turnManager = new TurnManager();
@@ -102,8 +101,11 @@ describe("ChessBoard", () => {
 
     it("should return true if the king is in checkmate 2", () => {
       chessBoard.stateManager.initializeBoard();
-      chessBoard.stateManager.placePiece([1, 5], whiteQueen);
-      chessBoard.stateManager.placePiece([4, 1], whiteBishop);
+      chessBoard.nextTurn();
+      chessBoard.stateManager.removePiece([1, 5]);
+      chessBoard.stateManager.removePiece([1, 6]);
+      chessBoard.stateManager.placePiece([3, 7], whiteQueen);
+
       expect(chessBoard.isCheckMate()).toBe(true);
     });
 

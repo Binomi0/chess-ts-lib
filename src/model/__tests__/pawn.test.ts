@@ -9,7 +9,7 @@ describe("Pawn", () => {
     expect(pawn).toBeInstanceOf(Piece);
   });
 
-  it("should hace a color", () => {
+  it("should have a color", () => {
     const pawn = new Pawn(PieceColor.White);
     expect(pawn.color).toEqual(PieceColor.White);
   });
@@ -63,65 +63,6 @@ describe("Pawn", () => {
         [5, 1],
         [4, 0],
       ]);
-    });
-  });
-  describe("validateMove", () => {
-    it("should return true for a valid move", () => {
-      const pawn = new Pawn(PieceColor.White);
-      const boardStateManager = new StateManager();
-      boardStateManager.setEmptyBoard();
-      boardStateManager.placePiece([6, 0], pawn);
-      const isValidMove = pawn.validateMove(boardStateManager, {
-        from: [6, 0],
-        to: [5, 0],
-        piece: pawn,
-      });
-      expect(isValidMove).toBe(true);
-    });
-
-    it("should return false for an invalid move", () => {
-      const pawn = new Pawn(PieceColor.White);
-      const boardStateManager = new StateManager();
-      boardStateManager.setEmptyBoard();
-      boardStateManager.placePiece([6, 0], pawn);
-
-      try {
-        pawn.validateMove(boardStateManager, {
-          from: [6, 0],
-          to: [5, 1],
-          piece: pawn,
-        });
-        expect(false).toBe(true);
-      } catch (error) {
-        expect((error as Error).message).toBe("Invalid movement for pawn");
-      }
-    });
-
-    it("should return true if initial move is two spaces forward", () => {
-      const pawn = new Pawn(PieceColor.White);
-      const boardStateManager = new StateManager();
-      boardStateManager.setEmptyBoard();
-      boardStateManager.placePiece([6, 0], pawn);
-      const isValidMove = pawn.validateMove(boardStateManager, {
-        from: [6, 0],
-        to: [4, 0],
-        piece: pawn,
-      });
-      expect(isValidMove).toBe(true);
-    });
-
-    it("should return true if capturing as first move", () => {
-      const pawn = new Pawn(PieceColor.White);
-      const boardStateManager = new StateManager();
-      boardStateManager.setEmptyBoard();
-      boardStateManager.placePiece([6, 0], pawn);
-      boardStateManager.placePiece([5, 1], new Pawn(PieceColor.Black));
-      const isValidMove = pawn.validateMove(boardStateManager, {
-        from: [6, 0],
-        to: [5, 1],
-        piece: pawn,
-      });
-      expect(isValidMove).toBe(true);
     });
   });
 });

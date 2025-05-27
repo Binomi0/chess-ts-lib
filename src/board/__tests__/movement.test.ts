@@ -41,7 +41,6 @@ describe("MovementManager", () => {
   describe("validateMove", () => {
     it("should validate a move based on the current state of the board", () => {
       // Assuming there's a piece at [0, 0] that can move to [1, 0]
-      stateManager.setEmptyBoard();
       stateManager.placePiece([4, 0], whitePawn);
       expect(movementManager.validateMove([4, 0], [3, 0])).toBe(true);
     });

@@ -1,6 +1,6 @@
 import StateManager from "../board/stateManager";
 import PieceDirections from "../model/directions";
-import { PieceColor, PieceType, Position, Movement } from "../types";
+import { PieceColor, PieceType, Position } from "../types";
 
 abstract class Piece {
   abstract symbol: string;
@@ -40,10 +40,6 @@ abstract class Piece {
     from: Position,
     directions: Position[],
   ): Position[];
-  abstract validateMove(
-    boardStateManager: StateManager,
-    movement: Movement,
-  ): boolean;
 }
 
 export default Piece;

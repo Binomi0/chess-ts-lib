@@ -41,41 +41,4 @@ describe("Bishop", () => {
       expect(validMoves).toHaveLength(10);
     });
   });
-
-  describe("validateMove", () => {
-    let chessBoard: ChessBoard;
-
-    beforeEach(() => {
-      const turn = new TurnManager();
-      const manager = new GameManager(turn);
-      const stateManager = new StateManager();
-      const moveManager = new MovementManager(stateManager, turn);
-      chessBoard = new ChessBoard(manager, stateManager, moveManager);
-      chessBoard.stateManager.setEmptyBoard();
-    });
-
-    it("should return true for a valid move", () => {
-      chessBoard.stateManager.placePiece([0, 0], whiteBishop);
-      const isValidMove = whiteBishop.validateMove(chessBoard.stateManager, {
-        from: [0, 0],
-        to: [2, 2],
-        piece: whiteBishop,
-      });
-      expect(isValidMove).toBe(true);
-    });
-
-    it("should return false for an invalid move", () => {
-      chessBoard.stateManager.placePiece([0, 0], whiteBishop);
-      try {
-        const isValidMove = whiteBishop.validateMove(chessBoard.stateManager, {
-          from: [0, 0],
-          to: [1, 0],
-          piece: whiteBishop,
-        });
-        expect(isValidMove).toBe(false);
-      } catch (error) {
-        console.error(error);
-      }
-    });
-  });
 });

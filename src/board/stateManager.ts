@@ -15,6 +15,7 @@ import {
 import type Piece from "../model/piece";
 import type { Position, BoardCell, PieceColor, State } from "../types";
 import { createFreshBoard } from "../utils/helpers";
+import BoardValidations from "./boardValidations";
 
 class StateManager implements State {
   private board: BoardCell[][];
@@ -84,7 +85,7 @@ class StateManager implements State {
       throw new Error("Invalid move: target cell is occupied");
     }
 
-    fromCell.validateMove(this, { from, to, piece: fromCell });
+    BoardValidations.isValidMove(this, from, to);
 
     this.placePiece(to, fromCell);
     this.removePiece(from);

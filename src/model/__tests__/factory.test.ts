@@ -52,9 +52,9 @@ describe("PieceFactory", () => {
 
   it("should repect Liskov", () => {
     const whiteKing = PieceFactory.getPiece(PieceType.King, PieceColor.White);
-    expect(whiteKing.validateMove).toBeDefined();
+    expect(whiteKing.getAllAvailableMoves).toBeDefined();
 
     const blackKing = PieceFactory.getPiece(PieceType.King, PieceColor.Black);
-    expect(blackKing.validateMove).toBeDefined();
+    expect(blackKing.getAllAvailableMoves).toBeDefined();
   });
 });

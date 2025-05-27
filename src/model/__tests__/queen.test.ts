@@ -50,15 +50,4 @@ describe("Queen", () => {
     const moves = queen.getAllAvailableMoves(chessBoard.stateManager, from);
     expect(moves.length).toBe(7);
   });
-
-  it("should return true for a valid move", () => {
-    chessBoard.stateManager.placePiece([0, 0], queen);
-
-    const isValidMove = queen.validateMove(chessBoard.stateManager, {
-      from: [0, 0],
-      to: [1, 0],
-      piece: queen,
-    });
-    expect(isValidMove).toBe(true);
-  });
 });
